@@ -1,18 +1,26 @@
 import {SECTION_ACTIVE_CLASSNAME } from './config-sections.js';
 
 export const AppSectionController = {
-    currentActiveSection: document.querySelector('.section-base.' + SECTION_ACTIVE_CLASSNAME),
+    currentActiveSection: function(){
+        try {
+            return document.querySelector('.section-base.' + SECTION_ACTIVE_CLASSNAME)            
+        } catch(err) {
+            return null;
+        }
+    },
     navigateTo: function(targetId) {
         try {
             const nextSection = document.getElementById(targetId);
-            if (!nextSection || nextSection === currentActiveSection) return;
+            if (!nextSection) return;
+
+            const activeSection = currentActiveSection();
+            if (nextSection == activeSection) return;
             
-            if (currentActiveSection) {
-                currentActiveSection.classList.remove(SECTION_ACTIVE_CLASSNAME);
+            if (activeSection) {
+                activeSection.classList.remove(SECTION_ACTIVE_CLASSNAME);
             }
     
             nextSection.classList.add(SECTION_ACTIVE_CLASSNAME);
-            currentActiveSection = nextSection;
         } catch(err) {
                 console.log('[AppSectionController.navigateTo] ' + err.message);
         }
