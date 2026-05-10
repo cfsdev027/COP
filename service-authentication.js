@@ -47,18 +47,19 @@ export const ServiceAuthentication = {
     },
     self_authenticate: async function() {
         try {
-            const uuid = ServiceCookies.get(COP_AUTH_COOKIE);
+            const uuid = this.get_auth_id();
           
             if (!uuid || uuid === 'null') {
                 return false;
             }
 
-            const data = await ServiceUsers.fetch(uuid);
-            if (data === null) {
+            const user = await ServiceUsers.fetch(uuid);
+            if (user === null) {
                 return false;
             }
                      
-            ServiceStorage.set(COP_LS_KEY, data);
+            this.set_auth({user: user});
+            
             return true;
 
         } catch (err) {
