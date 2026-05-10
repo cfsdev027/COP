@@ -1,0 +1,32 @@
+:root {
+    --bg-gradient: linear-gradient(135deg, #062f2d 0%, #021514 100%);
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --primary: #0f766e;
+    --primary-hover: #115e59;
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
+    --time-bg: #0f172a;
+    --log-bg: #090d16;
+    --success-glow: #10b981;
+    --warning-glow: #f59e0b;
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --texto-claro: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: var(--bg-gradient);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
