@@ -1,5 +1,5 @@
-import {TESTE} from './configurations.js';
+import {SUPABASE_URL } from './configurations.js';
 
 (async () => {
-    alert(TESTE);
+    alert(SUPABASE_URL );
 })();
