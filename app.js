@@ -1,6 +1,5 @@
-import {SUPABASE_URL} from './configurations.js';
-import {LoginUI} from './login-ui.js';
+import {AppRouter} from './app-router.js';
 
 (async () => {
-    LoginUI.init();
+    AppRouter['login'].init();
 })();
