@@ -1,4 +1,4 @@
-const LoginUI = {
+export const LoginUI = {
     // Referência da Section mapeada no seu HTML
     section: document.getElementById('section-login'),
 
