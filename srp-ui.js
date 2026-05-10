@@ -3,7 +3,6 @@ import {
 } from './config-srp-ui.js';
 
 export const SrpUI = {
-    // Referência da Section mapeada no seu HTML
     section: document.getElementById(SECTION_SRP_ID),
 
     init() {
@@ -12,8 +11,8 @@ export const SrpUI = {
         }
     },
 
-    render(user) {
-        this.container.innerHTML = '';
+    render() {
+        this.section.innerHTML = '';
 
         const punchCard = document.createElement('div');
         punchCard.className = 'punch-card';
@@ -30,8 +29,8 @@ export const SrpUI = {
         userName.className = 'user-name username-view';
 
         const userDoc = document.createElement('div');
-        userDoc.className = 'user-doc';
-        userDoc.innerHTML = `<span id="document-type-view">${user.tipoDoc}</span>:&nbsp;<span id="document-view">${user.documento}</span>`;
+        userDoc.id = 'document-view';
+        userDoc.className = 'user-doc document-view';
 
         const documentContainer = document.createElement('div');
         userDoc.className = 'document-container';
