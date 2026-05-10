@@ -1,3 +1,5 @@
+import {TESTE} from './configurations.js';
+
 (async () => {
-    alert('Aplicação inicializada.');
+    alert(TESTE);
 })();
