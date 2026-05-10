@@ -6,7 +6,7 @@ import {SECTION_LOGIN_ID} from './config-login-ui.js';
 export const AppRouter = {
     login: {
         section_id: SECTION_LOGIN_ID,
-        init: function() => {
+        init: function() {
             LoginUI.init();
             AppSectionController.navigateTo(SECTION_LOGIN_ID);
         }
