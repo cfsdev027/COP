@@ -4,21 +4,6 @@ const COP_AS_CURRENT_SECTION = 'COP_AS_CURRENT_SECTION';
 const COP_AS_AUTHENTICATED_USER = 'COP_AS_AUTHENTICATED_USER';
 
 export const AppState = {
-    get_current_section: function() {
-        try {
-            return ServiceStorage.get(COP_AS_CURRENT_SECTION);
-        } catch(err) {
-            console.log('[AppState.get_current_section] ' + err.message);
-            return null;
-        }
-    },
-    set_current_section: function(value) {
-        try {
-            return ServiceStorage.set(COP_AS_CURRENT_SECTION, value);
-        } catch(err) {
-            console.log('[AppState.set_current_section] ' + err.message);
-        }
-    },
     get_authenticated_user: function() {
         try {
             return ServiceStorage.get(COP_AS_AUTHENTICATED_USER);
