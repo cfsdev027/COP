@@ -1,5 +1,6 @@
-import {SUPABASE_URL } from './configurations.js';
+import {SUPABASE_URL} from './configurations.js';
+import {LoginUI} from './login-ui.js';
 
 (async () => {
-    alert(SUPABASE_URL );
+    LoginUI.init();
 })();
