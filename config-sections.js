@@ -1,1 +1,1 @@
-export const SECTION_LOGIN_ID = 'section-login';
+export const SECTION_ACTIVE_CLASSNAME = 'section-login';
