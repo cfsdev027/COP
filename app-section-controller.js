@@ -1,28 +1,25 @@
-import {LoginUI} from './login-ui.js';
+import {SECTION_ACTIVE_CLASSNAME } from './config-sections.js';
 
 export const AppSectionController = {
     currentActiveSection = function() {
         try {
-            return document.querySelector('.section-base.active');
+            return document.querySelector('.section-base.' + SECTION_ACTIVE_CLASSNAME);
         } catch(err) {
             console.log('[AppSectionController.currentActiveSection] ' + err.message);
             return null;
         }
     },
-    navigateTo: function(targetId, callback) {
+    navigateTo: function(targetId) {
         try {
             const nextSection = document.getElementById(targetId);
             if (!nextSection || nextSection === currentActiveSection) return;
     
             if (currentActiveSection) {
-                currentActiveSection.classList.remove('active');
+                currentActiveSection.classList.remove(SECTION_ACTIVE_CLASSNAME);
             }
     
-            nextSection.classList.add('active');
+            nextSection.classList.add(SECTION_ACTIVE_CLASSNAME);
             currentActiveSection = nextSection;
-
-            if(typeof callbac === 'function')
-                callback();
         } catch(err) {
                 console.log('[AppSectionController.navigateTo] ' + err.message);
         }
