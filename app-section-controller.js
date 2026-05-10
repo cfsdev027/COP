@@ -3,7 +3,8 @@ import {SECTION_ACTIVE_CLASSNAME } from './config-sections.js';
 export const AppSectionController = {
     currentActiveSection: function(){
         try {
-            return document.querySelector('.section-base.' + SECTION_ACTIVE_CLASSNAME)            
+            const query = '.section-base.' + SECTION_ACTIVE_CLASSNAME;
+            return document.querySelector(query);            
         } catch(err) {
             return null;
         }
