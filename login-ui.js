@@ -13,10 +13,8 @@ export const LoginUI = {
 
     init() {
         if (this.section) {
-            alert('init render');
-            this.render();
-            alert('finally render');
             this.section.classList.add(SECTION_ACTIVE_CLASSNAME);
+            this.render();
         }
     },
 
