@@ -1,11 +1,20 @@
+import {SECTION_ACTIVE_CLASSNAME} from './config-sections.js';
+import {
+    SECTION_LOGIN_ID,
+    SECTION_LOGIN_TITLE_ID,
+    SECTION_LOGIN_TITLE,
+    SECTION_LOGIN_FORM_ID,
+    SECTION_LOGIN_FORM_SUBMIT_ID
+} from './config-login-ui.js';
+
 export const LoginUI = {
     // Referência da Section mapeada no seu HTML
-    section: document.getElementById('section-login'),
+    section: document.getElementById(SECTION_LOGIN_ID),
 
     init() {
         if (this.section) {
             this.render();
-            this.section.classList.add('active');
+            this.section.classList.add(SECTION_ACTIVE_CLASSNAME);
         }
     },
 
@@ -17,9 +26,9 @@ export const LoginUI = {
         const headerDiv = document.createElement('div');
         headerDiv.className = 'text-center';
         const h2 = document.createElement('h2');
-        h2.id = 'login-title';
+        h2.id = SECTION_LOGIN_TITLE_ID;
         h2.className = 'login-title';
-        h2.textContent = 'REGISTRO DE PONTO';
+        h2.textContent = SECTION_LOGIN_TITLE;
         headerDiv.appendChild(h2);
 
         // 2. Alerta de Erro (Criado em memória para manipulação fácil)
@@ -27,7 +36,7 @@ export const LoginUI = {
 
         // 3. Formulário e seus inputs
         const form = document.createElement('form');
-        form.id = 'form-login';
+        form.id = SECTION_LOGIN_FORM_ID;
         form.noValidate = true;
         form.className = 'd-grid gap-4';
 
@@ -35,6 +44,7 @@ export const LoginUI = {
         const passInput = this.createInputGroup('password', 'password-input', 'Senha', 'bi-lock', true);
         
         const btnSubmit = document.createElement('button');
+        btnSubmit.id = SECTION_LOGIN_FORM_SUBMIT_ID;
         btnSubmit.type = 'submit';
         btnSubmit.className = 'btn btn-authenticate shadow';
         btnSubmit.textContent = 'Autenticar';
