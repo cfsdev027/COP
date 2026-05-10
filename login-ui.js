@@ -1,4 +1,3 @@
-import {SECTION_ACTIVE_CLASSNAME} from './config-sections.js';
 import {
     SECTION_LOGIN_ID,
     SECTION_LOGIN_TITLE_ID,
@@ -13,7 +12,6 @@ export const LoginUI = {
 
     init() {
         if (this.section) {
-            this.section.classList.add(SECTION_ACTIVE_CLASSNAME);
             this.render();
         }
     },
