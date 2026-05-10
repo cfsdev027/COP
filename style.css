@@ -35,7 +35,7 @@ body {
     display: none;
 }
 
-.section-base.ativa {
+.section-base.active {
     display: block;
 }
 
