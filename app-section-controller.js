@@ -13,7 +13,7 @@ export const AppSectionController = {
             const nextSection = document.getElementById(targetId);
             if (!nextSection) return;
 
-            const activeSection = currentActiveSection();
+            const activeSection = this.currentActiveSection();
             if (nextSection == activeSection) return;
             
             if (activeSection) {
