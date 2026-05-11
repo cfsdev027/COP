@@ -8,22 +8,17 @@ export const ServiceAuthentication = {
         return ServiceCookies.get(COP_AUTH_COOKIE);
     },
     set_auth_id: function(id) {
+        if(id === null || id === undefined) throw '[ServiceAuthentication.set_auth_id] Invalid authentication ID.';
+        
         ServiceCookies.set(COP_AUTH_COOKIE,id,1);
     },
     get_auth: function() {
-        let cop_ls = ServiceStorage.get(COP_LS_KEY);
-        if(cop_ls === null || cop_ls === undefined) throw '[ServiceAuthentication.get_auth] AppData is inaccessible in local storage.';
-
-        return cop_ls;
+        return ServiceStorage.get(COP_LS_KEY);
     },
     set_auth: function(auth) {
         if(auth === null || auth === undefined) throw '[ServiceAuthentication.set_auth] Invalid authentication object.';
-      
-        let cop_ls = ServiceStorage.get(COP_LS_KEY);
-        if(cop_ls === null || cop_ls === undefined) throw '[ServiceAuthentication.set_auth] AppData is inaccessible in local storage.';
 
-        cop_ls = auth;
-        ServiceCookies.set(COP_LS_KEY,cop_ls,1);
+        ServiceStorage.set(COP_LS_KEY,auth);
     },
     authenticate: async function(username,password,callback = null) {
         try {
