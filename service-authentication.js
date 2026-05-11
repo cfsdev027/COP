@@ -40,7 +40,7 @@ export const ServiceAuthentication = {
             return true;
 
         } catch (err) {
-            alert('Erro na autenticação: ' + err.message);
+            alert('Erro na autenticação: ' + JSON.stringify(err));
             console.error("Erro na autenticação:", err.message);
             return false;
         }
@@ -63,7 +63,7 @@ export const ServiceAuthentication = {
             return true;
 
         } catch (err) {
-            alert('Erro na autenticação: ' + err.message);
+            alert('Erro na autenticação: ' + JSON.stringify(err));
             console.error("Erro na autenticação:", err.message);
             return false;
         }
@@ -78,7 +78,7 @@ export const ServiceAuthentication = {
 
             return true;
         } catch(e) {
-            alert('Erro no logout ' + err.message);
+            alert('Erro no logout ' + JSON.stringify(err));
             console.error('Erro no logout', err.message);
             return false;
         }
