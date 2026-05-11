@@ -14,7 +14,7 @@ export const ServiceAuthentication = {
         let cop_ls = ServiceStorage.get(COP_LS_KEY);
         if(cop_ls === null || cop_ls === undefined) throw '[ServiceAuthentication.get_auth] AppData is inaccessible in local storage.';
 
-        return cop_ls.auth;
+        return cop_ls;
     },
     set_auth: function(auth) {
         if(auth === null || auth === undefined) throw '[ServiceAuthentication.set_auth] Invalid authentication object.';
@@ -22,20 +22,20 @@ export const ServiceAuthentication = {
         let cop_ls = ServiceStorage.get(COP_LS_KEY);
         if(cop_ls === null || cop_ls === undefined) throw '[ServiceAuthentication.set_auth] AppData is inaccessible in local storage.';
 
-        cop_ls.auth = auth;
+        cop_ls = auth;
         ServiceCookies.set(COP_LS_KEY,cop_ls,1);
     },
-    authenticate: async function(username,password,callback) {
+    authenticate: async function(username,password,callback = null) {
         try {
             const user = await ServiceUsers.fetchByUsernameAndPassword(username,password);
             if(user === null || user === undefined)
                 return false;
 
             this.set_auth_id(user.id);
-            this.set_auth({user: user});
+            this.set_auth(user);
 
             if(typeof callback === 'function')
-                callback(data);
+                callback(user);
 
             return true;
 
@@ -58,7 +58,7 @@ export const ServiceAuthentication = {
                 return false;
             }
                      
-            this.set_auth({user: user});
+            this.set_auth(user);
             
             return true;
 
