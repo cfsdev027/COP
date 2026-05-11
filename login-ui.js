@@ -5,6 +5,7 @@ import {
     SECTION_LOGIN_FORM_ID,
     SECTION_LOGIN_FORM_SUBMIT_ID
 } from './config-login-ui.js';
+import {ServiceAuthentication} from './service-authentication.js';
 
 export const LoginUI = {
     // Referência da Section mapeada no seu HTML
@@ -100,10 +101,16 @@ export const LoginUI = {
         // Exemplo de lógica de validação
         if (!user || !pass) {
             errorElement.hidden = false;
-        } else {
-            errorElement.hidden = true;
-            console.log("Autenticando...", { user, pass });
-            // Aqui entraria sua chamada para o Supabase
+            return;
         }
+
+        errorElement.hidden = true;
+        let isAuthenticated = await ServiceAuthentication.authentication(user,pass);
+        if(!isAuthenticated) {
+            errorElement.hidden = false;
+            return;
+        }
+        
+        window.location.reload();
     }
 };
