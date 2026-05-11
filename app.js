@@ -1,5 +1,11 @@
 import {AppRouter} from './app-router.js';
+import {ServiceAuthentication} from './service-authentication.js';
 
 (async () => {
-    AppRouter['login'].init();
+    let isAuthenticated = ServiceAuthentication.self_authenticate();
+    if (isAuthenticated) {
+        AppRouter['srp'].init(); 
+    } else {
+        AppRouter['login'].init();
+    }
 })();
