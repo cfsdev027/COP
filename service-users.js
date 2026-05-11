@@ -31,8 +31,8 @@ export const ServiceUsers = {
 
             return data;
         } catch(err) {
+            alert('An exception has ben throw in service Users.fetch: ' + err.message);
             console.log('An exception has ben throw in service Users.fetch: ' + err.message);
-          
             return null;
         }
     },
@@ -50,8 +50,8 @@ export const ServiceUsers = {
 
             return data;
         } catch(err) {
+            alert('An exception has ben throw in service Users.fetchByUsernameAndPassword: ' + err.message);
             console.log('An exception has ben throw in service Users.fetchByUsernameAndPassword: ' + err.message);
-          
             return null;
         }
     },
