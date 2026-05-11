@@ -5,7 +5,10 @@ import {ServiceAuthentication} from './service-authentication.js';
 
 export const SrpUI = {
     section: document.getElementById(SECTION_SRP_ID),
-
+    auth: ServiceAuthentication.get_auth(),
+    is_auth() {
+        return (this.auth !== null && this.auth !== undefined);
+    },
     init() {
         if (this.section) {
             this.render();
@@ -28,10 +31,11 @@ export const SrpUI = {
         const userName = document.createElement('div');
         userName.id = 'username-view';
         userName.className = 'user-name username-view';
+        userName.innerHTML = this.auth.username;
 
         const userDoc = document.createElement('div');
-        userDoc.id = 'document-view';
-        userDoc.className = 'user-doc document-view';
+        userDoc.id = 'user-doc-view';
+        userDoc.className = 'user-doc user-doc-view';
 
         const documentContainer = document.createElement('div');
         userDoc.className = 'document-container';
@@ -39,10 +43,12 @@ export const SrpUI = {
         const documentTypeView = document.createElement('span');
         documentTypeView.id = 'document-type-view';
         documentTypeView.className = 'document-type-view';
+        documentTypeView.innerHTML = this.auth.document_type;
 
         const documentView = document.createElement('span');
         documentView.id = 'document-view';
         documentView.className = 'document-view';
+        documentView.innerHTML = this.auth.document;
 
         documentContainer.append(documentTypeView, documentView);
         userDoc.append(documentContainer);
