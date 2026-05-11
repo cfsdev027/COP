@@ -105,11 +105,14 @@ export const LoginUI = {
         }
 
         errorElement.hidden = true;
-        let isAuthenticated = await ServiceAuthentication.authentication(user,pass);
-        if(!isAuthenticated) {
-            errorElement.hidden = false;
-            return;
-        }
+
+        (async () => {
+            let isAuthenticated = await ServiceAuthentication.authentication(user,pass);
+            if(!isAuthenticated) {
+                errorElement.hidden = false;
+                return;
+            }
+        })();
         
         window.location.reload();
     }
