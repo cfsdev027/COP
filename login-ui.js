@@ -112,8 +112,8 @@ export const LoginUI = {
                 errorElement.hidden = false;
                 return;
             }
+
+            window.location.reload();
         })();
-        
-        window.location.reload();
     }
 };
