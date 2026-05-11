@@ -44,11 +44,11 @@ export const ServiceAuthentication = {
         try {
             const uuid = this.get_auth_id();
 
-            alert('user_id: ' + uuid);
             if (!uuid || uuid === 'null') {
                 return false;
             }
-
+            
+            alert('user_id: ' + uuid);
             const user = await ServiceUsers.fetch(uuid);
             if (user === null) {
                 return false;
