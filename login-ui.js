@@ -107,7 +107,7 @@ export const LoginUI = {
         errorElement.hidden = true;
 
         (async () => {
-            let isAuthenticated = await ServiceAuthenticate.authentication(user,pass);
+            let isAuthenticated = await ServiceAuthenticate.authenticate(user,pass);
             if(!isAuthenticated) {
                 errorElement.hidden = false;
                 return;
