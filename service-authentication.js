@@ -48,7 +48,6 @@ export const ServiceAuthentication = {
                 return false;
             }
             
-            alert('user_id: ' + uuid);
             const user = await ServiceUsers.fetch(uuid);
             if (user === null) {
                 return false;
