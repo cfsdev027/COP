@@ -8,8 +8,6 @@ window.addEventListener('unhandledrejection', function (event) {
     alert("Erro de Promessa: " + event.reason);
 });
 
-alert('Init');
-
 import {AppRouter} from './app-router.js';
 import {ServiceAuthentication} from './service-authentication.js';
 
