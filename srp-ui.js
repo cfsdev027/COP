@@ -1,7 +1,7 @@
 import {
     SECTION_SRP_ID
 } from './config-srp-ui.js';
-import {ServiceAuthentication} from './service-users.js';
+import {ServiceAuthentication} from './service-authentication.js';
 
 export const SrpUI = {
     section: document.getElementById(SECTION_SRP_ID),
