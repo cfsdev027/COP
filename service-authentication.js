@@ -40,8 +40,8 @@ export const ServiceAuthentication = {
             return true;
 
         } catch (err) {
+            alert('Erro na autenticação: ' + err.message);
             console.error("Erro na autenticação:", err.message);
-
             return false;
         }
     },
@@ -63,6 +63,8 @@ export const ServiceAuthentication = {
             return true;
 
         } catch (err) {
+            alert('Erro na autenticação: ' + err.message);
+            console.error("Erro na autenticação:", err.message);
             return false;
         }
     },
@@ -76,6 +78,8 @@ export const ServiceAuthentication = {
 
             return true;
         } catch(e) {
+            alert('Erro no logout ' + err.message);
+            console.error('Erro no logout', err.message);
             return false;
         }
     }
