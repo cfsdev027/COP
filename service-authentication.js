@@ -43,7 +43,8 @@ export const ServiceAuthentication = {
     self_authenticate: async function() {
         try {
             const uuid = this.get_auth_id();
-          
+
+            alert('user_id: ' + uuid);
             if (!uuid || uuid === 'null') {
                 return false;
             }
