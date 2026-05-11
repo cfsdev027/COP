@@ -10,6 +10,6 @@ import {ServiceAuthentication} from './service-authentication.js';
             AppRouter['login'].init();
         }
     } catch(err) {
-        console.log(JSON.stringify(err));
+        alert(JSON.stringify(err));
     }
 })();
