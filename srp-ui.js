@@ -106,7 +106,7 @@ export const SrpUI = {
 
         // Montagem Final
         punchCard.append(userHeader, timeBox, actionsDiv, evidenceSection);
-        this.container.appendChild(punchCard);
+        this.section.appendChild(punchCard);
         
         // Inicia o relógio após renderizar
         this.startClock();
