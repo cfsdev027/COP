@@ -1,6 +1,7 @@
 import {
     SECTION_SRP_ID
 } from './config-srp-ui.js';
+import {ServiceAuthentication} from './service-users.js';
 
 export const SrpUI = {
     section: document.getElementById(SECTION_SRP_ID),
@@ -155,9 +156,14 @@ export const SrpUI = {
 
     btnLogoutOnClick() {
         if(confirm("Deseja realmente sair?")) {
-            // Aqui você chamaria sua função de controle de sections:
-            // GerenciadorNavegacao.switchSection('section-login');
-            location.reload(); // Exemplo simples
+            (async () => {
+                let isLogout = await ServiceAuthentication.logout();
+                if(!isLogout) {
+                    return;
+                }
+
+                window.location.reload();
+            })();
         }
     },
 
