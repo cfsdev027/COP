@@ -7,7 +7,7 @@ export const DashboardUsersUI = {
     section: document.getElementById(SECTION_DASHBOARD_USERS_ID),
     auth: ServiceAuthentication.get_auth(),
     filters: [
-        {v: 'none', t: '🔍 Nenhum'},
+        {v: 'none', t: 'Nenhum'},
         {v: 'username', t: 'Usuário'},
         {v: 'document', t: 'Documento'},
         {v: 'role', t: 'Role'},
