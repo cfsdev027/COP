@@ -6,7 +6,14 @@ import { ServiceUsers } from './service-users.js';
 export const DashboardUsersUI = {
     section: document.getElementById(SECTION_DASHBOARD_USERS_ID),
     auth: ServiceAuthentication.get_auth(),
-
+    filters: [
+        {v: 'none', t: 'Nenhum'},
+        {v: 'username', t: 'Usuário'},
+        {v: 'document', t: 'Documento'},
+        {v: 'role', t: 'Role'},
+        {v: 'active', t: 'Ativo'}
+    ],
+    
     init() {
         try {
             if (!this.section) throw "Missing SECTION";
@@ -20,32 +27,41 @@ export const DashboardUsersUI = {
 
     el(tag, classes = [], attrs = {}) {
         const element = document.createElement(tag);
-        if (classes.length) element.classList.add(...classes.filter(c => c));
+        
+        // Garante que classes sejam adicionadas individualmente
+        if (classes.length > 0) {
+            classes.forEach(cls => {
+                if (cls) element.classList.add(cls);
+            });
+        }
+
         for (const [key, val] of Object.entries(attrs)) {
-            if (key === 'innerHTML') element.innerHTML = val;
-            else if (key === 'textContent') element.textContent = val;
+            if (key === 'textContent') element.textContent = val;
+            else if (key === 'innerHTML') element.innerHTML = val;
             else element.setAttribute(key, val);
         }
         return element;
     },
-
+    
     getNavbar() {
+        const filters
         const navbar = this.el('nav',['navbar','bg-light']);
-        navbar.innerHTML =`
-                <div class="container-fluid">
-                    <form class="d-flex" role="search">
-                        <select class="form-select" aria-label="Default select example">
-                            <option selected>Filtro</option>
-                            <option value="none">Nenhum</option>
-                            <option value="username">Usuário</option>
-                            <option value="document">Documento</option>
-                            <option value="role">Role</option>
-                            <option value="active">Status</option>
-                        </select>
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-                </div>`;
+        const navbarContainer = this.el('div', ['container-fluid']);
+        const navbarForm = this.el('form', ['d-flex'], { role: 'search' });
+        const navbarFilter = this.el('select',['form-select'], { id: 'navbar-filter-select' });
+
+        this.filters.forEach(filter => {
+            navbarFilter.append(
+                this.el('option', [], { value: filter.v, textContent: filter.t})
+            );
+        });
+
+        const navbarInput = this.el('input', ['form-control', 'me-2'], {id: 'navbar-filter-input', type: 'search' });
+        const navbarButton = this.el('button', ['btn', 'btn-outline-success'], { type: 'submit', innerHTML: 'Buscar' }
+
+        navbarForm.append(navbarFilter, navbarInput, navbarButton);
+        navbarContainer.append(navbarForm);
+        navbar.append(navbarContainer);
 
         return navbar;
     },
