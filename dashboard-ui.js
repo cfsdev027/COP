@@ -16,7 +16,7 @@ export const DashboardUI = {
         }
     },
 
-    render: function() {
+    render() {
         this.section.innerHTML = '';
 
         // 1. Criar o Sidebar (Aside)
@@ -68,15 +68,13 @@ export const DashboardUI = {
         this.section.append(aside, dashDiv);
 
         // Inicializa o conteúdo baseado na role inicial
-        if (typeof initDashboard === 'function') {
-            initDashboard(selector.value);
-        }
+        this.initDashboard(selector.value);
     },
     /**
      * Inicializa e atualiza os componentes do Dashboard baseado no perfil do usuário.
      * @param {string} role - O nível de acesso ('admin' ou 'default')
      */
-    initDashboard: function(role) {
+    initDashboard(role) {
         // 1. Definição das configurações de UI por perfil
         const uiConfig = {
             admin: {
