@@ -45,8 +45,8 @@ export const DashboardUsersUI = {
 
     render() {
         this.section.innerHTML = '';
-        const main = this.el('div', ['container-fluid', 'p-2', 'p-md-4', 'bg-light']);
-
+        const main = this.el('div', ['container-fluid', 'p-2', 'p-md-4', 'bg-light', 'overflow-hidden', 'w-100']);
+        
         // --- TOOLBAR (Busca e Novo) ---
         const toolbar = this.el('div', ['d-flex', 'flex-column', 'flex-md-row', 'justify-content-between', 'gap-2', 'mb-3']);
         
