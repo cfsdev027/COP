@@ -15,7 +15,7 @@ import {ServiceAuthentication} from './service-authentication.js';
     try {
         let isAuthenticated = await ServiceAuthentication.self_authenticate();
         if (isAuthenticated) {
-            AppRouter['srp'].init(); 
+            AppRouter['dashboard'].init(); 
         } else {
             AppRouter['login'].init();
         }
