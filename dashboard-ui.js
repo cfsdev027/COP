@@ -29,8 +29,6 @@ export const DashboardUI = {
 
     render() {
         this.section.innerHTML = '';
-
-        //if(ENV === 'dev') alert('[DASHBOARD_render]: rendering(sidebar).');
         
         if(SECTION_DASHBOARD_SIDEBAR_ID == null) 
             throw {stack: 'DashboardUI.render()', error_message: 'Missing SECTION_DASHBOARD_SIDEBAR_ID'};
@@ -44,14 +42,12 @@ export const DashboardUI = {
 
         const brand = document.createElement('div');
         brand.style.cssText = 'padding: 0 20px 20px; font-weight: bold; color: var(--accent);';
-        brand.textContent = 'PROJETO COP';
+        brand.textContent = 'DASHBOARD';
 
         const nav = document.createElement('nav');
         nav.id = SECTION_DASHBOARD_SBMC_ID;
 
         aside.append(brand, nav);
-
-        //if(ENV === 'dev') alert('[DASHBOARD_render]: rendering(dashboard-container).');
 
         // 2. Criar o Container do Dashboard
         const dashDiv = document.createElement('div');
@@ -68,8 +64,6 @@ export const DashboardUI = {
 
         dashHeader.append(greeting);
 
-        //if(ENV === 'dev') alert('[DASHBOARD_render]: rendering(metrics).');
-
         // Grid de Métricas
         const gridMetrics = document.createElement('div');
         gridMetrics.className = 'grid-metrics';
@@ -84,14 +78,12 @@ export const DashboardUI = {
         this.initDashboard();
     },
     initDashboard() {
-        //if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering.');
-
         if (this.auth == null) throw 'Missing authentication.';
         if (this.auth.role == null) throw 'Missing authentication role.';
         
         // 1. Definição das configurações de UI por perfil
         const uiConfig = {
-            admin: {
+            ADMIN: {
                 menu: [{
                         label: 'Cadastro Usuários',
                         icon: '👤'
@@ -126,7 +118,7 @@ export const DashboardUI = {
                     }
                 ]
             },
-            default: {
+            DEFAULT: {
                 menu: [{
                         label: 'Jornada de Trabalho',
                         icon: '⏱️'
@@ -149,16 +141,13 @@ export const DashboardUI = {
                 ]
             }
         };
-
-        //if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering(config).');
         
-        const config = uiConfig[this.auth.role] || uiConfig['default'];
+        const config = uiConfig[this.auth.role] || uiConfig['DEFAULT'];
         if (config == null) throw 'Missing configuration for role: ' + this.auth.role;
         if (config.menu == null) throw 'Missing configuration menu for role: ' + this.auth.role;
         if (config.metrics == null) throw 'Missing configuration metrics for role: ' + this.auth.role;
         
         // 2. Atualizar o Menu Lateral
-        //if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering(update-sidemenu).');
         const menuContainer = document.getElementById(SECTION_DASHBOARD_SBMC_ID);
         if (menuContainer) {
             menuContainer.innerHTML = ''; // Limpa o menu atual
@@ -176,7 +165,6 @@ export const DashboardUI = {
         }
 
         // 3. Atualizar os Cards de Métricas (Grid)
-        //if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering(update-metrics).');
         const metricsContainer = document.getElementById('metrics-container');
         if (metricsContainer) {
             metricsContainer.innerHTML = ''; // Limpa os cards atuais
@@ -202,7 +190,6 @@ export const DashboardUI = {
         }
 
         // 4. Atualizar Título da Página
-        //if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering(update-title).');
         const greeting = document.getElementById('user-greeting');
         if (greeting) {
             greeting.textContent = this.auth.role === 'admin' ? 'Painel Administrativo' : 'Área do Colaborador';
