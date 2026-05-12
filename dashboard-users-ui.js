@@ -48,36 +48,12 @@ export const DashboardUsersUI = {
         const main = this.el('div', ['container-fluid', 'p-2', 'p-md-4', 'bg-light', 'overflow-hidden', 'w-100']);
         
         // --- TOOLBAR (Busca e Novo) ---
-        const toolbar = this.el('div', ['d-flex', 'flex-column', 'flex-md-row', 'justify-content-between', 'gap-2', 'mb-3']);
-        
-        const searchBox = this.el('div', ['input-group', 'shadow-sm']);
-        const input = this.el('input', ['form-control'], { id: 'f_username', placeholder: 'Buscar usuário...' });
-        const btnS = this.el('button', ['btn', 'btn-primary'], { id: 'btnSearch', textContent: 'Pesquisar' });
-        searchBox.append(input, btnS);
-
-        const actions = this.el('div', ['d-flex', 'gap-2']);
-        const btnNew = this.el('button', ['btn', 'btn-success', 'flex-grow-1'], { id: 'btnNew', textContent: '+ Novo Usuário' });
-        actions.append(btnNew);
-
-        toolbar.append(searchBox, actions);
-
-        // --- GRID DESKTOP (Table) ---
-        const d_card = this.el('div', ['card', 'd-none', 'd-md-block', 'border-0', 'shadow-sm']);
-        const table = this.el('table', ['table', 'table-hover', 'align-middle', 'mb-0']);
-        const thead = this.el('thead', ['table-dark']);
-        const trH = this.el('tr');
-        ['ID', 'Usuário', 'Documento', 'Role', 'Status', 'Ações'].forEach(t => {
-            trH.append(this.el('th', ['small', 'py-3'], { textContent: t }));
-        });
-        thead.append(trH);
-        const tbody = this.el('tbody', [], { id: 'gridDesktop' });
-        table.append(thead, tbody);
-        d_card.append(table);
+        const toolbar = this.getToolBar();
 
         // --- GRID MOBILE (Cards) ---
         const m_container = this.el('div', ['d-md-none', 'd-flex', 'flex-column', 'gap-3'], { id: 'gridMobile' });
 
-        main.append(toolbar, d_card, m_container);
+        main.append(toolbar, m_container);
         this.section.append(main);
     },
 
@@ -95,25 +71,63 @@ export const DashboardUsersUI = {
         };
     },
 
+    getToolBar() {
+        const navbar = this.el('nav', ['navbar', 'navbar-light', 'bg-white', 'shadow-sm', 'rounded', 'p-3', 'mb-4']);
+     
+        // O Form agora é um container flex que muda de direção conforme o tamanho da tela
+        // No mobile: flex-column (empilhado) | No desktop: flex-md-row (alinhado)
+        const filterForm = this.el('div', ['d-flex', 'flex-column', 'flex-md-row', 'gap-2', 'w-100']);
+
+        // 1. Select Box de Filtros
+        const selectFilter = this.el('select', ['form-select', 'w-100'], { 
+            id: 'filterType',
+            style: 'max-width: 200px;' // Limita o tamanho apenas no desktop
+        });
+    
+        const options = [
+            { value: 'none', text: 'Nenhum' },
+            { value: 'username', text: 'Username' },
+            { value: 'document', text: 'Documento' },
+            { value: 'role', text: 'Perfil (Role)' },
+            { value: 'active', text: 'Status (Ativo)' }
+        ];
+
+        options.forEach(opt => {
+            const o = this.el('option', [], { value: opt.value, textContent: opt.text });
+            selectFilter.append(o);
+        });
+
+        // 2. Input de Valor
+        const inputVal = this.el('input', ['form-control', 'flex-grow-1', 'w-100'], { 
+            id: 'filterValue', 
+            type: 'text', 
+            placeholder: 'Digite o valor para pesquisar...',
+            'aria-label': 'Search'
+        });
+
+        // 3. Botão de Pesquisa (sem submit)
+        const btnSearch = this.el('button', ['btn', 'btn-outline-success', 'w-100'], { 
+            id: 'btnExecuteSearch',
+            type: 'button', // Importante para não disparar reload da página
+            textContent: 'Pesquisar'
+        });
+        
+        // Ajuste de largura para desktop: o botão não deve ser gigante
+        btnSearch.style.width = 'auto';
+        btnSearch.classList.add('flex-md-shrink-0');
+
+        // Agrupamento
+        filterForm.append(selectFilter, inputVal, btnSearch);
+        navbar.append(filterForm);
+
+        return navbar;
+    },
+    
     populate(users) {
-        const desktop = document.getElementById('gridDesktop');
         const mobile = document.getElementById('gridMobile');
-        desktop.innerHTML = '';
         mobile.innerHTML = '';
 
         users.forEach(user => {
-            // Render Desktop Row
-            const tr = this.el('tr');
-            tr.append(
-                this.el('td', ['text-muted'], { textContent: user.id }),
-                this.el('td', ['fw-bold'], { textContent: user.username }),
-                this.el('td', [], { textContent: `${user.document_type}: ${user.document}` }),
-                this.el('td', [], { textContent: user.role }),
-                this.el('td', [], { innerHTML: user.active ? '<span class="badge bg-success">Ativo</span>' : '<span class="badge bg-danger">Inativo</span>' }),
-                this.createActions(user, false)
-            );
-            desktop.append(tr);
-
             // Render Mobile Card
             const card = this.el('div', ['card', 'border-0', 'shadow-sm']);
             const cBody = this.el('div', ['card-body']);
