@@ -114,7 +114,7 @@ export const DashboardUI = {
         const userData = document.createElement('div');
         userData.innerHTML = `
             <span style="margin-right: 15px;"><strong>Usuário:</strong> <span id="info-username">...</span></span>
-            <span style="margin-right: 15px;"><strong>Doc:</strong> <span id="info-doc-type">...</span> - <span id="info-doc">...</span></span>
+            <span style="margin-right: 15px;"><strong><span id="info-doc-type">...</span></strong>:&nbsp<span id="info-doc">...</span></span>
         `;
 
         // Botão de Logout
