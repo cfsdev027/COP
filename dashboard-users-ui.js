@@ -29,6 +29,27 @@ export const DashboardUsersUI = {
         return element;
     },
 
+    getNavbar() {
+        const navbar = this.el('nav',['navbar','bg-light']);
+        navbar.innerHTML =`
+                <div class="container-fluid">
+                    <form class="d-flex" role="search">
+                        <select class="form-select" aria-label="Default select example">
+                            <option selected>Filtro</option>
+                            <option value="none">Nenhum</option>
+                            <option value="username">Usuário</option>
+                            <option value="document">Documento</option>
+                            <option value="role">Role</option>
+                            <option value="active">Status</option>
+                        </select>
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form>
+                </div>`;
+
+        return navbar;
+    },
+
     render() {
         this.section.innerHTML = '';
         
@@ -36,45 +57,12 @@ export const DashboardUsersUI = {
         const main = this.el('div', ['container-fluid', 'py-4', 'px-3', 'bg-light', 'min-vh-100']);
 
         // --- NAVBAR DE BUSCA (ESTILO MODERNO) ---
-        const searchCard = this.el('div', ['card', 'border-0', 'shadow-sm', 'mb-4']);
-        const cardBody = this.el('div', ['card-body', 'p-3']);
-        
-        // Grid do Bootstrap: empilha no mobile (col-12) e alinha no desktop (col-md)
-        const row = this.el('div', ['row', 'g-2', 'align-items-center']);
-
-        const colSelect = this.el('div', ['col-12', 'col-md-3']);
-        const select = this.el('select', ['form-select'], { id: 'filterType' });
-        [
-            {v:'none', t:'🔍 Filtrar por...'},
-            {v:'username', t:'Username'},
-            {v:'document', t:'Documento'},
-            {v:'role', t:'Perfil'},
-            {v:'active', t:'Status'}
-        ].forEach(opt => select.append(this.el('option', [], { value: opt.v, textContent: opt.t })));
-        colSelect.append(select);
-
-        const colInput = this.el('div', ['col-12', 'col-md-7']);
-        const input = this.el('input', ['form-control'], { 
-            id: 'filterValue', 
-            placeholder: 'Digite o termo de pesquisa...' 
-        });
-        colInput.append(input);
-
-        const colBtn = this.el('div', ['col-12', 'col-md-2', 'd-grid']);
-        const btn = this.el('button', ['btn', 'btn-primary'], { 
-            id: 'btnExecuteSearch', 
-            textContent: 'Pesquisar' 
-        });
-        colBtn.append(btn);
-
-        row.append(colSelect, colInput, colBtn);
-        cardBody.append(row);
-        searchCard.append(cardBody);
+        const navbar = this.getNavbar();
 
         // --- GRID CONTAINER ---
         const gridContent = this.el('div', ['w-100'], { id: 'gridContent' });
 
-        main.append(searchCard, gridContent);
+        main.append(navbar, gridContent);
         this.section.append(main);
     },
 
