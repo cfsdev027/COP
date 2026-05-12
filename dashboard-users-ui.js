@@ -44,7 +44,6 @@ export const DashboardUsersUI = {
     },
     
     getNavbar() {
-        const filters
         const navbar = this.el('nav',['navbar','bg-light']);
         const navbarContainer = this.el('div', ['container-fluid']);
         const navbarForm = this.el('form', ['d-flex'], { role: 'search' });
@@ -57,7 +56,7 @@ export const DashboardUsersUI = {
         });
 
         const navbarInput = this.el('input', ['form-control', 'me-2'], {id: 'navbar-filter-input', type: 'search' });
-        const navbarButton = this.el('button', ['btn', 'btn-outline-success'], { type: 'submit', innerHTML: 'Buscar' }
+        const navbarButton = this.el('button', ['btn', 'btn-outline-success'], { type: 'submit', innerHTML: 'Buscar' });
 
         navbarForm.append(navbarFilter, navbarInput, navbarButton);
         navbarContainer.append(navbarForm);
@@ -87,9 +86,9 @@ export const DashboardUsersUI = {
         if (!btn) return;
 
         btn.onclick = async () => {
-            const type = document.getElementById('filterType').value;
-            const val = document.getElementById('filterValue').value;
-            console.log('Pesquisando...', type, val);
+            const type = document.getElementById('navbar-filter-select').value;
+            const val = document.getElementById('navbar-filter-input').value;
+            
             // Aqui você chamaria ServiceUsers.fetch...
             const users = await ServiceUsers.get(); 
             this.populateGrid(users);
