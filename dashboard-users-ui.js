@@ -7,7 +7,7 @@ export const DashboardUsersUI = {
     section: document.getElementById(SECTION_DASHBOARD_USERS_ID),
     auth: ServiceAuthentication.get_auth(),
     filters: [
-        {v: 'none', t: 'Nenhum'},
+        {v: 'none', t: '🔍 Nenhum'},
         {v: 'username', t: 'Usuário'},
         {v: 'document', t: 'Documento'},
         {v: 'role', t: 'Role'},
@@ -18,8 +18,8 @@ export const DashboardUsersUI = {
         try {
             if (!this.section) throw "Missing SECTION";
             this.render();
-            // O setTimeout garante que o navegador terminou de pintar o HTML antes do JS buscar os IDs
-            setTimeout(() => this.dataInit(), 50);
+            // Aumentamos levemente o tempo para garantir o fluxo do navegador
+            setTimeout(() => this.dataInit(), 100);
         } catch (err) {
             console.error('[DASHBOARD_init_error]:', err);
         }
@@ -27,14 +27,9 @@ export const DashboardUsersUI = {
 
     el(tag, classes = [], attrs = {}) {
         const element = document.createElement(tag);
-        
-        // Garante que classes sejam adicionadas individualmente
         if (classes.length > 0) {
-            classes.forEach(cls => {
-                if (cls) element.classList.add(cls);
-            });
+            classes.forEach(cls => cls && element.classList.add(cls));
         }
-
         for (const [key, val] of Object.entries(attrs)) {
             if (key === 'textContent') element.textContent = val;
             else if (key === 'innerHTML') element.innerHTML = val;
@@ -44,69 +39,46 @@ export const DashboardUsersUI = {
     },
     
     getNavbar() {
-        const navbar = this.el(
-            'nav', 
-            [
-                'navbar', 
-                'navbar-light', 
-                'bg-white', 
-                'shadow-sm', 
-                'rounded', 
-                'p-3', 
-                'mb-4', 
-                'border', 
-                'align-items-center'
-            ]
+        // 'h-auto' garante que a navbar não estique verticalmente
+        const navbar = this.el('nav', 
+            ['navbar', 'navbar-light', 'bg-white', 'shadow-sm', 'rounded', 'p-3', 'mb-4', 'border', 'h-auto']
         );
         
-        const navbarContainer = this.el('div', ['container-fluid', 'p-0']);
-
+        const container = this.el('div', ['container-fluid', 'p-0']);
+        // 'align-items-center' mantém os filtros centralizados sem esticar
         const row = this.el('div', ['row', 'g-2', 'w-100', 'm-0', 'align-items-center']);
 
         const colSelect = this.el('div', ['col-12', 'col-md-3']);
         const select = this.el('select', ['form-select'], { id: 'navbar-filter-select' });
-        
-        this.filters.forEach(f => {
-            select.append(this.el('option', [], { value: f.v, textContent: f.t }));
-        });
-        
+        this.filters.forEach(f => select.append(this.el('option', [], { value: f.v, textContent: f.t })));
         colSelect.append(select);
 
         const colInput = this.el('div', ['col-12', 'col-md-7']);
         const input = this.el('input', ['form-control'], { 
             id: 'navbar-filter-input', 
-            type: 'text', 
-            placeholder: 'Digite para pesquisar...' 
+            placeholder: 'Pesquisar valor...' 
         });
-        
         colInput.append(input);
 
-        // Coluna do Botão - corrigindo o erro de fechamento de parênteses
         const colBtn = this.el('div', ['col-12', 'col-md-2', 'd-grid']);
         const btn = this.el('button', ['btn', 'btn-primary'], { 
             id: 'btnExecuteSearch', 
-            type: 'button', 
             textContent: 'Pesquisar' 
         });
-        
         colBtn.append(btn);
-        row.append(colSelect, colInput, colBtn);
-        navbarContainer.append(row);
-        navbar.append(navbarContainer);
 
+        row.append(colSelect, colInput, colBtn);
+        container.append(row);
+        navbar.append(container);
         return navbar;
     },
 
     render() {
         this.section.innerHTML = '';
-        
-        // Container mestre com fundo sutil para destacar os cards brancos
-        const main = this.el('div', ['container-fluid', 'py-4', 'px-3', 'bg-light', 'min-vh-100']);
+        // Usamos 'd-flex flex-column' para empilhar os elementos corretamente
+        const main = this.el('div', ['container-fluid', 'py-4', 'px-3', 'bg-light', 'min-vh-100', 'd-flex', 'flex-column']);
 
-        // --- NAVBAR DE BUSCA (ESTILO MODERNO) ---
         const navbar = this.getNavbar();
-
-        // --- GRID CONTAINER ---
         const gridContent = this.el('div', ['w-100'], { id: 'gridContent' });
 
         main.append(navbar, gridContent);
@@ -120,8 +92,6 @@ export const DashboardUsersUI = {
         btn.onclick = async () => {
             const type = document.getElementById('navbar-filter-select').value;
             const val = document.getElementById('navbar-filter-input').value;
-            
-            // Aqui você chamaria ServiceUsers.fetch...
             const users = await ServiceUsers.get(); 
             this.populateGrid(users);
         };
@@ -135,40 +105,35 @@ export const DashboardUsersUI = {
         if (!container) return;
         container.innerHTML = '';
 
-        // Layout Responsivo: Cards que parecem itens de lista profissionais
         const listGroup = this.el('div', ['row', 'g-3']);
 
         users.forEach(user => {
-            const col = this.el('div', ['col-12', 'col-lg-6']); // 1 por linha mobile, 2 no desktop
+            const col = this.el('div', ['col-12', 'col-md-6']); 
             const card = this.el('div', ['card', 'h-100', 'border-0', 'shadow-sm', 'border-start', 'border-primary', 'border-4']);
             const body = this.el('div', ['card-body', 'p-3']);
 
             const statusBadge = user.active 
-                ? '<span class="badge bg-success-subtle text-success float-end">Ativo</span>'
-                : '<span class="badge bg-danger-subtle text-danger float-end">Inativo</span>';
+                ? '<span class="badge bg-success text-white float-end">Ativo</span>'
+                : '<span class="badge bg-danger text-white float-end">Inativo</span>';
 
             body.innerHTML = `
                 ${statusBadge}
-                <h6 class="card-title mb-1 text-uppercase fw-bold text-dark">${user.username}</h6>
-                <p class="text-muted small mb-2">ID: <span class="user-select-all">${user.id}</span></p>
-                
+                <h6 class="fw-bold text-dark mb-1">${user.username}</h6>
+                <p class="text-muted small mb-3">ID: ${user.id}</p>
                 <div class="row small mb-3">
                     <div class="col-6">
                         <label class="text-muted d-block small">Documento</label>
-                        <span class="fw-medium">${user.document_type}: ${user.document}</span>
+                        <span>${user.document_type}: ${user.document}</span>
                     </div>
                     <div class="col-6 border-start">
                         <label class="text-muted d-block small">Perfil</label>
-                        <span class="fw-medium">${user.role}</span>
+                        <span>${user.role}</span>
                     </div>
                 </div>
             `;
 
-            const footer = this.el('div', ['d-flex', 'gap-2']);
-            const btnEdit = this.el('button', ['btn', 'btn-sm', 'btn-outline-primary', 'flex-grow-1'], { textContent: 'Editar Registro' });
-            
-            footer.append(btnEdit);
-            body.append(footer);
+            const btnEdit = this.el('button', ['btn', 'btn-sm', 'btn-outline-primary', 'w-100'], { textContent: 'Editar' });
+            body.append(btnEdit);
             card.append(body);
             col.append(card);
             listGroup.append(col);
