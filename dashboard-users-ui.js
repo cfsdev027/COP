@@ -3,6 +3,7 @@ import {
 } from './config-dashboard-users-ui.js';
 import {ENV} from './configurations.js';
 import {ServiceAuthentication} from './service-authentication.js';
+import {ServiceUsers} from './service-users.js';
 
 export const DashboardUsersUI = {
     section: document.getElementById(SECTION_DASHBOARD_USERS_ID),
