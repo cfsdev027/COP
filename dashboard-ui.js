@@ -26,7 +26,6 @@ export const DashboardUI = {
             if(ENV === 'dev') alert('[DASHBOARD_init_error]: ' + JSON.stringify(err));
         }
     },
-
     render() {
         this.section.innerHTML = '';
         
@@ -35,6 +34,10 @@ export const DashboardUI = {
         
         if(SECTION_DASHBOARD_SBMC_ID == null) 
             throw {stack: 'DashboardUI.render()', error_message: 'Missing SECTION_DASHBOARD_SBMC_ID'};
+
+        const userInfoHeader = this.getUserInfoHeader();
+        if(userInfoHeader != null) 
+            this.section.append(userInfoHeader);
       
         // 1. Criar o Sidebar (Aside)
         const aside = document.createElement('aside');
@@ -76,6 +79,50 @@ export const DashboardUI = {
 
         // Inicializa o conteúdo baseado na role inicial
         this.initDashboard();
+    },
+    gerUserInfoHeader(){
+        const userInfoHeader = document.createElement('div');
+        userInfoHeader.id = 'user-info-header';
+        userInfoHeader.style.cssText = `
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 20px; 
+            background: #f8f9fa; 
+            border-bottom: 1px solid #ddd;
+            font-size: 0.9rem;
+        `;
+
+        // Container para os dados textuais
+        const userData = document.createElement('div');
+        userData.innerHTML = `
+            <span style="margin-right: 15px;"><strong>Usuário:</strong> <span id="info-username">...</span></span>
+            <span style="margin-right: 15px;"><strong>Doc:</strong> <span id="info-doc-type">...</span> - <span id="info-doc">...</span></span>
+        `;
+
+        // Botão de Logout
+        const logoutBtn = document.createElement('button');
+        logoutBtn.textContent = 'Sair';
+        logoutBtn.style.cssText = 'padding: 5px 12px; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 4px;';
+        logoutBtn.onclick = () => {
+            // Implemente sua lógica de logout aqui (ex: limpar cookies/localStorage e recarregar)
+            console.log('Executando Logout...');
+            location.reload(); 
+        };
+
+        userInfoHeader.append(userData, logoutBtn);
+
+        return userInfoHeader;
+    },
+    setUserInfoHeader() {
+        // Carregamento dos dados do usuário nos elementos do Header
+        const elName = document.getElementById('info-username');
+        const elDocType = document.getElementById('info-doc-type');
+        const elDoc = document.getElementById('info-doc');
+
+        if (elName) elName.textContent = this.auth.username || 'Não informado';
+        if (elDocType) elDocType.textContent = this.auth.document_type || 'DOC';
+        if (elDoc) elDoc.textContent = this.auth.document || '000.000.000-00';
     },
     initDashboard() {
         if (this.auth == null) throw 'Missing authentication.';
@@ -141,7 +188,9 @@ export const DashboardUI = {
                 ]
             }
         };
-        
+
+        this.setUserInfoHeader();
+
         const config = uiConfig[this.auth.role] || uiConfig['DEFAULT'];
         if (config == null) throw 'Missing configuration for role: ' + this.auth.role;
         if (config.menu == null) throw 'Missing configuration menu for role: ' + this.auth.role;
