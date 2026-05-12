@@ -71,7 +71,7 @@ export const DashboardUI = {
             // Inicializa o conteúdo baseado na role inicial
             this.initDashboard(selector.value);
         } catch (err) {
-            alert(JSON.stringify(err);
+            alert(JSON.stringify(err));
         }
     },
     /**
