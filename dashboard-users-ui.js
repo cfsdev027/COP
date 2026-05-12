@@ -1,51 +1,29 @@
-import {
-    SECTION_DASHBOARD_USERS_ID
-} from './config-dashboard-users-ui.js';
-import {ENV} from './configurations.js';
-import {ServiceAuthentication} from './service-authentication.js';
-import {ServiceUsers} from './service-users.js';
+import { SECTION_DASHBOARD_USERS_ID } from './config-dashboard-users-ui.js';
+import { ENV } from './configurations.js';
+import { ServiceAuthentication } from './service-authentication.js';
+import { ServiceUsers } from './service-users.js';
 
 export const DashboardUsersUI = {
     section: document.getElementById(SECTION_DASHBOARD_USERS_ID),
     auth: ServiceAuthentication.get_auth(),
-    is_auth() {
-        return (this.auth !== null && this.auth !== undefined);
-    },
+
     init() {
         try {
-            if(SECTION_DASHBOARD_USERS_ID == null) 
-                throw {stack: 'DashboardUsersUI.init()', error_message: 'Missing SECTION_DASHBOARD_USERS_ID'};
-            
-            if (this.section) {
-                this.render();
-                setTimeout(() => this.dataInit(), 0);
-            } else {
-                throw {stack: 'DashboardUsersUI.init()', error_message: 'Missing SECTION'};
-            }
-        } catch(err) {
-            if(ENV !== 'dev') return;
-            if(typeof err === 'string'){
-                alert('[DASHBOARD_init_error]: ' + err);
-            } else {
-                alert('[DASHBOARD_init_error]: ' + JSON.stringify(err));
-            }
+            if (!this.section) throw "Missing SECTION";
+            this.render();
+            // O setTimeout garante que o navegador terminou de pintar o HTML antes do JS buscar os IDs
+            setTimeout(() => this.dataInit(), 50);
+        } catch (err) {
+            console.error('[DASHBOARD_init_error]:', err);
         }
     },
-    
-    // Função 'el' robusta para garantir aplicação de classes e atributos
+
     el(tag, classes = [], attrs = {}) {
         const element = document.createElement(tag);
-        
-        // Garante que classes sejam adicionadas individualmente
-        if (classes.length > 0) {
-            classes.forEach(cls => {
-                if (cls) element.classList.add(cls);
-            });
-        }
-
+        if (classes.length) element.classList.add(...classes.filter(c => c));
         for (const [key, val] of Object.entries(attrs)) {
-            if (key === 'textContent') element.textContent = val;
-            else if (key === 'innerHTML') element.innerHTML = val;
+            if (key === 'innerHTML') element.innerHTML = val;
+            else if (key === 'textContent') element.textContent = val;
             else element.setAttribute(key, val);
         }
         return element;
@@ -54,73 +32,65 @@ export const DashboardUsersUI = {
     render() {
         this.section.innerHTML = '';
         
-        // Container mestre com reset de box-sizing para evitar extrapolação
-        const main = this.el('div', ['container-fluid', 'p-3', 'p-md-4', 'bg-light', 'w-100'], {
-            style: 'overflow-x: hidden; min-height: 100vh;'
-        });
+        // Container mestre com fundo sutil para destacar os cards brancos
+        const main = this.el('div', ['container-fluid', 'py-4', 'px-3', 'bg-light', 'min-vh-100']);
 
-        // --- NAVBAR DE BUSCA (Ajustada conforme imagem 1000033229) ---
-        const nav = this.el('nav', ['navbar', 'navbar-light', 'bg-white', 'shadow-sm', 'rounded', 'p-3', 'mb-4', 'border']);
-        const filterForm = this.el('div', ['d-flex', 'flex-column', 'flex-md-row', 'gap-2', 'w-100']);
+        // --- NAVBAR DE BUSCA (ESTILO MODERNO) ---
+        const searchCard = this.el('div', ['card', 'border-0', 'shadow-sm', 'mb-4']);
+        const cardBody = this.el('div', ['card-body', 'p-3']);
+        
+        // Grid do Bootstrap: empilha no mobile (col-12) e alinha no desktop (col-md)
+        const row = this.el('div', ['row', 'g-2', 'align-items-center']);
 
-        // Select de Filtro
+        const colSelect = this.el('div', ['col-12', 'col-md-3']);
         const select = this.el('select', ['form-select'], { id: 'filterType' });
-        const options = [
-            { v: 'none', t: 'Nenhum' },
-            { v: 'username', t: 'Username' },
-            { v: 'document', t: 'Documento' },
-            { v: 'role', t: 'Perfil' },
-            { v: 'active', t: 'Status' }
-        ];
-        options.forEach(opt => {
-            const o = this.el('option', [], { value: opt.v, textContent: opt.t });
-            select.append(o);
-        });
+        [
+            {v:'none', t:'🔍 Filtrar por...'},
+            {v:'username', t:'Username'},
+            {v:'document', t:'Documento'},
+            {v:'role', t:'Perfil'},
+            {v:'active', t:'Status'}
+        ].forEach(opt => select.append(this.el('option', [], { value: opt.v, textContent: opt.t })));
+        colSelect.append(select);
 
-        // Input de busca
+        const colInput = this.el('div', ['col-12', 'col-md-7']);
         const input = this.el('input', ['form-control'], { 
             id: 'filterValue', 
-            type: 'text', 
-            placeholder: 'Digite o valor para pesquisar...' 
+            placeholder: 'Digite o termo de pesquisa...' 
         });
+        colInput.append(input);
 
-        // Botão Pesquisar
-        const btn = this.el('button', ['btn', 'btn-primary', 'px-4'], { 
+        const colBtn = this.el('div', ['col-12', 'col-md-2', 'd-grid']);
+        const btn = this.el('button', ['btn', 'btn-primary'], { 
             id: 'btnExecuteSearch', 
-            type: 'button', 
             textContent: 'Pesquisar' 
         });
+        colBtn.append(btn);
 
-        filterForm.append(select, input, btn);
-        nav.append(filterForm);
+        row.append(colSelect, colInput, colBtn);
+        cardBody.append(row);
+        searchCard.append(cardBody);
 
-        // --- GRID CONTAINER (Cards Mobile / Table Desktop) ---
+        // --- GRID CONTAINER ---
         const gridContent = this.el('div', ['w-100'], { id: 'gridContent' });
 
-        main.append(nav, gridContent);
+        main.append(searchCard, gridContent);
         this.section.append(main);
     },
 
     async dataInit() {
         const btn = document.getElementById('btnExecuteSearch');
-        
-        // Verificação de segurança para o erro de 'null'
-        if (!btn) {
-            console.warn('Botão de busca não encontrado no DOM. Tentando novamente...');
-            return;
-        }
+        if (!btn) return;
 
         btn.onclick = async () => {
             const type = document.getElementById('filterType').value;
             const val = document.getElementById('filterValue').value;
-            
-            // Aqui entra sua lógica de ServiceUsers
-            console.log('Executando busca:', type, val);
-            const users = await ServiceUsers.get(); // Exemplo: recarregando todos
+            console.log('Pesquisando...', type, val);
+            // Aqui você chamaria ServiceUsers.fetch...
+            const users = await ServiceUsers.get(); 
             this.populateGrid(users);
         };
 
-        // Carga inicial de dados
         const initialUsers = await ServiceUsers.get();
         this.populateGrid(initialUsers);
     },
@@ -130,26 +100,45 @@ export const DashboardUsersUI = {
         if (!container) return;
         container.innerHTML = '';
 
-        // Versão Mobile: Lista de Cards (conforme imagem 1000033229)
-        const mobileList = this.el('div', ['d-md-none', 'd-flex', 'flex-column', 'gap-3']);
-        
+        // Layout Responsivo: Cards que parecem itens de lista profissionais
+        const listGroup = this.el('div', ['row', 'g-3']);
+
         users.forEach(user => {
-            const card = this.el('div', ['card', 'border-0', 'shadow-sm']);
+            const col = this.el('div', ['col-12', 'col-lg-6']); // 1 por linha mobile, 2 no desktop
+            const card = this.el('div', ['card', 'h-100', 'border-0', 'shadow-sm', 'border-start', 'border-primary', 'border-4']);
             const body = this.el('div', ['card-body', 'p-3']);
-            
+
+            const statusBadge = user.active 
+                ? '<span class="badge bg-success-subtle text-success float-end">Ativo</span>'
+                : '<span class="badge bg-danger-subtle text-danger float-end">Inativo</span>';
+
             body.innerHTML = `
-                <div class="mb-1"><strong>${user.username}</strong> <span class="text-muted small">ID: ${user.id}</span></div>
-                <div class="small"><strong>Documento:</strong> ${user.document_type} - ${user.document}</div>
-                <div class="small mb-2"><strong>Perfil:</strong> ${user.role} | <strong>Status:</strong> ${user.active ? 'Ativo' : 'Inativo'}</div>
+                ${statusBadge}
+                <h6 class="card-title mb-1 text-uppercase fw-bold text-dark">${user.username}</h6>
+                <p class="text-muted small mb-2">ID: <span class="user-select-all">${user.id}</span></p>
+                
+                <div class="row small mb-3">
+                    <div class="col-6">
+                        <label class="text-muted d-block small">Documento</label>
+                        <span class="fw-medium">${user.document_type}: ${user.document}</span>
+                    </div>
+                    <div class="col-6 border-start">
+                        <label class="text-muted d-block small">Perfil</label>
+                        <span class="fw-medium">${user.role}</span>
+                    </div>
+                </div>
             `;
+
+            const footer = this.el('div', ['d-flex', 'gap-2']);
+            const btnEdit = this.el('button', ['btn', 'btn-sm', 'btn-outline-primary', 'flex-grow-1'], { textContent: 'Editar Registro' });
             
-            const btnEdit = this.el('button', ['btn', 'btn-sm', 'btn-outline-secondary', 'w-100'], { textContent: 'Editar' });
-            body.append(btnEdit);
+            footer.append(btnEdit);
+            body.append(footer);
             card.append(body);
-            mobileList.append(card);
+            col.append(card);
+            listGroup.append(col);
         });
 
-        container.append(mobileList);
-        // (Adicione aqui a lógica análoga para a tabela Desktop se desejar)
+        container.append(listGroup);
     }
 };
