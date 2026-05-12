@@ -79,6 +79,10 @@ export const DashboardUI = {
      * @param {string} role - O nível de acesso ('admin' ou 'default')
      */
     initDashboard(role) {
+
+        if (this.auth == null) throw 'Missing authentication.';
+        if (this.auth.role == null) throw 'Missing authentication role.';
+        
         // 1. Definição das configurações de UI por perfil
         const uiConfig = {
             admin: {
@@ -140,8 +144,11 @@ export const DashboardUI = {
             }
         };
 
-        const config = uiConfig[role] || uiConfig['default'];
-
+        const config = uiConfig[this.auth.role] || uiConfig['default'];
+        if (config == null) throw 'Missing configuration for role: ' + this.auth.role;
+        if (config.menu == null) throw 'Missing configuration menu for role: ' + this.auth.role;
+        if (config.metrics == null) throw 'Missing configuration metrics for role: ' + this.auth.role;
+        
         // 2. Atualizar o Menu Lateral
         const menuContainer = document.getElementById(SECTION_DASHBOARD_SBMC_ID);
         if (menuContainer) {
