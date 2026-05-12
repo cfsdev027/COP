@@ -146,19 +146,23 @@ export const DashboardUI = {
             ADMIN: {
                 menu: [{
                         label: 'Usuários',
-                        icon: '👤'
+                        icon: '👤',
+                        on_click: () => alert('Usuários')
                     },
                     {
                         label: 'Ordens de Produção (OP)',
-                        icon: '🏭'
+                        icon: '🏭',
+                        on_click: () => alert('Ordens de Produção (OP)')
                     },
                     {
                         label: 'Jornadas',
-                        icon: '🔍'
+                        icon: '🔍',
+                        on_click: () => alert('Jornadas')
                     },
                     {
                         label: 'Relatórios',
-                        icon: '📈'
+                        icon: '📈',
+                        on_click: () => alert('Relatórios')
                     }
                 ],
                 metrics: [{
@@ -181,11 +185,13 @@ export const DashboardUI = {
             DEFAULT: {
                 menu: [{
                         label: 'Jornadas',
-                        icon: '⏱️'
+                        icon: '⏱️',
+                        on_click: () => alert('Jornadas')
                     },
                     {
                         label: 'Espelho de Ponto',
-                        icon: '📅'
+                        icon: '📅',
+                        on_click: () => alert('Espelho de Ponto')
                     }
                 ],
                 metrics: [{
@@ -220,7 +226,7 @@ export const DashboardUI = {
                 navItem.innerHTML = `<span>${item.icon}</span> <span style="margin-left: 10px;">${item.label}</span>`;
 
                 // Exemplo de feedback visual ao clicar
-                navItem.onclick = () => console.log(`Acessando: ${item.label}`);
+                navItem.onclick = () => item.on_click();
 
                 menuContainer.appendChild(navItem);
             });
