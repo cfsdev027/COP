@@ -2,7 +2,7 @@ import {
     SECTION_DASHBOARD_ID,
     SECTION_DASHBOARD_SIDEBAR_ID
 } from './config-dashboard-ui.js';
-import {ENV} from './configurarions.js';
+import {ENV} from './configurations.js';
 import {ServiceAuthentication} from './service-authentication.js';
 
 export const DashboardUI = {
