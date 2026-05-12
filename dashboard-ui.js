@@ -33,8 +33,8 @@ export const DashboardUI = {
         if(ENV === 'dev') alert('[DASHBOARD_render]: rendering(sidebar).');
         if(SECTION_DASHBOARD_SIDEBAR_ID == null) 
             throw {stack: 'DashboardUI.render()', error_message: 'Missing SECTION_DASHBOARD_SIDEBAR_ID'};
-        if(SECTION_DASHBOARD_SIDEBAR_ID == null) 
-            throw {stack: 'DashboardUI.render()', error_message: 'Missing SECTION_DASHBOARD_SIDEBAR_ID'};
+        if(SECTION_DASHBOARD_SBMC_ID == null) 
+            throw {stack: 'DashboardUI.render()', error_message: 'Missing SECTION_DASHBOARD_SBMC_ID'};
       
         // 1. Criar o Sidebar (Aside)
         const aside = document.createElement('aside');
