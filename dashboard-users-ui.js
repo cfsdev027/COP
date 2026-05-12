@@ -31,191 +31,123 @@ export const DashboardUsersUI = {
             }
         }
     },
+    el(tag, classes = [], attributes = {}) {
+        const element = document.createElement(tag);
+        if (classes.length) element.classList.add(...classes.filter(c => c));
+        for (const [key, value] of Object.entries(attributes)) {
+            element.setAttribute(key, value);
+        }
+        return element;
+    },
+
     render() {
-        this.section.innerHTML = `
-            <div class="container-fluid py-4 animate__animated animate__fadeIn">
-                <!-- SEÇÃO DE FILTROS -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-white py-3">
-                        <h6 class="m-0 font-weight-bold text-primary"><i class="bi bi-funnel"></i> Filtros de Consulta</h6>
-                    </div>
-                    <div class="card-body">
-                        <form id="filterForm" class="row g-3">
-                            <div class="col-12 col-md-3">
-                                <input type="text" id="f_username" class="form-control form-control-sm" placeholder="Username">
-                            </div>
-                            <div class="col-6 col-md-2">
-                                <select id="f_docType" class="form-select form-select-sm">
-                                    <option value="">Tipo Doc.</option>
-                                    <option value="CPF">CPF</option>
-                                    <option value="CNPJ">CNPJ</option>
-                                </select>
-                            </div>
-                            <div class="col-6 col-md-2">
-                                <input type="text" id="f_doc" class="form-control form-control-sm" placeholder="Documento">
-                            </div>
-                            <div class="col-6 col-md-2">
-                                <select id="f_role" class="form-select form-select-sm">
-                                    <option value="">Role (Todos)</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="user">User</option>
-                                </select>
-                            </div>
-                            <div class="col-6 col-md-1">
-                                <select id="f_active" class="form-select form-select-sm">
-                                    <option value="true">Ativo</option>
-                                    <option value="false">Inativo</option>
-                                </select>
-                            </div>
-                            <div class="col-12 col-md-2 d-grid">
-                                <button type="button" id="btnFilter" class="btn btn-primary btn-sm">
-                                    Pesquisar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+        this.section.innerHTML = ''; // Limpa para evitar duplicidade
+        const container = this.el('div', ['container-fluid', 'py-4']);
 
-                <!-- GRIDVIEW -->
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="ps-3">ID</th>
-                                        <th>Criado em</th>
-                                        <th>Username</th>
-                                        <th>Doc. Tipo</th>
-                                        <th>Documento</th>
-                                        <th>Role</th>
-                                        <th>Status</th>
-                                        <th class="text-end pe-3">Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="userGridBody">
-                                    <!-- Dinâmico -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        // --- SEÇÃO DE FILTROS ---
+        const cardFilter = this.el('div', ['card', 'border-0', 'shadow-sm', 'mb-4']);
+        const cardBody = this.el('div', ['card-body']);
+        const filterForm = this.el('div', ['row', 'g-2']);
 
-            <!-- MODAL DE EDIÇÃO -->
-            <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content border-0 shadow">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Editar Usuário</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body" id="modalEditBody">
-                            <!-- Form de edição dinâmico -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+        // Criando os inputs de filtro
+        const colUser = this.el('div', ['col-12', 'col-md-3']);
+        const inputUser = this.el('input', ['form-control'], { id: 'f_username', placeholder: 'Usuário' });
+        colUser.append(inputUser);
+
+        const colDoc = this.el('div', ['col-12', 'col-md-3']);
+        const inputDoc = this.el('input', ['form-control'], { id: 'f_doc', placeholder: 'Documento' });
+        colDoc.append(inputDoc);
+
+        const colBtn = this.el('div', ['col-12', 'col-md-2', 'd-grid']);
+        const btnFilter = this.el('button', ['btn', 'btn-primary'], { id: 'btnFilter' });
+        btnFilter.textContent = 'Filtrar';
+        colBtn.append(btnFilter);
+
+        filterForm.append(colUser, colDoc, colBtn);
+        cardBody.append(filterForm);
+        cardFilter.append(cardBody);
+
+        // --- GRIDVIEW RESPONSIVO ---
+        const gridWrapper = this.el('div', ['card', 'border-0', 'shadow-sm']);
+        const gridBody = this.el('div', ['card-body', 'p-0'], { id: 'userGridContainer' });
+        
+        // Criamos o header da tabela (oculto no mobile via CSS)
+        const table = this.el('table', ['table', 'table-hover', 'd-none', 'd-md-table', 'mb-0']);
+        const thead = this.el('thead', ['table-light']);
+        const trH = this.el('tr');
+        ['ID', 'Usuário', 'Doc', 'Role', 'Status', ''].forEach(text => {
+            const th = this.el('th');
+            th.textContent = text;
+            trH.append(th);
+        });
+        thead.append(trH);
+        
+        const tbody = this.el('tbody', [], { id: 'userTableBody' });
+        table.append(thead, tbody);
+        
+        // Container para versão Mobile (Cards)
+        const mobileContainer = this.el('div', ['d-md-none'], { id: 'userMobileContainer' });
+
+        gridBody.append(table, mobileContainer);
+        gridWrapper.append(gridBody);
+
+        container.append(cardFilter, gridWrapper);
+        this.section.append(container);
     },
 
     async dataInit() {
-        // Carga inicial
         const users = await ServiceUsers.get();
         this.populateGrid(users);
 
-        // Listener de Filtros
-        document.getElementById('btnFilter').addEventListener('click', async () => {
-            const filters = {
-                username: document.getElementById('f_username').value,
-                docType: document.getElementById('f_docType').value,
-                doc: document.getElementById('f_doc').value,
-                role: document.getElementById('f_role').value,
-                active: document.getElementById('f_active').value
-            };
-            
-            // Lógica de escolha do fetch baseado no filtro preenchido
-            let result;
-            if(filters.username) result = await ServiceUsers.fetchByUsernameAndPassword(filters.username, "");
-            else if(filters.doc) result = await ServiceUsers.fetchByDocumentTypeAndDocument(filters.docType, filters.doc);
-            else if(filters.role) result = await ServiceUsers.fetchByRole(filters.role);
-            else result = await ServiceUsers.fetchByActive(filters.active === 'true');
-
-            this.populateGrid(Array.isArray(result) ? result : [result]);
-        });
+        document.getElementById('btnFilter').onclick = async () => {
+            const user = document.getElementById('f_username').value;
+            const res = await ServiceUsers.fetchByUsernameAndPassword(user, "");
+            this.populateGrid(Array.isArray(res) ? res : [res]);
+        };
     },
 
     populateGrid(users) {
-        const tbody = document.getElementById('userGridBody');
-        tbody.innerHTML = users.map(user => `
-            <tr>
-                <td class="ps-3 text-muted">#${user.id}</td>
-                <td>${new Date(user.created_at).toLocaleDateString()}</td>
-                <td class="fw-bold">${user.username}</td>
-                <td><span class="badge bg-light text-dark border">${user.document_type}</span></td>
-                <td>${user.document}</td>
-                <td><span class="badge bg-info-subtle text-info text-uppercase">${user.role}</span></td>
-                <td>
-                    <span class="dot ${user.active ? 'bg-success' : 'bg-danger'}"></span>
-                    ${user.active ? 'Ativo' : 'Inativo'}
-                </td>
-                <td class="text-end pe-3">
-                    <button class="btn btn-sm btn-outline-primary border-0" onclick="DashboardUsersUI.openEdit(${user.id})">
-                        Editar
-                    </button>
-                </td>
-            </tr>
-        `).join('');
+        const tbody = document.getElementById('userTableBody');
+        const mobileContainer = document.getElementById('userMobileContainer');
+        
+        tbody.innerHTML = '';
+        mobileContainer.innerHTML = '';
+
+        users.forEach(user => {
+            // Versão Desktop (Linha da Tabela)
+            const tr = this.el('tr', ['align-middle']);
+            tr.append(
+                this.el('td', ['text-muted'], {}, `#${user.id}`),
+                this.el('td', ['fw-bold'], {}, user.username),
+                this.el('td', [], {}, `${user.document_type}: ${user.document}`),
+                this.el('td', [], {}, user.role),
+                this.el('td', [], {}, user.active ? 'Ativo' : 'Inativo'),
+                this.createActionBtn(user.id)
+            );
+            tbody.append(tr);
+
+            // Versão Mobile (Card)
+            const mCard = this.el('div', ['p-3', 'border-bottom']);
+            mCard.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <strong>${user.username}</strong>
+                    <span class="badge ${user.active ? 'bg-success' : 'bg-danger'}">${user.role}</span>
+                </div>
+                <div class="small text-muted mt-1">${user.document_type}: ${user.document}</div>
+            `;
+            const btnWrap = this.el('div', ['mt-2']);
+            btnWrap.append(this.createActionBtn(user.id, true));
+            mCard.append(btnWrap);
+            mobileContainer.append(mCard);
+        });
     },
 
-    async openEdit(id) {
-        const user = await ServiceUsers.fetch(id);
-        const modalBody = document.getElementById('modalEditBody');
-        
-        modalBody.innerHTML = `
-            <div class="row g-3">
-                <div class="col-12">
-                    <label class="form-label small fw-bold">Username</label>
-                    <input type="text" id="edit_username" class="form-control" value="${user.username}">
-                </div>
-                <div class="col-12">
-                    <label class="form-label small fw-bold">Senha</label>
-                    <input type="password" id="edit_password" class="form-control" value="${user.password}">
-                </div>
-                <div class="col-6">
-                    <label class="form-label small fw-bold">Tipo Doc</label>
-                    <select id="edit_docType" class="form-select">
-                        <option value="CPF" ${user.document_type === 'CPF' ? 'selected' : ''}>CPF</option>
-                        <option value="CNPJ" ${user.document_type === 'CNPJ' ? 'selected' : ''}>CNPJ</option>
-                    </select>
-                </div>
-                <div class="col-6">
-                    <label class="form-label small fw-bold">Documento</label>
-                    <input type="text" id="edit_doc" class="form-control" value="${user.document}">
-                </div>
-                <div class="col-12">
-                    <button class="btn btn-primary w-100" onclick="DashboardUsersUI.saveUpdate(${user.id})">Salvar Alterações</button>
-                </div>
-            </div>
-        `;
-        
-        const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
-        modal.show();
-    },
-
-    async saveUpdate(id) {
-        const data = [
-            id,
-            document.getElementById('edit_username').value,
-            document.getElementById('edit_password').value,
-            document.getElementById('edit_docType').value,
-            document.getElementById('edit_doc').value,
-            'user', // ou pegar de um select
-            true    // ou pegar de um select
-        ];
-
-        await ServiceUsers.update(...data);
-        alert('Usuário atualizado com sucesso!');
-        location.reload(); 
+    createActionBtn(id, fullWidth = false) {
+        const td = this.el('td', [fullWidth ? 'd-grid' : 'text-end']);
+        const btn = this.el('button', ['btn', 'btn-sm', 'btn-outline-secondary']);
+        btn.textContent = 'Editar';
+        btn.onclick = () => this.openEdit(id);
+        td.append(btn);
+        return td;
     }
 };
