@@ -46,17 +46,7 @@ export const DashboardUI = {
             greeting.id = 'user-greeting';
             greeting.textContent = 'Bem-vindo';
 
-            const selector = document.createElement('select');
-            selector.id = 'role-selector';
-            selector.setAttribute('onchange', 'initDashboard(this.value)');
-
-            // Opções do Select
-            const optDefault = new Option('Visão: Colaborador (Default)', 'default');
-            const optAdmin = new Option('Visão: Administrador', 'admin');
-            selector.add(optDefault);
-            selector.add(optAdmin);
-
-            dashHeader.append(greeting, selector);
+            dashHeader.append(greeting);
 
             // Grid de Métricas
             const gridMetrics = document.createElement('div');
@@ -69,7 +59,7 @@ export const DashboardUI = {
             this.section.append(aside, dashDiv);
 
             // Inicializa o conteúdo baseado na role inicial
-            this.initDashboard(selector.value);
+            this.initDashboard();
         } catch (err) {
             alert(JSON.stringify(err));
         }
@@ -78,7 +68,7 @@ export const DashboardUI = {
      * Inicializa e atualiza os componentes do Dashboard baseado no perfil do usuário.
      * @param {string} role - O nível de acesso ('admin' ou 'default')
      */
-    initDashboard(role) {
+    initDashboard() {
 
         if (this.auth == null) throw 'Missing authentication.';
         if (this.auth.role == null) throw 'Missing authentication role.';
