@@ -17,62 +17,62 @@ export const DashboardUI = {
     },
 
     render() {
-        alert('renderizando dashboard');
-        
-        this.section.innerHTML = '';
+        try {
+            this.section.innerHTML = '';
 
-        // 1. Criar o Sidebar (Aside)
-        const aside = document.createElement('aside');
-        aside.id = SECTION_DASHBOARD_SIDEBAR_ID;
+            // 1. Criar o Sidebar (Aside)
+            const aside = document.createElement('aside');
+            aside.id = SECTION_DASHBOARD_SIDEBAR_ID;
 
-        const brand = document.createElement('div');
-        brand.style.cssText = 'padding: 0 20px 20px; font-weight: bold; color: var(--accent);';
-        brand.textContent = 'PROJETO COP';
+            const brand = document.createElement('div');
+            brand.style.cssText = 'padding: 0 20px 20px; font-weight: bold; color: var(--accent);';
+            brand.textContent = 'PROJETO COP';
 
-        const nav = document.createElement('nav');
-        nav.id = SECTION_DASHBOARD_SBMC_ID;
+            const nav = document.createElement('nav');
+            nav.id = SECTION_DASHBOARD_SBMC_ID;
 
-        aside.append(brand, nav);
+            aside.append(brand, nav);
 
-        // 2. Criar o Container do Dashboard
-        const dashDiv = document.createElement('div');
-        dashDiv.id = 'dashboard';
-        dashDiv.className = 'dashboard'; // Corrigido de 'classe' para 'className'
+            // 2. Criar o Container do Dashboard
+            const dashDiv = document.createElement('div');
+            dashDiv.id = 'dashboard';
+            dashDiv.className = 'dashboard'; // Corrigido de 'classe' para 'className'
 
-        // Header do Dashboard
-        const dashHeader = document.createElement('div');
-        dashHeader.className = 'dashboard-header';
+            // Header do Dashboard
+            const dashHeader = document.createElement('div');
+            dashHeader.className = 'dashboard-header';
 
-        const greeting = document.createElement('h1');
-        greeting.id = 'user-greeting';
-        greeting.textContent = 'Bem-vindo';
+            const greeting = document.createElement('h1');
+            greeting.id = 'user-greeting';
+            greeting.textContent = 'Bem-vindo';
 
-        const selector = document.createElement('select');
-        selector.id = 'role-selector';
-        selector.setAttribute('onchange', 'initDashboard(this.value)');
+            const selector = document.createElement('select');
+            selector.id = 'role-selector';
+            selector.setAttribute('onchange', 'initDashboard(this.value)');
 
-        // Opções do Select
-        const optDefault = new Option('Visão: Colaborador (Default)', 'default');
-        const optAdmin = new Option('Visão: Administrador', 'admin');
-        selector.add(optDefault);
-        selector.add(optAdmin);
+            // Opções do Select
+            const optDefault = new Option('Visão: Colaborador (Default)', 'default');
+            const optAdmin = new Option('Visão: Administrador', 'admin');
+            selector.add(optDefault);
+            selector.add(optAdmin);
 
-        dashHeader.append(greeting, selector);
+            dashHeader.append(greeting, selector);
 
-        // Grid de Métricas
-        const gridMetrics = document.createElement('div');
-        gridMetrics.className = 'grid-metrics';
-        gridMetrics.id = 'metrics-container';
+            // Grid de Métricas
+            const gridMetrics = document.createElement('div');
+            gridMetrics.className = 'grid-metrics';
+            gridMetrics.id = 'metrics-container';
 
-        dashDiv.append(dashHeader, gridMetrics);
+            dashDiv.append(dashHeader, gridMetrics);
 
-        // 3. Injetar no Container Principal
-        this.section.append(aside, dashDiv);
+            // 3. Injetar no Container Principal
+            this.section.append(aside, dashDiv);
 
-        alert('dashboard renderizada.');
-
-        // Inicializa o conteúdo baseado na role inicial
-        this.initDashboard(selector.value);
+            // Inicializa o conteúdo baseado na role inicial
+            this.initDashboard(selector.value);
+        } catch (err) {
+            alert(JSON.stringify(err);
+        }
     },
     /**
      * Inicializa e atualiza os componentes do Dashboard baseado no perfil do usuário.
