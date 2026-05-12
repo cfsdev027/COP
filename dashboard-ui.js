@@ -16,7 +16,7 @@ export const DashboardUI = {
         }
     },
 
-    function render() {
+    render: function() {
         this.section.innerHTML = '';
 
         // 1. Criar o Sidebar (Aside)
