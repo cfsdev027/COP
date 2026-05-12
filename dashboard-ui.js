@@ -2,6 +2,7 @@ import {
     SECTION_DASHBOARD_ID,
     SECTION_DASHBOARD_SIDEBAR_ID
 } from './config-dashboard-ui.js';
+import {ENV} from './configurarions.js';
 import {ServiceAuthentication} from './service-authentication.js';
 
 export const DashboardUI = {
@@ -11,64 +12,73 @@ export const DashboardUI = {
         return (this.auth !== null && this.auth !== undefined);
     },
     init() {
-        if (this.section) {
-            this.render();
+        try {
+            if (this.section) {
+                this.render();
+            } else {
+                throw 'Missing dashboard section.';
+            }
+        } catch(err) {
+            if(ENV === 'dev') alert('[DASHBOARD_init_error]: ' + JSON.stringify(err));
         }
     },
 
     render() {
-        try {
-            this.section.innerHTML = '';
+        this.section.innerHTML = '';
 
-            // 1. Criar o Sidebar (Aside)
-            const aside = document.createElement('aside');
-            aside.id = SECTION_DASHBOARD_SIDEBAR_ID;
+        if(ENV === 'dev') alert('[DASHBOARD_render]: rendering(sidebar).');
 
-            const brand = document.createElement('div');
-            brand.style.cssText = 'padding: 0 20px 20px; font-weight: bold; color: var(--accent);';
-            brand.textContent = 'PROJETO COP';
+        // 1. Criar o Sidebar (Aside)
+        const aside = document.createElement('aside');
+        aside.id = SECTION_DASHBOARD_SIDEBAR_ID;
 
-            const nav = document.createElement('nav');
-            nav.id = SECTION_DASHBOARD_SBMC_ID;
+        const brand = document.createElement('div');
+        brand.style.cssText = 'padding: 0 20px 20px; font-weight: bold; color: var(--accent);';
+        brand.textContent = 'PROJETO COP';
 
-            aside.append(brand, nav);
+        const nav = document.createElement('nav');
+        nav.id = SECTION_DASHBOARD_SBMC_ID;
 
-            // 2. Criar o Container do Dashboard
-            const dashDiv = document.createElement('div');
-            dashDiv.id = 'dashboard';
-            dashDiv.className = 'dashboard'; // Corrigido de 'classe' para 'className'
+        aside.append(brand, nav);
 
-            // Header do Dashboard
-            const dashHeader = document.createElement('div');
-            dashHeader.className = 'dashboard-header';
+        if(ENV === 'dev') alert('[DASHBOARD_render]: rendering(dashboard-container).');
 
-            const greeting = document.createElement('h1');
-            greeting.id = 'user-greeting';
-            greeting.textContent = 'Bem-vindo';
+        // 2. Criar o Container do Dashboard
+        const dashDiv = document.createElement('div');
+        dashDiv.id = 'dashboard';
+        dashDiv.className = 'dashboard'; // Corrigido de 'classe' para 'className'
 
-            dashHeader.append(greeting);
+        // Header do Dashboard
+        const dashHeader = document.createElement('div');
+        dashHeader.className = 'dashboard-header';
 
-            // Grid de Métricas
-            const gridMetrics = document.createElement('div');
-            gridMetrics.className = 'grid-metrics';
-            gridMetrics.id = 'metrics-container';
+        const greeting = document.createElement('h1');
+        greeting.id = 'user-greeting';
+        greeting.textContent = 'Bem-vindo';
 
-            dashDiv.append(dashHeader, gridMetrics);
+        dashHeader.append(greeting);
 
-            // 3. Injetar no Container Principal
-            this.section.append(aside, dashDiv);
+        if(ENV === 'dev') alert('[DASHBOARD_render]: rendering(metrics).');
 
-            // Inicializa o conteúdo baseado na role inicial
-            this.initDashboard();
-        } catch (err) {
-            alert('[Dashboard_render_error]: ' + JSON.stringify(err));
-        }
+        // Grid de Métricas
+        const gridMetrics = document.createElement('div');
+        gridMetrics.className = 'grid-metrics';
+        gridMetrics.id = 'metrics-container';
+
+        dashDiv.append(dashHeader, gridMetrics);
+
+        // 3. Injetar no Container Principal
+         this.section.append(aside, dashDiv);
+
+        // Inicializa o conteúdo baseado na role inicial
+        this.initDashboard();
     },
     /**
      * Inicializa e atualiza os componentes do Dashboard baseado no perfil do usuário.
      * @param {string} role - O nível de acesso ('admin' ou 'default')
      */
     initDashboard() {
+        if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering.');
 
         if (this.auth == null) throw 'Missing authentication.';
         if (this.auth.role == null) throw 'Missing authentication role.';
@@ -134,12 +144,15 @@ export const DashboardUI = {
             }
         };
 
+        if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering(config).');
+        
         const config = uiConfig[this.auth.role] || uiConfig['default'];
         if (config == null) throw 'Missing configuration for role: ' + this.auth.role;
         if (config.menu == null) throw 'Missing configuration menu for role: ' + this.auth.role;
         if (config.metrics == null) throw 'Missing configuration metrics for role: ' + this.auth.role;
         
         // 2. Atualizar o Menu Lateral
+        if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering(update-sidemenu).');
         const menuContainer = document.getElementById(SECTION_DASHBOARD_SBMC_ID);
         if (menuContainer) {
             menuContainer.innerHTML = ''; // Limpa o menu atual
@@ -157,6 +170,7 @@ export const DashboardUI = {
         }
 
         // 3. Atualizar os Cards de Métricas (Grid)
+        if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering(update-metrics).');
         const metricsContainer = document.getElementById('metrics-container');
         if (metricsContainer) {
             metricsContainer.innerHTML = ''; // Limpa os cards atuais
@@ -182,6 +196,7 @@ export const DashboardUI = {
         }
 
         // 4. Atualizar Título da Página
+        if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering(update-title).');
         const greeting = document.getElementById('user-greeting');
         if (greeting) {
             greeting.textContent = role === 'admin' ? 'Painel Administrativo' : 'Área do Colaborador';
