@@ -90,10 +90,9 @@ export const DashboardUsersUI = {
         });
         
         colBtn.append(btn);
-
         row.append(colSelect, colInput, colBtn);
-        container.append(row);
-        navbar.append(container);
+        navbarContainer.append(row);
+        navbar.append(navbarContainer);
 
         return navbar;
     },
