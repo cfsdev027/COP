@@ -23,7 +23,12 @@ export const DashboardUI = {
                 throw {stack: 'DashboardUI.init()', error_message: 'Missing SECTION'};
             }
         } catch(err) {
-            if(ENV === 'dev') alert('[DASHBOARD_init_error]: ' + JSON.stringify(err));
+            if(ENV !== 'dev') return;
+            if(typeof err === 'string'){
+                alert('[DASHBOARD_init_error]: ' + err);
+            } else {
+                alert('[DASHBOARD_init_error]: ' + JSON.stringify(err));
+            }
         }
     },
     render() {
@@ -80,7 +85,7 @@ export const DashboardUI = {
         // Inicializa o conteúdo baseado na role inicial
         this.initDashboard();
     },
-    gerUserInfoHeader(){
+    getUserInfoHeader(){
         const userInfoHeader = document.createElement('div');
         userInfoHeader.id = 'user-info-header';
         userInfoHeader.style.cssText = `
