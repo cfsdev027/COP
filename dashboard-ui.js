@@ -145,19 +145,19 @@ export const DashboardUI = {
         const uiConfig = {
             ADMIN: {
                 menu: [{
-                        label: 'Cadastro Usuários',
+                        label: 'Usuários',
                         icon: '👤'
                     },
                     {
-                        label: 'Ordens de Produção',
+                        label: 'Ordens de Produção (OP)',
                         icon: '🏭'
                     },
                     {
-                        label: 'Auditoria de Ordens',
+                        label: 'Jornadas',
                         icon: '🔍'
                     },
                     {
-                        label: 'Relatórios do Sistema',
+                        label: 'Relatórios',
                         icon: '📈'
                     }
                 ],
@@ -180,7 +180,7 @@ export const DashboardUI = {
             },
             DEFAULT: {
                 menu: [{
-                        label: 'Jornada de Trabalho',
+                        label: 'Jornadas',
                         icon: '⏱️'
                     },
                     {
