@@ -44,23 +44,56 @@ export const DashboardUsersUI = {
     },
     
     getNavbar() {
-        const navbar = this.el('nav',['navbar','bg-light']);
-        const navbarContainer = this.el('div', ['container-fluid']);
-        const navbarForm = this.el('form', ['d-flex'], { role: 'search' });
-        const navbarFilter = this.el('select',['form-select'], { id: 'navbar-filter-select' });
+        const navbar = this.el(
+            'nav', 
+            [
+                'navbar', 
+                'navbar-light', 
+                'bg-white', 
+                'shadow-sm', 
+                'rounded', 
+                'p-3', 
+                'mb-4', 
+                'border', 
+                'align-items-center'
+            ]
+        );
+        
+        const navbarContainer = this.el('div', ['container-fluid', 'p-0']);
 
-        this.filters.forEach(filter => {
-            navbarFilter.append(
-                this.el('option', [], { value: filter.v, textContent: filter.t})
-            );
+        const row = this.el('div', ['row', 'g-2', 'w-100', 'm-0', 'align-items-center']);
+
+        const colSelect = this.el('div', ['col-12', 'col-md-3']);
+        const select = this.el('select', ['form-select'], { id: 'navbar-filter-select' });
+        
+        this.filters.forEach(f => {
+            select.append(this.el('option', [], { value: f.v, textContent: f.t }));
         });
+        
+        colSelect.append(select);
 
-        const navbarInput = this.el('input', ['form-control', 'me-2'], {id: 'navbar-filter-input', type: 'search' });
-        const navbarButton = this.el('button', ['btn', 'btn-outline-success'], { type: 'submit', innerHTML: 'Buscar' });
+        const colInput = this.el('div', ['col-12', 'col-md-7']);
+        const input = this.el('input', ['form-control'], { 
+            id: 'navbar-filter-input', 
+            type: 'text', 
+            placeholder: 'Digite para pesquisar...' 
+        });
+        
+        colInput.append(input);
 
-        navbarForm.append(navbarFilter, navbarInput, navbarButton);
-        navbarContainer.append(navbarForm);
-        navbar.append(navbarContainer);
+        // Coluna do Botão - corrigindo o erro de fechamento de parênteses
+        const colBtn = this.el('div', ['col-12', 'col-md-2', 'd-grid']);
+        const btn = this.el('button', ['btn', 'btn-primary'], { 
+            id: 'btnExecuteSearch', 
+            type: 'button', 
+            textContent: 'Pesquisar' 
+        });
+        
+        colBtn.append(btn);
+
+        row.append(colSelect, colInput, colBtn);
+        container.append(row);
+        navbar.append(container);
 
         return navbar;
     },
