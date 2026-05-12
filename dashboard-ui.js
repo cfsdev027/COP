@@ -5,6 +5,7 @@ import {
 } from './config-dashboard-ui.js';
 import {ENV} from './configurations.js';
 import {ServiceAuthentication} from './service-authentication.js';
+import {AppRouter} from './app-router.js';
 
 export const DashboardUI = {
     section: document.getElementById(SECTION_DASHBOARD_ID),
@@ -147,7 +148,7 @@ export const DashboardUI = {
                 menu: [{
                         label: 'Usuários',
                         icon: '👤',
-                        on_click: () => alert('Usuários')
+                        on_click: () => AppRouter['dashboard_users'].init()
                     },
                     {
                         label: 'Ordens de Produção (OP)',
