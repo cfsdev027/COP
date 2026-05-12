@@ -32,149 +32,123 @@ export const DashboardUsersUI = {
         }
     },
 
-    // Helper para facilitar a criação de elementos
     el(tag, classes = [], attrs = {}) {
         const element = document.createElement(tag);
         if (classes.length) element.classList.add(...classes.filter(c => c));
         for (const [key, val] of Object.entries(attrs)) {
-            if (key === 'dataset') {
-                Object.assign(element.dataset, val);
-            } else {
-                element[key] = val;
-            }
+            if (key === 'innerHTML') element.innerHTML = val;
+            else if (key === 'textContent') element.textContent = val;
+            else element.setAttribute(key, val);
         }
         return element;
     },
 
     render() {
         this.section.innerHTML = '';
-        const mainContainer = this.el('div', ['container-fluid', 'p-3', 'bg-light', 'min-vh-100']);
+        const main = this.el('div', ['container-fluid', 'p-2', 'p-md-4', 'bg-light']);
 
-        // --- BARRA SUPERIOR (Ações e Busca Rápida) ---
-        const topBar = this.el('div', ['d-flex', 'justify-content-between', 'align-items-center', 'mb-3', 'gap-2']);
+        // --- TOOLBAR (Busca e Novo) ---
+        const toolbar = this.el('div', ['d-flex', 'flex-column', 'flex-md-row', 'justify-content-between', 'gap-2', 'mb-3']);
         
-        const searchGroup = this.el('div', ['input-group', 'w-50']);
-        const searchInput = this.el('input', ['form-control'], { id: 'f_username', placeholder: 'Busca rápida (Username)...' });
-        const btnSearch = this.el('button', ['btn', 'btn-outline-secondary'], { id: 'btnSearch', innerHTML: '🔍' });
-        searchGroup.append(searchInput, btnSearch);
+        const searchBox = this.el('div', ['input-group', 'shadow-sm']);
+        const input = this.el('input', ['form-control'], { id: 'f_username', placeholder: 'Buscar usuário...' });
+        const btnS = this.el('button', ['btn', 'btn-primary'], { id: 'btnSearch', textContent: 'Pesquisar' });
+        searchBox.append(input, btnS);
 
-        const actionsGroup = this.el('div', ['d-flex', 'gap-2']);
-        const btnNew = this.el('button', ['btn', 'btn-success'], { id: 'btnNew', textContent: 'Novo' });
-        const btnExit = this.el('button', ['btn', 'btn-secondary'], { textContent: 'Sair' });
-        actionsGroup.append(btnNew, btnExit);
+        const actions = this.el('div', ['d-flex', 'gap-2']);
+        const btnNew = this.el('button', ['btn', 'btn-success', 'flex-grow-1'], { id: 'btnNew', textContent: '+ Novo Usuário' });
+        actions.append(btnNew);
 
-        topBar.append(searchGroup, actionsGroup);
+        toolbar.append(searchBox, actions);
 
-        // --- GRID TABLE ---
-        const tableContainer = this.el('div', ['card', 'shadow-sm', 'border-0']);
-        const table = this.el('table', ['table', 'table-bordered', 'table-sm', 'align-middle', 'm-0']);
-        
-        // Header conforme imagem 1000033227.jpg
-        const thead = this.el('thead', ['table-secondary', 'text-secondary', 'small']);
+        // --- GRID DESKTOP (Table) ---
+        const d_card = this.el('div', ['card', 'd-none', 'd-md-block', 'border-0', 'shadow-sm']);
+        const table = this.el('table', ['table', 'table-hover', 'align-middle', 'mb-0']);
+        const thead = this.el('thead', ['table-dark']);
         const trH = this.el('tr');
-        ['Ações', 'Id', 'Username', 'Tipo Doc', 'Documento', 'Role', 'Status'].forEach(text => {
-            const th = this.el('th', ['p-2'], { textContent: text });
-            trH.append(th);
+        ['ID', 'Usuário', 'Documento', 'Role', 'Status', 'Ações'].forEach(t => {
+            trH.append(this.el('th', ['small', 'py-3'], { textContent: t }));
         });
         thead.append(trH);
-
-        const tbody = this.el('tbody', [], { id: 'userGridBody' });
+        const tbody = this.el('tbody', [], { id: 'gridDesktop' });
         table.append(thead, tbody);
-        tableContainer.append(table);
+        d_card.append(table);
 
-        mainContainer.append(topBar, tableContainer);
-        this.section.append(mainContainer);
+        // --- GRID MOBILE (Cards) ---
+        const m_container = this.el('div', ['d-md-none', 'd-flex', 'flex-column', 'gap-3'], { id: 'gridMobile' });
+
+        main.append(toolbar, d_card, m_container);
+        this.section.append(main);
     },
 
     async dataInit() {
-        const users = await ServiceUsers.get();
-        this.populateGrid(users);
-
-        document.getElementById('btnSearch').onclick = async () => {
-            const query = document.getElementById('f_username').value;
-            const res = await ServiceUsers.fetchByUsernameAndPassword(query, "");
-            this.populateGrid(Array.isArray(res) ? res : [res]);
+        const load = async () => {
+            const users = await ServiceUsers.get();
+            this.populate(users);
         };
 
-        document.getElementById('btnNew').onclick = () => this.addNewRow();
+        await load();
+        document.getElementById('btnSearch').onclick = async () => {
+            const val = document.getElementById('f_username').value;
+            const res = await ServiceUsers.fetchByUsernameAndPassword(val, "");
+            this.populate(Array.isArray(res) ? res : [res]);
+        };
     },
 
-    populateGrid(users) {
-        const tbody = document.getElementById('userGridBody');
-        tbody.innerHTML = '';
+    populate(users) {
+        const desktop = document.getElementById('gridDesktop');
+        const mobile = document.getElementById('gridMobile');
+        desktop.innerHTML = '';
+        mobile.innerHTML = '';
 
         users.forEach(user => {
-            const tr = this.el('tr', ['user-row']);
-            tr.dataset.userId = user.id;
-
-            // Coluna de Ações
-            const tdActions = this.el('td', ['text-center', 'p-1']);
-            const btnEdit = this.el('button', ['btn', 'btn-sm', 'text-primary', 'p-0', 'me-2'], { innerHTML: '✏️', title: 'Editar' });
-            const btnDel = this.el('button', ['btn', 'btn-sm', 'text-danger', 'p-0'], { innerHTML: '🗑️', title: 'Excluir' });
-            
-            btnEdit.onclick = () => this.toggleEditRow(tr, user);
-            tdActions.append(btnEdit, btnDel);
-
+            // Render Desktop Row
+            const tr = this.el('tr');
             tr.append(
-                tdActions,
-                this.el('td', ['text-muted', 'small'], { textContent: user.id }),
-                this.el('td', [], { textContent: user.username }),
-                this.el('td', [], { textContent: user.document_type }),
-                this.el('td', [], { textContent: user.document }),
+                this.el('td', ['text-muted'], { textContent: user.id }),
+                this.el('td', ['fw-bold'], { textContent: user.username }),
+                this.el('td', [], { textContent: `${user.document_type}: ${user.document}` }),
                 this.el('td', [], { textContent: user.role }),
-                this.el('td', [], { textContent: user.active ? 'Ativo' : 'Inativo' })
+                this.el('td', [], { innerHTML: user.active ? '<span class="badge bg-success">Ativo</span>' : '<span class="badge bg-danger">Inativo</span>' }),
+                this.createActions(user, false)
             );
-            tbody.append(tr);
+            desktop.append(tr);
+
+            // Render Mobile Card
+            const card = this.el('div', ['card', 'border-0', 'shadow-sm']);
+            const cBody = this.el('div', ['card-body']);
+            cBody.innerHTML = `
+                <div class="d-flex justify-content-between border-bottom pb-2 mb-2">
+                    <span class="fw-bold text-primary">${user.username}</span>
+                    <span class="badge bg-light text-dark">ID: ${user.id}</span>
+                </div>
+                <div class="small mb-1"><strong>Documento:</strong> ${user.document_type} - ${user.document}</div>
+                <div class="small mb-3"><strong>Perfil:</strong> ${user.role} | <strong>Status:</strong> ${user.active ? 'Ativo' : 'Inativo'}</div>
+            `;
+            cBody.append(this.createActions(user, true));
+            card.append(cBody);
+            mobile.append(card);
         });
     },
 
-    toggleEditRow(tr, user) {
-        // Transforma a linha em inputs (Editable Inline)
-        const cells = tr.cells;
+    createActions(user, isMobile) {
+        const container = this.el('div', [isMobile ? 'd-grid' : 'd-flex', 'gap-2']);
+        const btnEdit = this.el('button', ['btn', 'btn-sm', isMobile ? 'btn-outline-primary' : 'btn-light'], { textContent: 'Editar' });
         
-        // Ações mudam para Confirmar/Cancelar
-        cells[0].innerHTML = '';
-        const btnSave = this.el('button', ['btn', 'btn-sm', 'text-success', 'me-2'], { innerHTML: '✅' });
-        const btnCancel = this.el('button', ['btn', 'btn-sm', 'text-secondary'], { innerHTML: '❌' });
-        
-        btnSave.onclick = () => this.saveRowUpdate(tr, user.id);
-        btnCancel.onclick = () => this.populateGrid([user]); // Simplificado: recarrega a linha
-        cells[0].append(btnSave, btnCancel);
+        btnEdit.onclick = () => {
+            const newName = prompt(`Editar Username para ${user.username}:`, user.username);
+            if(newName) {
+                ServiceUsers.update(user.id, newName, user.password, user.document_type, user.document, user.role, user.active);
+                location.reload();
+            }
+        };
 
-        // Transformação dos campos em inputs
-        cells[2].innerHTML = `<input type="text" class="form-control form-control-sm" value="${user.username}" id="edit_name_${user.id}">`;
-        cells[3].innerHTML = `<select class="form-select form-select-sm" id="edit_type_${user.id}">
-                                <option ${user.document_type === 'CPF' ? 'selected' : ''}>CPF</option>
-                                <option ${user.document_type === 'CNPJ' ? 'selected' : ''}>CNPJ</option>
-                              </select>`;
-        cells[4].innerHTML = `<input type="text" class="form-control form-control-sm" value="${user.document}" id="edit_doc_${user.id}">`;
-    },
-
-    async saveRowUpdate(tr, id) {
-        const username = document.getElementById(`edit_name_${id}`).value;
-        const docType = document.getElementById(`edit_type_${id}`).value;
-        const doc = document.getElementById(`edit_doc_${id}`).value;
-
-        // Chamada ao seu serviço existente
-        await ServiceUsers.update(id, username, '******', docType, doc, 'user', true);
-        alert('Registro atualizado!');
-        const users = await ServiceUsers.get();
-        this.populateGrid(users);
-    },
-
-    addNewRow() {
-        const tbody = document.getElementById('userGridBody');
-        const tr = this.el('tr', ['table-info']);
-        
-        tr.innerHTML = `
-            <td class="text-center"><button class="btn btn-sm text-success">💾</button></td>
-            <td class="text-muted small">NEW</td>
-            <td><input type="text" class="form-control form-control-sm" placeholder="Username"></td>
-            <td><select class="form-select form-select-sm"><option>CPF</option><option>CNPJ</option></select></td>
-            <td><input type="text" class="form-control form-control-sm" placeholder="000.000..."></td>
-            <td><input type="text" class="form-control form-control-sm" value="user"></td>
-            <td>Ativo</td>
-        `;
-        tbody.prepend(tr); // Adiciona no topo como na imagem
+        container.append(btnEdit);
+        if(!isMobile) {
+            const td = this.el('td');
+            td.append(container);
+            return td;
+        }
+        return container;
     }
 };
