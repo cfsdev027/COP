@@ -17,6 +17,8 @@ export const DashboardUI = {
     },
 
     render() {
+        alert('renderizando dashboard');
+        
         this.section.innerHTML = '';
 
         // 1. Criar o Sidebar (Aside)
@@ -66,6 +68,8 @@ export const DashboardUI = {
 
         // 3. Injetar no Container Principal
         this.section.append(aside, dashDiv);
+
+        alert('dashboard renderizada.');
 
         // Inicializa o conteúdo baseado na role inicial
         this.initDashboard(selector.value);
