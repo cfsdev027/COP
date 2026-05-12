@@ -14,10 +14,13 @@ export const DashboardUI = {
     },
     init() {
         try {
+            if(SECTION_DASHBOARD_ID == null) 
+                throw {stack: 'DashboardUI.init()', error_message: 'Missing SECTION_DASHBOARD_ID'};
+            
             if (this.section) {
                 this.render();
             } else {
-                throw 'Missing dashboard section.';
+                throw {stack: 'DashboardUI.init()', error_message: 'Missing SECTION'};
             }
         } catch(err) {
             if(ENV === 'dev') alert('[DASHBOARD_init_error]: ' + JSON.stringify(err));
@@ -28,7 +31,11 @@ export const DashboardUI = {
         this.section.innerHTML = '';
 
         if(ENV === 'dev') alert('[DASHBOARD_render]: rendering(sidebar).');
-
+        if(SECTION_DASHBOARD_SIDEBAR_ID == null) 
+            throw {stack: 'DashboardUI.render()', error_message: 'Missing SECTION_DASHBOARD_SIDEBAR_ID'};
+        if(SECTION_DASHBOARD_SIDEBAR_ID == null) 
+            throw {stack: 'DashboardUI.render()', error_message: 'Missing SECTION_DASHBOARD_SIDEBAR_ID'};
+      
         // 1. Criar o Sidebar (Aside)
         const aside = document.createElement('aside');
         aside.id = SECTION_DASHBOARD_SIDEBAR_ID;
@@ -74,10 +81,6 @@ export const DashboardUI = {
         // Inicializa o conteúdo baseado na role inicial
         this.initDashboard();
     },
-    /**
-     * Inicializa e atualiza os componentes do Dashboard baseado no perfil do usuário.
-     * @param {string} role - O nível de acesso ('admin' ou 'default')
-     */
     initDashboard() {
         if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering.');
 
@@ -200,7 +203,7 @@ export const DashboardUI = {
         if(ENV === 'dev') alert('[DASHBOARD_init_dashboard]: rendering(update-title).');
         const greeting = document.getElementById('user-greeting');
         if (greeting) {
-            greeting.textContent = role === 'admin' ? 'Painel Administrativo' : 'Área do Colaborador';
+            greeting.textContent = this.auth.role === 'admin' ? 'Painel Administrativo' : 'Área do Colaborador';
         }
     }
 };
