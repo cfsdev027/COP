@@ -85,6 +85,18 @@ export const DashboardUI = {
         // Inicializa o conteúdo baseado na role inicial
         this.initDashboard();
     },
+    btnLogoutOnClick() {
+        if(!confirm("Deseja realmente sair?")) return;
+
+        (async () => {
+            let isLogout = await ServiceAuthentication.logout();
+            if(!isLogout) {
+                return;
+            }
+
+            window.location.reload();
+        })();
+    },
     getUserInfoHeader(){
         const userInfoHeader = document.createElement('div');
         userInfoHeader.id = 'user-info-header';
@@ -109,11 +121,7 @@ export const DashboardUI = {
         const logoutBtn = document.createElement('button');
         logoutBtn.textContent = 'Sair';
         logoutBtn.style.cssText = 'padding: 5px 12px; cursor: pointer; background: #e74c3c; color: white; border: none; border-radius: 4px;';
-        logoutBtn.onclick = () => {
-            // Implemente sua lógica de logout aqui (ex: limpar cookies/localStorage e recarregar)
-            console.log('Executando Logout...');
-            location.reload(); 
-        };
+        logoutBtn.onclick = () => this.btnLogoutOnClick();
 
         userInfoHeader.append(userData, logoutBtn);
 
