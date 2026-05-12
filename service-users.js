@@ -55,7 +55,7 @@ export const ServiceUsers = {
             return null;
         }
     },
-    fetchByDocument: async function(documentType,document) {
+    fetchByDocumentTypeAndDocument: async function(documentType,document) {
         try {
             const client = ServiceSupabase.client();
 
@@ -64,6 +64,40 @@ export const ServiceUsers = {
               .eq('document_type', documentType)
               .eq('document', document)
               .maybeSingle();
+
+            if (error) throw error;
+
+            return data;
+        } catch(err) {
+            console.log('An exception has ben throw in service Users.fetchByDocument: ' + err.message);
+          
+            return null;
+        }
+    },
+    fetchByRole: async function(role) {
+        try {
+            const client = ServiceSupabase.client();
+
+            const { data, error } = await client.from('users')
+              .select()
+              .eq('role', role);
+
+            if (error) throw error;
+
+            return data;
+        } catch(err) {
+            console.log('An exception has ben throw in service Users.fetchByDocument: ' + err.message);
+          
+            return null;
+        }
+    },
+    fetchByActive: async function(active) {
+        try {
+            const client = ServiceSupabase.client();
+
+            const { data, error } = await client.from('users')
+              .select()
+              .eq('active', active);
 
             if (error) throw error;
 
