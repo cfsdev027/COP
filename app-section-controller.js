@@ -18,12 +18,13 @@ export const AppSectionController = {
             if (nextSection == activeSection) return;
             
             if (activeSection) {
+                activeSection.innerHTML = '';
                 activeSection.classList.remove(SECTION_ACTIVE_CLASSNAME);
             }
     
             nextSection.classList.add(SECTION_ACTIVE_CLASSNAME);
         } catch(err) {
-                console.log('[AppSectionController.navigateTo] ' + err.message);
+            console.log('[AppSectionController.navigateTo] ' + err.message);
         }
     }
 }
