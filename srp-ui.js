@@ -161,16 +161,16 @@ export const SrpUI = {
     },
 
     btnLogoutOnClick() {
-        if(confirm("Deseja realmente sair?")) {
-            (async () => {
-                let isLogout = await ServiceAuthentication.logout();
-                if(!isLogout) {
-                    return;
-                }
+        if(!confirm("Deseja realmente sair?")) return;
 
-                window.location.reload();
-            })();
-        }
+        (async () => {
+            let isLogout = await ServiceAuthentication.logout();
+            if(!isLogout) {
+                return;
+            }
+
+            window.location.reload();
+        })();
     },
 
     addLog(mensagem) {
