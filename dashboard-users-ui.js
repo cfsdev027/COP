@@ -151,7 +151,7 @@ export const DashboardUsersUI = {
             : thia.el('span', ['badge','bg-danger','text-white','float-end']);
 
             elActive.id = 'active_' + hash;
-            elActive.innerHTML = user.active ? 'ATIVO' : 'INATIVO';@
+            elActive.innerHTML = user.active ? 'ATIVO' : 'INATIVO';
 
             const cardInfo = this.getUserCardInfo(user,hash);
             
