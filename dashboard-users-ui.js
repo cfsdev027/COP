@@ -92,8 +92,8 @@ export const DashboardUsersUI = {
         btn.onclick = async () => {
             const filter = document.getElementById('navbar-filter-select').value;
             const val = document.getElementById('navbar-filter-input').value;
-            
-            this.populateGrid(this.populateGridWithFilter(filter,val));
+            const users = await this.populateGridWithFilter(filter,val);
+            this.populateGrid(users);
         };
 
         this.populateGrid(await ServiceUsers.get());
@@ -119,6 +119,8 @@ export const DashboardUsersUI = {
     },
 
     populateGrid(users) {
+        if (!Array.isArray(users)) throw 'USERS is not array.';
+        
         const container = document.getElementById('gridContent');
         if (!container) return;
         container.innerHTML = '';
