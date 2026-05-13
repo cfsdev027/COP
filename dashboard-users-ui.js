@@ -45,7 +45,10 @@ export const DashboardUsersUI = {
         );
         
         const container = this.el('div', ['container-fluid', 'p-0']);
-        // 'align-items-center' mantém os filtros centralizados sem esticar
+        
+        const navbarBrand = this.el('a',['navbar-brand']);
+        navbarBrand.innerHTML = 'USUÁRIOS';
+        
         const row = this.el('div', ['row', 'g-2', 'w-100', 'm-0', 'align-items-center']);
 
         const colSelect = this.el('div', ['col-12', 'col-md-3']);
@@ -58,6 +61,7 @@ export const DashboardUsersUI = {
             id: 'navbar-filter-input', 
             placeholder: 'Pesquisar valor...' 
         });
+        
         colInput.append(input);
 
         const colBtn = this.el('div', ['col-12', 'col-md-2', 'd-grid']);
@@ -65,11 +69,12 @@ export const DashboardUsersUI = {
             id: 'btnExecuteSearch', 
             textContent: 'Pesquisar' 
         });
+        
         colBtn.append(btn);
-
         row.append(colSelect, colInput, colBtn);
-        container.append(row);
+        container.append(navbarBrand, row);
         navbar.append(container);
+        
         return navbar;
     },
 
