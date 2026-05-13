@@ -100,7 +100,6 @@ export const DashboardUsersUI = {
     },
 
     async populateGridWithFilter(filter,value){
-        if(value == null || value === '') return [];
         switch(filter){
                 case 'username':
                     if(value == null || value === '') return [];
