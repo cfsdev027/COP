@@ -103,11 +103,12 @@ export const DashboardUsersUI = {
         if(value == null || value === '') return [];
         switch(filter){
                 case 'username':
+                    if(value == null || value === '') return [];
                     return Array.of(await ServiceUsers.fetchByUsername(value));
                 case 'document':
                     const params = value.split(':');
-                    if(params == null || params.length !== 2) return null;
-                    if(params[0].toUpperCase() !== 'CPF' && params[0].toUpperCase() !== 'CNPJ') return null;
+                    if(params == null || params.length !== 2) return [];
+                    if(params[0].toUpperCase() !== 'CPF' && params[0].toUpperCase() !== 'CNPJ') return [];
                     return Array.of(await ServiceUsers.fetchByDocumentTypeAndDocument(params[0],params[1]));
                 case 'role':
                     return await ServiceUsers.fetchByRole(value);
