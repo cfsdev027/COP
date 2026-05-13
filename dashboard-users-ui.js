@@ -137,14 +137,14 @@ export const DashboardUsersUI = {
         if (!container) return;
         container.innerHTML = '';
 
-        const listGroup = this.el('div', ['row', 'g-3']);
+        const listGroup = this.el('div', ['row', 'g-0']);
 
         users.forEach(user => {
             const hash = this.simpleHash(user.id);
             
-            const col = this.el('div', ['col-12', 'col-md-6'], { id: 'user-' + hash }); 
-            const card = this.el('div', ['card', 'h-100', 'border-0', 'shadow-sm', 'border-start', 'border-primary', 'border-4']);
-            const body = this.el('div', ['card-body', 'p-3']);
+            const col = this.el('div', ['col-12', 'px-0'], { id: 'user-' + hash }); 
+            const card = this.el('div', ['card', 'w-100', 'border-0', 'shadow-sm', 'border-start', 'border-primary', 'border-4']);
+            const body = this.el('div', ['card-body', 'px-0', 'py-2']);
 
             const cardInfo = this.getUserCardInfo(user,hash);
             
