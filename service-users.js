@@ -36,6 +36,24 @@ export const ServiceUsers = {
             return null;
         }
     },
+    fetchByUsername: async function(username) {
+        try {
+            const client = ServiceSupabase.client();
+
+            const { data, error } = await client.from('users')
+              .select()
+              .eq('username', username)
+              .maybeSingle();
+
+            if (error) throw error;
+
+            return data;
+        } catch(err) {
+            alert('An exception has ben throw in service Users.fetchByUsernameAndPassword: ' + err.message);
+            console.log('An exception has ben throw in service Users.fetchByUsernameAndPassword: ' + err.message);
+            return null;
+        }
+    },
     fetchByUsernameAndPassword: async function(username,password) {
         try {
             const client = ServiceSupabase.client();
