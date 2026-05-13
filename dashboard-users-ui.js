@@ -2,6 +2,7 @@ import { SECTION_DASHBOARD_USERS_ID } from './config-dashboard-users-ui.js';
 import { ENV } from './configurations.js';
 import { ServiceAuthentication } from './service-authentication.js';
 import { ServiceUsers } from './service-users.js';
+import { AppRouter } from './app-router.js';
 
 export const DashboardUsersUI = {
     section: document.getElementById(SECTION_DASHBOARD_USERS_ID),
@@ -47,7 +48,10 @@ export const DashboardUsersUI = {
         const container = this.el('div', ['container-fluid', 'p-0']);
         
         const navbarBrand = this.el('a',['navbar-brand']);
-        navbarBrand.innerHTML = 'USUÁRIOS';
+        navbarBrand.innerHTML = '< USUÁRIOS';
+        navbarBrand.onClick = () => {
+            AppRouter['dashboard'].init();
+        }
         
         const row = this.el('div', ['row', 'g-2', 'w-100', 'm-0', 'align-items-center']);
 
