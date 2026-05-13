@@ -182,7 +182,7 @@ export const ServiceUsers = {
             const { data, error } = await client
                 .from('users')
                 .update({
-                  ativo: false
+                  active: false
                 }).select()
                 .eq('id', id)
                 .maybeSingle();
