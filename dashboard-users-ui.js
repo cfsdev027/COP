@@ -189,7 +189,7 @@ export const DashboardUsersUI = {
         const elIdValue = this.el('span',[], { id: 'id_' + hash });
         elIdValue.innerHTML = user.id;
         
-        elId.append(elActive,elIdLabel, elIdValue);
+        elId.append(elIdLabel, elIdValue);
         
         const elUsername = this.el('li',['list-group-item']);
         
@@ -199,7 +199,7 @@ export const DashboardUsersUI = {
         const elUsernameValue = this.el('span', [], { id: 'username_' + hash });
         elUsernameValue.innerHTML = user.username;
 
-        elUsername.append(elUsernameLabel, elUsernameValue);
+        elUsername.append(elActive, elUsernameLabel, elUsernameValue);
         
         const elDocument = this.el('li',['list-group-item']);
         
@@ -224,7 +224,7 @@ export const DashboardUsersUI = {
 
         elRole.append(elRoleLabel, elRoleValue);
 
-        elListGroup.append(elId,elUsername,elDocument,elRole);
+        elListGroup.append(elUsername,elId,elDocument,elRole);
 
         return elListGroup;
     }
