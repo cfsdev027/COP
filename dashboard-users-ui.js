@@ -90,14 +90,32 @@ export const DashboardUsersUI = {
         if (!btn) return;
 
         btn.onclick = async () => {
-            const type = document.getElementById('navbar-filter-select').value;
+            const filter = document.getElementById('navbar-filter-select').value;
             const val = document.getElementById('navbar-filter-input').value;
-            const users = await ServiceUsers.get(); 
-            this.populateGrid(users);
+            
+            this.populateGrid(this.populateGridWithFilter(filter,val));
         };
 
-        const initialUsers = await ServiceUsers.get();
-        this.populateGrid(initialUsers);
+        this.populateGrid(await ServiceUsers.get());
+    },
+
+    async populateGridWithFilter(filter,value){
+        if(value == null) return [];
+        switch(filter){
+                case 'username':
+                    return Array.of(await ServiceUsers.fetchByUsername(value));
+                case 'document':
+                    const params = value.split(':');
+                    if(params == null || params.length !== 2) return null;
+                    if(params[0].toUpperCase() !== 'CPF' && params[0].toUpperCase() !== 'CNPJ') return null;
+                    return Array.of(await ServiceUsers.fetchByDocumentTypeAndDocument(params[0],params[1]));
+                case 'role':
+                    return await ServiceUsers.fetchByRole(value);
+                case 'active':
+                    return await ServiceUsers.fetchByActive((value.toLowerCase() === 'true'));
+                default:
+                    return await ServiceUsers.get();
+        }
     },
 
     populateGrid(users) {
