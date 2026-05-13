@@ -146,18 +146,11 @@ export const DashboardUsersUI = {
             const card = this.el('div', ['card', 'h-100', 'border-0', 'shadow-sm', 'border-start', 'border-primary', 'border-4']);
             const body = this.el('div', ['card-body', 'p-3']);
 
-            const elActive = user.active 
-            ? this.el('span', ['badge','bg-success','text-white','float-end'])
-            : this.el('span', ['badge','bg-danger','text-white','float-end']);
-
-            elActive.id = 'active_' + hash;
-            elActive.innerHTML = user.active ? 'ATIVO' : 'INATIVO';
-
             const cardInfo = this.getUserCardInfo(user,hash);
             
             const btnEdit = this.el('button', ['btn', 'btn-sm', 'btn-outline-primary', 'w-100'], { textContent: 'Editar' });
             
-            body.append(elActive,cardInfo,btnEdit);
+            body.append(cardInfo,btnEdit);
             card.append(body);
             col.append(card);
             listGroup.append(col);
@@ -180,21 +173,28 @@ export const DashboardUsersUI = {
 
     getUserCardInfo(user,hash) {
         const elListGroup = this.el('ul', ['list-group']);
+
+        const elActive = user.active 
+            ? this.el('span', ['badge','bg-success','text-white','float-end'])
+            : this.el('span', ['badge','bg-danger','text-white','float-end']);
+
+        elActive.id = 'active_' + hash;
+        elActive.innerHTML = user.active ? 'ATIVO' : 'INATIVO';
         
         const elId = this.el('li',['list-group-item']);
         
         const elIdLabel = this.el('label');
-        elIdLabel.innerHTML = 'ID: ';
+        elIdLabel.innerHTML = 'ID:&nbsp';
         
         const elIdValue = this.el('span',[], { id: 'id_' + hash });
         elIdValue.innerHTML = user.id;
         
-        elId.append(elIdLabel, elIdValue);
+        elId.append(elActive,elIdLabel, elIdValue);
         
         const elUsername = this.el('li',['list-group-item']);
         
         const elUsernameLabel = this.el('label');
-        elUsernameLabel.innerHTML = 'Username: ';
+        elUsernameLabel.innerHTML = 'Username:&nbsp';
 
         const elUsernameValue = this.el('span', [], { id: 'username_' + hash });
         elUsernameValue.innerHTML = user.username;
@@ -217,7 +217,7 @@ export const DashboardUsersUI = {
         const elRole = this.el('li', ['list-group-item']);
 
         const elRoleLabel = this.el('label');
-        elRoleLabel.innerHTML = 'Role: ';
+        elRoleLabel.innerHTML = 'Role:&nbsp';
 
         const elRoleValue = this.el('span', [], { id: 'role_' + hash });
         elRoleValue.innerHTML = user.role;
