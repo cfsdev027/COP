@@ -140,37 +140,89 @@ export const DashboardUsersUI = {
         const listGroup = this.el('div', ['row', 'g-3']);
 
         users.forEach(user => {
-            const col = this.el('div', ['col-12', 'col-md-6']); 
+            const hash = this.simpleHash(user.id);
+            
+            const col = this.el('div', ['col-12', 'col-md-6'], { id: 'user-' + hash); 
             const card = this.el('div', ['card', 'h-100', 'border-0', 'shadow-sm', 'border-start', 'border-primary', 'border-4']);
             const body = this.el('div', ['card-body', 'p-3']);
 
-            const statusBadge = user.active 
-                ? '<span class="badge bg-success text-white float-end">Ativo</span>'
-                : '<span class="badge bg-danger text-white float-end">Inativo</span>';
+            const elActive = user.active 
+            ? this.el('span', ['badge','bg-success','text-white','float-end'])
+            : thia.el('span', ['badge','bg-danger','text-white','float-end']);
 
-            body.innerHTML = `
-                ${statusBadge}
-                <h6 class="fw-bold text-dark mb-1">${user.username}</h6>
-                <p class="text-muted small mb-3">ID: ${user.id}</p>
-                <div class="row small mb-3">
-                    <div class="col-6">
-                        <label class="text-muted d-block small">Documento</label>
-                        <span>${user.document_type}: ${user.document}</span>
-                    </div>
-                    <div class="col-6 border-start">
-                        <label class="text-muted d-block small">Perfil</label>
-                        <span>${user.role}</span>
-                    </div>
-                </div>
-            `;
+            elActive.id = 'active_' + hash;
+            elActive.innerHTML = user.active ? 'ATIVO' : 'INATIVO';@
 
+            const cardInfo = this.getUserCardInfo(user,hash);
+            
             const btnEdit = this.el('button', ['btn', 'btn-sm', 'btn-outline-primary', 'w-100'], { textContent: 'Editar' });
-            body.append(btnEdit);
+            
+            body.append(elActive,cardInfo,btnEdit);
             card.append(body);
             col.append(card);
             listGroup.append(col);
         });
 
         container.append(listGroup);
+    },
+
+    simpleHash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash |= 0; // Converte para um inteiro de 32 bits
+        }
+        
+        // Retorna em base 36 (números + letras minúsculas)
+        return Math.abs(hash).toString(36);
+    },
+
+    getUserCardInfo(user,hash) {
+        const elListGroup = this.el('ul', ['list-group']);
+        
+        const elId = this.el('li',['list-group-item']);
+        
+        const elIdLabel = this.el('label');
+        elIsLabel.innerHTML = 'ID: ';
+        
+        const elIdValue = this.el('span',[], { id: 'id_' + hash);
+        elIdValue.innerHTML = user.id;
+        
+        elId.append(elIdLabel, elIdValue);
+        
+        const elUsername = this.el('li',['list-group-item']);
+        
+        const elUsernameLabel = this.el('label');
+        elUsernameLabel.innerHTML = 'Username: ';
+
+        const elUsernameValue = this.el('span', [], { id: 'username_' + hash });
+        elUsernameValue.innerHTML = user.username;
+
+        elUsername.append(elUsernameLabel, elUsernameValue);
+        
+        const elDocument = this.el('li',['list-group-item']);
+        
+        const elDocumentType = this.el('span', [], { id: 'document_type_' + hash });
+        elDocumentType.innerHTML = user.document_type;
+        
+        const elDocumentValue = this.el('span', [], { id: 'document_' + hash});
+        elDocumentValue.innerHTML = user.document;
+
+        elDocument.append(elDocumentLabel, elDocumentValue);
+
+        const elRole = this.el('li', ['list-group-item']);
+
+        const elRoleLabel this.el('label');
+        elRoleLabel.innerHTML = 'Role: ';
+
+        const elRoleValue = this.el('span', [], { id: 'role_' + hash });
+        elRoleValue.innerHTML = user.role;
+
+        elRole.append(elRoleLabel, elRoleValue);
+
+        elListGroup.append(elId,elUsername,elDocument,elRole);
+
+        return elListGroup;
     }
 };
