@@ -64,14 +64,21 @@ export const DashboardUsersUI = {
         
         colInput.append(input);
 
-        const colBtn = this.el('div', ['col-12', 'col-md-2', 'd-grid']);
-        const btn = this.el('button', ['btn', 'btn-primary'], { 
+        const colBtnSearch = this.el('div', ['col-12', 'col-md-2', 'd-grid']);
+        const btnSearch = this.el('button', ['btn', 'btn-primary'], { 
             id: 'btnExecuteSearch', 
             textContent: 'Pesquisar' 
         });
+
+        const colBtnAdd = this.el('div', ['col-12', 'col-md-2', 'd-grid']);
+        const btnAdd = this.el('button', ['btn', 'btn-primary'], { 
+            id: 'btn-user-add', 
+            textContent: 'Novo Usuário' 
+        });
         
-        colBtn.append(btn);
-        row.append(colSelect, colInput, colBtn);
+        colBtnSearch.append(btnSearch);
+        colBtnAdd.append(btnAdd);
+        row.append(colSelect, colInput, colBtnSearch, colBtnAdd);
         container.append(navbarBrand, row);
         navbar.append(container);
         
