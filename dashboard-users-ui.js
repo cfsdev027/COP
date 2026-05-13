@@ -142,13 +142,13 @@ export const DashboardUsersUI = {
         users.forEach(user => {
             const hash = this.simpleHash(user.id);
             
-            const col = this.el('div', ['col-12', 'col-md-6'], { id: 'user-' + hash); 
+            const col = this.el('div', ['col-12', 'col-md-6'], { id: 'user-' + hash }); 
             const card = this.el('div', ['card', 'h-100', 'border-0', 'shadow-sm', 'border-start', 'border-primary', 'border-4']);
             const body = this.el('div', ['card-body', 'p-3']);
 
             const elActive = user.active 
             ? this.el('span', ['badge','bg-success','text-white','float-end'])
-            : thia.el('span', ['badge','bg-danger','text-white','float-end']);
+            : this.el('span', ['badge','bg-danger','text-white','float-end']);
 
             elActive.id = 'active_' + hash;
             elActive.innerHTML = user.active ? 'ATIVO' : 'INATIVO';
