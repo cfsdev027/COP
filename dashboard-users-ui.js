@@ -172,7 +172,7 @@ export const DashboardUsersUI = {
     },
 
     getUserCardInfo(user,hash) {
-        const elListGroup = this.el('ul', ['list-group']);
+        const elListGroup = this.el('ul', ['list-group', 'list-group-flush']);
 
         const elActive = user.active 
             ? this.el('span', ['badge','bg-success','text-white','float-end'])
@@ -180,18 +180,20 @@ export const DashboardUsersUI = {
 
         elActive.id = 'active_' + hash;
         elActive.innerHTML = user.active ? 'ATIVO' : 'INATIVO';
+
+        const itemClasses = ['list-group-item', 'p-1', 'border-0', 'small']; 
         
-        const elId = this.el('li',['list-group-item']);
+        const elId = this.el('li', itemClasses);
         
         const elIdLabel = this.el('label');
         elIdLabel.innerHTML = 'ID:&nbsp';
         
-        const elIdValue = this.el('span',[], { id: 'id_' + hash });
+        const elIdValue = this.el('span',[], { id: 'id_' + hash, style: 'word-break: break-all;' });
         elIdValue.innerHTML = user.id;
         
         elId.append(elIdLabel, elIdValue);
         
-        const elUsername = this.el('li',['list-group-item']);
+        const elUsername = this.el('li',itemClasses);
         
         const elUsernameLabel = this.el('label');
         elUsernameLabel.innerHTML = 'Username:&nbsp';
@@ -201,7 +203,7 @@ export const DashboardUsersUI = {
 
         elUsername.append(elActive, elUsernameLabel, elUsernameValue);
         
-        const elDocument = this.el('li',['list-group-item']);
+        const elDocument = this.el('li',itemClasses);
         
         const elDocumentType = this.el('span', [], { id: 'document_type_' + hash });
         elDocumentType.innerHTML = user.document_type;
@@ -214,7 +216,7 @@ export const DashboardUsersUI = {
 
         elDocument.append(elDocumentType, elDocumentSeparator,elDocumentValue);
 
-        const elRole = this.el('li', ['list-group-item']);
+        const elRole = this.el('li', itemClasses);
 
         const elRoleLabel = this.el('label');
         elRoleLabel.innerHTML = 'Role:&nbsp';
