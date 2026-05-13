@@ -100,7 +100,7 @@ export const DashboardUsersUI = {
     },
 
     async populateGridWithFilter(filter,value){
-        if(value == null) return [];
+        if(value == null || value === '') return [];
         switch(filter){
                 case 'username':
                     return Array.of(await ServiceUsers.fetchByUsername(value));
