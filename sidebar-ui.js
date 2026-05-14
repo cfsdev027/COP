@@ -39,7 +39,7 @@ export const SidebarUI = {
 
         if(typeof el !== 'function') throw {
             stack: 'render',
-            message_error: 'el is not a function.';
+            message_error: 'el is not a function.'
         }
 
         const elSidebarHeader = this.makeSidebarHeader();
