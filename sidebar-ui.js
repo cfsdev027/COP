@@ -1,5 +1,5 @@
 import { ENV } from './configurations.js';
-import { SIDEBAR_ID } from './config-sidebar-ui.js';
+import { SIDEBAR_ID, SIDEBAR_NAV_ID } from './config-sidebar-ui.js';
 import { CatchError } from './catch-error.js';
 import { AppRouter } from './app-router.js';
 import { ServiceAuthentication } from './service-authentication.js';
@@ -9,15 +9,6 @@ export const SidebarUI = {
     auth: ServiceAuthentication.get_auth(),
     options: [],
     
-    catchError(err) {
-        let e = typeof err === 'string' ? err : JSON.stringify(err);
-        console.log('[SidebarUI.exception]: ' + err);
-      
-        if(ENV === 'dev') {
-            alert('[SidebarUI.exception]: ' + err);
-        }
-    },
-    
     init(options = []) {
         try {
             this.options = options;
@@ -25,7 +16,8 @@ export const SidebarUI = {
             this.render();
             setTimeout(() => this.dataInit(), 100);
         } catch (err) {
-            this.catchError(err);
+            if(typeof CatchError === 'function')
+                CatchError(err);
         }
     },
 
@@ -58,7 +50,7 @@ export const SidebarUI = {
         this.section.innerHTML = '';
 
         const elSidebarHeader = this.makeSidebarHeader();
-        const elSideNavbar = this.el('nav', ['sidebar-nav'], { id: 'sidebar-nav' });
+        const elSideNavbar = this.el('nav', [SIDEBAR_NAV_ID], { id: SIDEBAR_NAV_ID });
 
         this.section.append(elSidebarHeader,elSideNavbar);
 
@@ -71,7 +63,7 @@ export const SidebarUI = {
         if(this.options == null || this.options.length < 1)
             return;
         
-        const elSideNavbar = document.getElementById('sidebar-nav');
+        const elSideNavbar = document.getElementById(SIDEBAR_NAV_ID);
         this.options.ForEach(opt => {
             const elOption = this.el('button', ['nav-item'], { id: opt.id });
             elOption.onclick = () => opt.action();
