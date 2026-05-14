@@ -1,34 +1,23 @@
 :root {
-    --bg-gradient: linear-gradient(135deg, #062f2d 0%, #021514 100%);
-    --card-bg: #ffffff;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --primary: #0f766e;
-    --primary-hover: #115e59;
-    --danger: #ef4444;
-    --danger-hover: #dc2626;
-    --time-bg: #0f172a;
-    --log-bg: #090d16;
-    --success-glow: #10b981;
-    --warning-glow: #f59e0b;
-    --input-bg: rgba(255, 255, 255, 0.1);
-    --texto-claro: #ffffff;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', sans-serif;
+    --side-bg: #1e293b;
+    --main-bg: #f8fafc;
+    --text-dark: #0f172a;
+    --accent: #0f766e;
+    --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
 body {
-    background: var(--bg-gradient);
-    min-height: 100vh;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--main-bg);
+    overflow: hidden; /* Evita scroll duplo com a main-content */
+}
+
+/* Layout SPA */
+.app-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    height: 100vh;
+    width: 100vw;
 }
 
 .section-base {
@@ -37,123 +26,4 @@ body {
 
 .section-base.active {
     display: block;
-}
-
-.section-login {
-    
-}
-
-.login-title {
-    font-size: 1.8rem;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    color: var(--texto-claro);
-    text-transform: uppercase;
-    line-height: 1.3;
-    margin-bottom: 40px !important;
-}
-
-.section-srp {
-    background: #ffffff; 
-    border-radius: 24px; 
-    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-}
-
-.placeholder-log {
-    color: #64748b; 
-    font-style: italic; 
-    font-size: 0.85rem;
-}
-
-/* TÍTULO EXATAMENTE COMO NA IMAGEM DE REFERÊNCIA */
-.titulo-login {
-    font-size: 1.8rem;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    color: var(--texto-claro);
-    text-transform: uppercase;
-    line-height: 1.3;
-    margin-bottom: 40px !important;
-}
-
-/* FORMATO PERFEITO DA PÍLULA ESCURA */
-.grupo-input-custom {
-    background-color: var(--input-bg);
-    border-radius: 50px;
-    padding: 6px;
-    display: flex;
-    align-items: center;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* CAIXA CIRCULAR BRANCA DOS ÍCONES (IGUAL AO LAYOUT) */
-.icone-capsula {
-    background-color: #ffffff;
-    color: #041d1f;
-    width: 54px;
-    height: 54px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    flex-shrink: 0; /* Impede o círculo de achatar no mobile */
-}
-
-/* INPUT DE TEXTO TOTALMENTE LIMPO E ALINHADO */
-.input-invisivel {
-    background: transparent !important;
-    border: none !important;
-    color: #ffffff !important;
-    padding: 10px 24px !important;
-    font-size: 1.1rem;
-    width: 100%;
-}
-
-.input-invisivel::placeholder {
-    color: rgba(255, 255, 255, 0.35);
-}
-
-.input-invisivel:focus {
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* BOTÃO CÁPSULA BRANCO LARGO */
-.btn-authenticate {
-    background-color: #ffffff !important;
-    color: #041d1f !important;
-    font-weight: 800;
-    font-size: 1.3rem;
-    text-transform: uppercase;
-    border: none !important;
-    border-radius: 50px !important;
-    padding: 14px !important;
-    width: 100%;
-    margin-top: 15px;
-    letter-spacing: 0.5px;
-}
-
-/* ESTILO DA ÁREA LOGADA (MANTIDO SEGURO) */
-.card-custom-ponto {
-    border: none;
-    border-radius: 20px;
-    background: #ffffff;
-    color: #1e293b;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-}
-
-.painel-relogio {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    color: #ffffff;
-    border-radius: 14px;
-}
-
-.log-terminal {
-    background-color: #111827;
-    color: #10b981;
-    border-radius: 8px;
-    padding: 12px;
-    font-family: monospace;
 }
