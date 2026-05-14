@@ -8,6 +8,11 @@ import { ServiceAuthentication } from './service-authentication.js';
 export const SidebarUI = {
     container: document.getElementById(SIDEBAR_ID),
     auth: ServiceAuthentication.get_auth(),
+
+    dispose() {
+        this.container.classList.add('d-none');
+        this.container.innerHTML = '';
+    },
     
     init() {
         try {
@@ -34,6 +39,7 @@ export const SidebarUI = {
 
     render() {
         this.container.innerHTML = '';
+        this.container.classList.remove('d-none');
 
         if(typeof el !== 'function') throw {
             stack: 'render',
