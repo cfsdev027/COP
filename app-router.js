@@ -1,4 +1,5 @@
 import {AppSectionController} from './app-section-controller.js';
+import {ServiceStorage} from './ service-storage.js';
 
 import {SidebarUI} from './sidebar-ui.js';
 
@@ -14,35 +15,82 @@ import {SECTION_DASHBOARD_USERS_ID} from './config-dashboard-users-ui.js';
 import {SrpUI} from './srp-ui.js';
 import {SECTION_SRP_ID} from './config-srp-ui.js';
 
+const transition = function(next, id, sidebar_enable = false) {
+    const current = ServiceStorage.get('COP-CURRENT-SECTION');
+    if(current !== null) {
+        disposeSection(current);
+    }
+
+    next.init();
+    AppSectionController.navigateTo(id);
+    sidebarStateControll(sidebar_enable);
+    ServiceStorage.set('COP-CURRENT-SECTION', next);
+};
+
+const disposeSection = function(current) {
+    const dispose = current['dispose'];
+    if(typeof dispose === 'function') dispose();
+};
+
+const sidebarStateControll = function(enable) {
+    const state = ServiceStorage.get('COP-SIDEBAR-STATE');
+    if(state !== null) {
+        sidebarStateController(state, enable);
+    } else {
+        sidebarStateController(false, enable);
+    }
+
+    ServiceStorage.set('COP-CURRENT-SECTION', enable);
+}
+
+const sidebarStateController = function(state, enable) {
+    if(!(state) && enable) {
+        SidebarUI.init();
+    }
+
+    if(state && !(enable)) {
+        SidebarUI.dispose();
+    }
+}
+
 export const AppRouter = {
     login: {
         section_id: SECTION_LOGIN_ID,
         init: function() {
-            SidebarUI.dispose();
-            SectionLoginUI.init();
-            AppSectionController.navigateTo(SECTION_LOGIN_ID);
+            transition(
+                SectionLoginUI, 
+                SECTION_LOGIN_ID
+            );
         }
     },
     dashboard: {
         section_id: SECTION_DASHBOARD_ID,
         init: function() {
-            SidebarUI.init();
-            DashboardUI.init();
-            AppSectionController.navigateTo(SECTION_DASHBOARD_ID);
+            transition(
+                DashboardUI, 
+                SECTION_DASHBOARD_ID,
+                true
+            );
         }
     },
     dashboard_users: {
         section_id: SECTION_DASHBOARD_USERS_ID,
         init: function() {
-            DashboardUsersUI.init();
-            AppSectionController.navigateTo(SECTION_DASHBOARD_USERS_ID);
+            transition(
+                DashboardUsersUI, 
+                SECTION_DASHBOARD_USERS_ID,
+                true
+            );
         }
     },
     srp: {
         section_id: SECTION_SRP_ID,
         init: function() {
-            SrpUI.init();
-            AppSectionController.navigateTo(SECTION_SRP_ID);
+            transition(
+                SrpUI, 
+                SECTION_SRP_ID,
+                true
+            );
         }
-    }
+    },
 };
