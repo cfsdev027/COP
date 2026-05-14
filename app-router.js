@@ -18,6 +18,7 @@ export const AppRouter = {
     login: {
         section_id: SECTION_LOGIN_ID,
         init: function() {
+            SidebarUI.dispose();
             LoginUI.init();
             AppSectionController.navigateTo(SECTION_LOGIN_ID);
         }
