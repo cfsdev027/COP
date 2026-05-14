@@ -8,11 +8,9 @@ import { ServiceAuthentication } from './service-authentication.js';
 export const SidebarUI = {
     container: document.getElementById(SIDEBAR_ID),
     auth: ServiceAuthentication.get_auth(),
-    options: [],
     
-    init(options = []) {
+    init() {
         try {
-            this.options = options;
             if (!this.container) throw { stack: 'init', message_error: 'Missing CONTAINER.' };
             this.render();
             setTimeout(() => this.dataInit(), 100);
@@ -58,8 +56,11 @@ export const SidebarUI = {
         
         const elSideNavbar = document.getElementById(SIDEBAR_NAV_ID);
         elSideNavbar.innerHTML = '';
+
+        const options = this.getOptions();
+        if(options === null || options.length < 1) return;
         
-        this.options.ForEach(opt => {
+        options.ForEach(opt => {
             const elOption = el('button', ['nav-item'], { id: opt.id });
             elOption.onclick = () => opt.action();
             
@@ -74,5 +75,51 @@ export const SidebarUI = {
     async dataInitAsync() {
         this.initDataSideNavbar();
     },
-    
+
+    getOptions() {
+        return [
+            {
+                id: 'opt-users',
+                text: 'Usuários',
+                action: () => {
+                    alert('USUÁRIOS');
+                }
+            },
+            {
+                id: 'opt-services',
+                text: 'Serviços',
+                action: () => {
+                    alert('SERVIÇOS');
+                }
+            },
+            {
+                id: 'opt-steps',
+                text: 'Etapas',
+                action: () => {
+                    alert('ETAPAS');
+                }
+            },
+            {
+                id: 'opt-ops',
+                text: 'Ordens de Produção (OPs)',
+                action: () => {
+                    alert('ORDENS DE PRODUÇÃO (OPs)');
+                }
+            },
+            {
+                id: 'opt-journeys',
+                text: 'Jornadas',
+                action: () => {
+                    alert('JORNADAS');
+                }
+            },
+            {
+                id: 'opt-relatorios',
+                text: 'Relatórios',
+                action: () => {
+                    alert('RELATÓRIOS');
+                }
+            },
+        ];
+    }
 };
