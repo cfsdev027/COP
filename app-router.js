@@ -3,7 +3,7 @@ import {AppSectionController} from './app-section-controller.js';
 import {SidebarUI} from './sidebar-ui.js';
 
 import {LoginUI} from './login-ui.js';
-import {SECTION_LOGIN_ID} from './config-login-ui.js';
+import {DASHBOARD_SIDEBAR_UI_OPTIONS,SECTION_LOGIN_ID} from './config-login-ui.js';
 
 import {DashboardUI} from './dashboard-ui.js';
 import {SECTION_DASHBOARD_ID} from './config-dashboard-ui.js';
@@ -25,16 +25,7 @@ export const AppRouter = {
     dashboard: {
         section_id: SECTION_DASHBOARD_ID,
         init: function() {
-            SidebarUI.init([
-                {
-                    id: 'opt-users',
-                    text: 'Usuários',
-                    action: () => {
-                        alert('USUÁRIOS');
-                    }
-                }
-            ]);
-            
+            SidebarUI.init(DASHBOARD_SIDEBAR_UI_OPTIONS);
             DashboardUI.init();
             AppSectionController.navigateTo(SECTION_DASHBOARD_ID);
         }
