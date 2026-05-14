@@ -43,7 +43,7 @@ export const SidebarUI = {
         };
 
         const elSidebarHeader = this.makeSidebarHeader();
-        const elSideNavbar = this.el('nav', [SIDEBAR_NAV_ID], { id: SIDEBAR_NAV_ID });
+        const elSideNavbar = el('nav', [SIDEBAR_NAV_ID], { id: SIDEBAR_NAV_ID });
 
         this.container.append(elSidebarHeader,elSideNavbar);
 
@@ -60,10 +60,10 @@ export const SidebarUI = {
         elSideNavbar.innerHTML = '';
         
         this.options.ForEach(opt => {
-            const elOption = this.el('button', ['nav-item'], { id: opt.id });
+            const elOption = el('button', ['nav-item'], { id: opt.id });
             elOption.onclick = () => opt.action();
             
-            const elOptionText = this.el('i', ['bi', 'bi-briefcase']);
+            const elOptionText = el('i', ['bi', 'bi-briefcase']);
             elOptionText.innerHTML = opt.text;
 
             elOption.append(elOptionText);
