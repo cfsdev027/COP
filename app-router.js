@@ -1,5 +1,7 @@
 import {AppSectionController} from './app-section-controller.js';
 
+import {SidebarUI} from './sidebar-ui.js';
+
 import {LoginUI} from './login-ui.js';
 import {SECTION_LOGIN_ID} from './config-login-ui.js';
 
@@ -23,6 +25,16 @@ export const AppRouter = {
     dashboard: {
         section_id: SECTION_DASHBOARD_ID,
         init: function() {
+            SidebarUI.init([
+                {
+                    id: 'opt-users',
+                    text: 'Usuários',
+                    action: () => {
+                        alert('USUÁRIOS');
+                    }
+                }
+            ]);
+            
             DashboardUI.init();
             AppSectionController.navigateTo(SECTION_DASHBOARD_ID);
         }
