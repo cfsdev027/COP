@@ -12,6 +12,10 @@ export const SectionLoginUI = {
     dispose() {
         if (this.container) {
             this.container.classList.add('d-none');
+            this.container.classList.remove('d-flex');
+            this.container.classList.remove('justify-content-center');
+            this.container.classList.remove('align-items-center');
+            this.container.classList.remove('vh-100');
             this.container.innerHTML = '';
         }
     },
@@ -82,7 +86,10 @@ export const SectionLoginUI = {
     render() {
         this.container.innerHTML = '';
         this.container.classList.remove('d-none');
-        this.container.className = 'section-base active d-flex justify-content-center align-items-center';
+        this.container.classList.add('d-flex');
+        this.container.classList.add('justify-content-center');
+        this.container.classList.add('align-items-center');
+        this.container.classList.add('vh-100');
 
         // Cria o Card branco central
         const card = el('div', ['card', 'border-0', 'shadow-lg', 'p-4', 'p-md-5']);
