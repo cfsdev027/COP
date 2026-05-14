@@ -40,7 +40,7 @@ export const SidebarUI = {
         if(typeof el !== 'function') throw {
             stack: 'render',
             message_error: 'el is not a function.'
-        }
+        };
 
         const elSidebarHeader = this.makeSidebarHeader();
         const elSideNavbar = this.el('nav', [SIDEBAR_NAV_ID], { id: SIDEBAR_NAV_ID });
