@@ -6,19 +6,19 @@ import { AppRouter } from './app-router.js';
 import { ServiceAuthentication } from './service-authentication.js';
 
 export const SidebarUI = {
-    section: document.getElementById(SIDEBAR_ID),
+    container: document.getElementById(SIDEBAR_ID),
     auth: ServiceAuthentication.get_auth(),
     options: [],
     
     init(options = []) {
         try {
             this.options = options;
-            if (!this.section) throw { stack: 'init', message_error: 'Missing SECTION.' };
+            if (!this.container) throw { stack: 'init', message_error: 'Missing CONTAINER.' };
             this.render();
             setTimeout(() => this.dataInit(), 100);
         } catch (err) {
             if(typeof CatchError === 'function')
-                CatchError('SidebarUI.init', err);
+                CatchError('SidebarUI', err);
         }
     },
 
@@ -35,7 +35,7 @@ export const SidebarUI = {
     },
 
     render() {
-        this.section.innerHTML = '';
+        this.container.innerHTML = '';
 
         if(typeof el !== 'function') throw {
             stack: 'render',
@@ -45,7 +45,7 @@ export const SidebarUI = {
         const elSidebarHeader = this.makeSidebarHeader();
         const elSideNavbar = this.el('nav', [SIDEBAR_NAV_ID], { id: SIDEBAR_NAV_ID });
 
-        this.section.append(elSidebarHeader,elSideNavbar);
+        this.container.append(elSidebarHeader,elSideNavbar);
 
         (async () => {
             await this.dataInitAsync();
