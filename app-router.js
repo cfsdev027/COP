@@ -6,7 +6,7 @@ import {LoginUI} from './login-ui.js';
 import {SECTION_LOGIN_ID} from './config-login-ui.js';
 
 import {DashboardUI} from './dashboard-ui.js';
-import {DASHBOARD_SIDEBAR_UI_OPTIONS,SECTION_DASHBOARD_ID} from './config-dashboard-ui.js';
+import {SECTION_DASHBOARD_ID} from './config-dashboard-ui.js';
 
 import {DashboardUsersUI} from './dashboard-users-ui.js';
 import {SECTION_DASHBOARD_USERS_ID} from './config-dashboard-users-ui.js';
@@ -25,7 +25,7 @@ export const AppRouter = {
     dashboard: {
         section_id: SECTION_DASHBOARD_ID,
         init: function() {
-            SidebarUI.init(DASHBOARD_SIDEBAR_UI_OPTIONS);
+            SidebarUI.init();
             DashboardUI.init();
             AppSectionController.navigateTo(SECTION_DASHBOARD_ID);
         }
