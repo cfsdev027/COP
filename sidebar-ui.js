@@ -1,6 +1,7 @@
 import { ENV } from './configurations.js';
 import { SIDEBAR_ID, SIDEBAR_NAV_ID } from './config-sidebar-ui.js';
 import { CatchError } from './catch-error.js';
+import { el } from './el-ui.js';
 import { AppRouter } from './app-router.js';
 import { ServiceAuthentication } from './service-authentication.js';
 
@@ -17,28 +18,15 @@ export const SidebarUI = {
             setTimeout(() => this.dataInit(), 100);
         } catch (err) {
             if(typeof CatchError === 'function')
-                CatchError(err);
+                CatchError('SidebarUI.init', err);
         }
-    },
-
-    el(tag, classes = [], attrs = {}) {
-        const element = document.createElement(tag);
-        if (classes.length > 0) {
-            classes.forEach(cls => cls && element.classList.add(cls));
-        }
-        for (const [key, val] of Object.entries(attrs)) {
-            if (key === 'textContent') element.textContent = val;
-            else if (key === 'innerHTML') element.innerHTML = val;
-            else element.setAttribute(key, val);
-        }
-        return element;
     },
 
     makeSidebarHeader() {
-        const elSidebarHeader = this.el('div',['sidebar-header']);
+        const elSidebarHeader = el('div',['sidebar-header']);
         
-        const elLogoIcon = this.el('i',['bi','bi-gear-fill','logo-icon']);
-        const elLogoText = this.el('span',['logo-text']);
+        const elLogoIcon = el('i',['bi','bi-gear-fill','logo-icon']);
+        const elLogoText = el('span',['logo-text']);
         elLogoText.innerHTML = 'OP-Control';
 
         elSidebarHeader.append(elLogoIcon,elLogoText);
@@ -48,6 +36,11 @@ export const SidebarUI = {
 
     render() {
         this.section.innerHTML = '';
+
+        if(typeof el !== 'function') throw {
+            stack: 'render',
+            message_error: 'el is not a function.';
+        }
 
         const elSidebarHeader = this.makeSidebarHeader();
         const elSideNavbar = this.el('nav', [SIDEBAR_NAV_ID], { id: SIDEBAR_NAV_ID });
@@ -64,6 +57,8 @@ export const SidebarUI = {
             return;
         
         const elSideNavbar = document.getElementById(SIDEBAR_NAV_ID);
+        elSideNavbar.innerHTML = '';
+        
         this.options.ForEach(opt => {
             const elOption = this.el('button', ['nav-item'], { id: opt.id });
             elOption.onclick = () => opt.action();
