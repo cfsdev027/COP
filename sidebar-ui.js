@@ -13,7 +13,7 @@ export const SidebarUI = {
         try {
             if (!this.container) throw { stack: 'init', message_error: 'Missing CONTAINER.' };
             this.render();
-            setTimeout(() => this.dataInit(), 100);
+            setTimeout(() => this.dataInitAsync(), 100);
         } catch (err) {
             if(typeof CatchError === 'function')
                 CatchError('SidebarUI', err);
