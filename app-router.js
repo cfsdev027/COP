@@ -2,7 +2,7 @@ import {AppSectionController} from './app-section-controller.js';
 
 import {SidebarUI} from './sidebar-ui.js';
 
-import {LoginUI} from './login-ui.js';
+import {SectionLoginUI} from './section-login-ui.js';
 import {SECTION_LOGIN_ID} from './config-login-ui.js';
 
 import {DashboardUI} from './dashboard-ui.js';
@@ -19,7 +19,7 @@ export const AppRouter = {
         section_id: SECTION_LOGIN_ID,
         init: function() {
             SidebarUI.dispose();
-            LoginUI.init();
+            SectionLoginUI.init();
             AppSectionController.navigateTo(SECTION_LOGIN_ID);
         }
     },
