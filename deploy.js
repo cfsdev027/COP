@@ -1,18 +1,25 @@
-(function() {
+(async function() {
     const scriptSrc = './app.js';
     
-    // 1. Localiza e remove instâncias existentes do módulo
-    const existingScripts = document.querySelectorAll(`script[src="${scriptSrc}"]`);
-    existingScripts.forEach(script => {
-        script.remove();
-        console.log(`Módulo antigo removido: ${scriptSrc}`);
-    });
+    console.log('Inicializando deploy...');
+    document.querySelectorAll(`script[src*="${scriptSrc}"]`).forEach(s => s.remove());
+    console.log('- Delete script;');
+    try {
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = scriptSrc;
 
-    // 2. Cria e injeta a nova instância do módulo
-    const newScript = document.createElement('script');
-    newScript.type = 'module';
-    newScript.src = `${scriptSrc}?t=${Date.now()}`; // Query string para evitar cache
-    
-    document.head.appendChild(newScript);
-    console.log(`Novo módulo injetado: ${scriptSrc}`);
+        console.log('- Build script;');
+        
+        const body = document.querySelector('body');
+        if (body) {
+            body.append(script);
+            console.log('Script carregado com sucesso.');
+        }
+        else {
+            console.log('Falha no carregamento do script.');
+        }
+    } catch (err) {
+        console.error('Erro ao carregar o módulo:', (typeof err === 'string' ? err : JSON.stringify(err)));
+    }
 })();
