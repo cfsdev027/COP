@@ -1,5 +1,5 @@
 import {AppSectionController} from './app-section-controller.js';
-import {ServiceStorage} from './ service-storage.js';
+import {ServiceStorage} from './service-storage.js';
 
 import {SidebarUI} from './sidebar-ui.js';
 
