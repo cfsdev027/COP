@@ -1,20 +1,18 @@
 (async function() {
-    const scriptSrc = './app.js';
-    
-    console.log('Inicializando deploy...');
-    document.querySelectorAll(`script[src*="${scriptSrc}"]`).forEach(s => s.remove());
-    console.log('- Delete script;');
+    const src = './app.js';
     try {
+        const current = document.querySelector('script[src="./app.js"][type="module"]');
+        if (current) current.remove();
+        
         const script = document.createElement('script');
         script.type = 'module';
-        script.src = scriptSrc;
+        script.src = src;
 
         console.log('- Build script;');
         
         const body = document.querySelector('body');
         if (body) {
             body.append(script);
-            console.log('Script carregado com sucesso.');
         }
         else {
             console.log('Falha no carregamento do script.');
