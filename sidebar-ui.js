@@ -11,7 +11,6 @@ export const SidebarUI = {
 
     dispose() {
         this.container.classList.add('d-none');
-        this.container.classList.remove('on');
         this.container.innerHTML = '';
     },
     
@@ -41,7 +40,6 @@ export const SidebarUI = {
     render() {
         this.container.innerHTML = '';
         this.container.classList.remove('d-none');
-        this.container.classList.add('on');
 
         if(typeof el !== 'function') throw {
             stack: 'render',
