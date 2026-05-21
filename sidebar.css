@@ -3,9 +3,12 @@
     width: 260px;
     background-color: var(--side-bg);
     color: white;
-    display: flex;
     flex-direction: column;
     transition: all 0.3s ease;
+}
+
+.sidebar.on { 
+    display:flex; 
 }
 
 .sidebar-header {
