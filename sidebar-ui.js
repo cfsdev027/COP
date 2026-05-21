@@ -82,7 +82,7 @@ export const SidebarUI = {
         options.forEach(opt => {
             const elOption = el('li', ['nav-item'], { id: opt.id });
             
-            const elOptionText = el('button', ['nav-link', 'bi', 'bi-briefcase']);
+            const elOptionText = el('button', ['nav-link', 'btn', 'btn-dark', 'w-100']);
             elOptionText.onclick = () => opt.action();
             elOptionText.innerHTML = opt.text;
 
