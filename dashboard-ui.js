@@ -4,6 +4,7 @@ import {
     SECTION_DASHBOARD_SBMC_ID
 } from './config-dashboard-ui.js';
 
+import {el} from './el-ui.js';
 import {ENV} from './configurations.js';
 import {AppRouter} from './app-router.js';
 import {CatchError} from './catch-error.js';
