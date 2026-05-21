@@ -45,8 +45,8 @@ export const SidebarUI = {
         const elNavbarGroup = el('div', ['navbar-toggler', 'btn-group'], { role: 'group' });
         
         const elUserInfoToggler = el('button', ['btn', 'btn-dark', 'user-info-toggler', 'pr-1'], { type: 'button' });
-        elUserInfoToggler.addEventListener('click', function() {
-            navbarCollapseController('user-info');
+        elUserInfoToggler.addEventListener('click', () => {
+            this.navbarCollapseController('user-info');
         });
         
         const elUserInfoTogglerIcon = el('span', ['bi', 'bi-person']);
@@ -54,8 +54,8 @@ export const SidebarUI = {
         elUserInfoToggler.append(elUserInfoTogglerIcon);
         
         const elNavbarToggler = el('button', ['btn', 'btn-dark', 'options-toggler'], { type: 'button' });
-        elNavbarToggler.addEventListener('click', function() {
-            navbarCollapseController('options');
+        elNavbarToggler.addEventListener('click', () => {
+            this.navbarCollapseController('options');
         });
 
         const elNavbarTogglerIcon = el('span', ['navbar-toggler-icon']);
