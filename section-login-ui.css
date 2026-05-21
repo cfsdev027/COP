@@ -1,5 +1,4 @@
 .section-login {
-    display: flex !important; /* Sobrescreve o display: block padrão */
     justify-content: center;   /* Centraliza horizontalmente */
     align-items: center;       /* Centraliza verticalmente */
     min-height: 100vh;        /* Garante que o container ocupe a altura toda da tela */
