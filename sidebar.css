@@ -14,7 +14,7 @@
 .sidebar .navbar-nav {
     flex-direction: column;
     padding-top: 1rem;
-    gap: 4px;
+    gap: 0px;
 }
 
 .sidebar .nav-item {
