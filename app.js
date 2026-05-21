@@ -11,8 +11,19 @@ window.addEventListener('unhandledrejection', function (event) {
 import {AppRouter} from './app-router.js';
 import {ServiceAuthentication} from './service-authentication.js';
 
+function appendStyleSheetWithoutCache(css) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `${css}?v=${Date.now()}`; 
+    document.head.appendChild(link);
+};
+
 (async () => {
     try {
+        this.appendStyleSheetWithoutCache('style.css');
+        this.appendStyleSheetWithoutCache('sidebar.css');
+        this.appendStyleSheetWithoutCache('section-login-ui.css');
+        
         let isAuthenticated = await ServiceAuthentication.self_authenticate();
         if (isAuthenticated) {
             AppRouter['dashboard'].init(); 
