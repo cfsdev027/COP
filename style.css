@@ -45,5 +45,5 @@ body {
     flex: 1; /* Força a section ativa a ocupar todo o espaço disponível do .main-content */
     height: 100%; /* Garante que ela comece do topo do container pai */
     margin-top: 0 !important; /* Remove qualquer espaço residual no topo */
-    padding-top: 1rem !important;
+    padding-top: 4rem !important;
 }
