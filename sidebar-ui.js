@@ -44,7 +44,9 @@ export const SidebarUI = {
         const elNavbarBrand = el('a', ['navbar-brand', 'sidebar-header'], { id: 'navbar-brand', href: `/COP?t=${Date.now()}` });
         elNavbarBrand.innerHTML = '<i class="bi bi-gear-fill logo-icon"></i> <span class="logo-text">OP-Control</span>';
 
-        const elUserInfoToggler = el('button', ['navbar-toggler', 'user-info-toggler', 'pr-0', 'pl-0'], { type: 'button' });
+        const elNavbarGroup = el('div', ['navbar-toggler', 'btn-group'], { role: 'group' });
+        
+        const elUserInfoToggler = el('button', ['user-info-toggler'], { type: 'button' });
         elUserInfoToggler.setAttribute('data-bs-toggle', 'collapse');
         elUserInfoToggler.setAttribute('data-bs-target', '#navbar-user-info');
         
@@ -53,12 +55,14 @@ export const SidebarUI = {
         elUserInfoToggler.append(elUserInfoTogglerIcon);
         
         // 4. Botão Hambúrguer (Só aparece no Mobile)
-        const elNavbarToggler = el('button', ['navbar-toggler', 'pl-0'], { type: 'button' });
+        const elNavbarToggler = el('button', ['options-toggler'], { type: 'button' });
         elNavbarToggler.setAttribute('data-bs-toggle', 'collapse');
         elNavbarToggler.setAttribute('data-bs-target', '#navbar-options');
 
         const elNavbarTogglerIcon = el('span', ['navbar-toggler-icon']);
         elNavbarToggler.append(elNavbarTogglerIcon);
+
+        elNavbarGroup.append(elUserInfoToggler, elNavbarToggler);
 
         // 5. O bloco que vai colapsar no mobile e virar a lista no desktop
         const elNavbarCollapse = el('div', ['collapse', 'navbar-collapse', 'w-100'], { id: 'navbar-options' });
@@ -73,7 +77,7 @@ export const SidebarUI = {
         // Montagem estrutural
         elNavbarCollapse.append(elNavbarNav);
         elNavbarUserInfoCollapse.append(elNavbarUserInfo);
-        elNavbarContainer.append(elNavbarBrand, elUserInfoToggler, elNavbarToggler, elNavbarCollapse, elNavbarUserInfoCollapse);
+        elNavbarContainer.append(elNavbarBrand, elNavbarGroup, elNavbarCollapse, elNavbarUserInfoCollapse);
         this.container.append(elNavbarContainer);
 
         (async () => {
