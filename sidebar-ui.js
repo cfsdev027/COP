@@ -44,8 +44,11 @@ export const SidebarUI = {
         const elNavbarBrand = el('a', ['navbar-brand', 'sidebar-header'], { id: 'navbar-brand', href: `/COP?t=${Date.now()}` });
         elNavbarBrand.innerHTML = '<i class="bi bi-gear-fill logo-icon"></i> <span class="logo-text">OP-Control</span>';
 
-        const elUserInfoToggler = el('button', ['btn', 'btn-dark'], { type: 'button' });
-        const elUserInfoTogglerIcon = el('i', ['bi', 'bi-person']);
+        const elUserInfoToggler = el('button', ['navbar-toggler',], { type: 'button' });
+        elUserInfoToggler.setAttribute('data-bs-toggle', 'collapse');
+        elUserInfoToggler.setAttribute('data-bs-target', '#navbar-user-info');
+        
+        const elUserInfoTogglerIcon = el('span', ['bi', 'bi-person']);
 
         elUserInfoToggler.append(elUserInfoTogglerIcon);
         
@@ -62,10 +65,15 @@ export const SidebarUI = {
 
         // 6. Lista horizontal de opções (nav)
         const elNavbarNav = el('div', ['navbar-nav', 'ms-auto'], { id: 'navbarNav' });
+
+        const elNavbarUserInfoCollapse = el('div', ['collapse', 'navbar-collapse', 'w-100'], { id: 'navbar-user-info' });
+
+        const elNavbarUserInfo = el('div', ['navbar-nav', 'ms-auto'], { id: 'navbarUserInfo' });
         
         // Montagem estrutural
         elNavbarCollapse.append(elNavbarNav);
-        elNavbarContainer.append(elNavbarBrand, elUserInfoToggler, elNavbarToggler, elNavbarCollapse);
+        elNavbarUserInfoCollapse.append(elNavbarUserInfo);
+        elNavbarContainer.append(elNavbarBrand, elUserInfoToggler, elNavbarToggler, elNavbarCollapse, elNavbarUserInfoCollapse);
         this.container.append(elNavbarContainer);
 
         (async () => {
