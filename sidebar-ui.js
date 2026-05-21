@@ -137,7 +137,6 @@ export const SidebarUI = {
     },
 
     async dataInitAsync() {
-        this.initSideNavbar();
     },
 
     getOptions() {
