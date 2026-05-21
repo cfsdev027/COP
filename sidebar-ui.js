@@ -3,6 +3,7 @@ import { SIDEBAR_ID, SIDEBAR_NAV_ID } from './config-sidebar-ui.js';
 import { CatchError } from './catch-error.js';
 import { el } from './el-ui.js';
 import { AppRouter } from './app-router.js';
+import { ServiceStorage } from './service-storage.js';
 import { ServiceAuthentication } from './service-authentication.js';
 
 export const SidebarUI = {
@@ -34,50 +35,37 @@ export const SidebarUI = {
             message_error: 'el is not a function.'
         };
 
-        // 1. O container principal (aside) ganha a semântica de navbar do Bootstrap
         this.container.className = "sidebar navbar navbar-expand-lg navbar-dark bg-dark";
 
-        // 2. Container fluido interno
         const elNavbarContainer = el('div', ['container-fluid']);
         
-        // 3. Header/Logo da Sidebar
         const elNavbarBrand = el('a', ['navbar-brand', 'sidebar-header'], { id: 'navbar-brand', href: `/COP?t=${Date.now()}` });
         elNavbarBrand.innerHTML = '<i class="bi bi-gear-fill logo-icon"></i> <span class="logo-text">OP-Control</span>';
 
         const elNavbarGroup = el('div', ['navbar-toggler', 'btn-group'], { role: 'group' });
         
         const elUserInfoToggler = el('button', ['btn', 'btn-dark', 'user-info-toggler', 'pr-1'], { type: 'button' });
-        elUserInfoToggler.setAttribute('data-bs-toggle', 'collapse');
-        elUserInfoToggler.setAttribute('data-bs-target', '#navbar-user-info');
+        elUserInfoToggler.addEventListener('click', function() {
+            this.navbarCollapseController('user-info');
+        });
         
         const elUserInfoTogglerIcon = el('span', ['bi', 'bi-person']);
 
         elUserInfoToggler.append(elUserInfoTogglerIcon);
         
-        // 4. Botão Hambúrguer (Só aparece no Mobile)
         const elNavbarToggler = el('button', ['btn', 'btn-dark', 'options-toggler'], { type: 'button' });
-        elNavbarToggler.setAttribute('data-bs-toggle', 'collapse');
-        elNavbarToggler.setAttribute('data-bs-target', '#navbar-options');
+        elNavbarToggler.addEventListener('click', function() {
+            this.navbarCollapseController('options');
+        });
 
         const elNavbarTogglerIcon = el('span', ['navbar-toggler-icon']);
         elNavbarToggler.append(elNavbarTogglerIcon);
 
         elNavbarGroup.append(elUserInfoToggler, elNavbarToggler);
 
-        // 5. O bloco que vai colapsar no mobile e virar a lista no desktop
-        const elNavbarCollapse = el('div', ['collapse', 'navbar-collapse', 'w-100'], { id: 'navbar-options' });
-
-        // 6. Lista horizontal de opções (nav)
-        const elNavbarNav = el('div', ['navbar-nav', 'ms-auto'], { id: 'navbarNav' });
-
-        const elNavbarUserInfoCollapse = el('div', ['collapse', 'navbar-collapse', 'w-100'], { id: 'navbar-user-info' });
-
-        const elNavbarUserInfo = el('div', ['navbar-nav', 'ms-auto'], { id: 'navbarUserInfo' });
+        const elNavbarCollapse = el('div', ['collapse', 'navbar-collapse', 'w-100'], { id: 'navbar-collapse' });
         
-        // Montagem estrutural
-        elNavbarCollapse.append(elNavbarNav);
-        elNavbarUserInfoCollapse.append(elNavbarUserInfo);
-        elNavbarContainer.append(elNavbarBrand, elNavbarGroup, elNavbarCollapse, elNavbarUserInfoCollapse);
+        elNavbarContainer.append(elNavbarBrand, elNavbarGroup, elNavbarCollapse);
         this.container.append(elNavbarContainer);
 
         (async () => {
@@ -85,12 +73,36 @@ export const SidebarUI = {
         })();
     },
 
-    initSideNavbar() {
-        const elNavbarNav = document.getElementById('navbarNav');
-        elNavbarNav.innerHTML = '';
+    navbarCollapseController(opt) {
+        const elNavbarCollapse = document.getElementById('navbar-collapse');
+        elNavbarCollapse.innerHTML = '';
         
-        const elNavbarOptions = el('ul', ['navbar-nav'], { id: 'navbar-options' });
+        const currentState = ServiceStorage.get('COP_NAVBAR_CURRENT');
+        if (currentState === opt) {
+            ServiceStorage.set('COP_NAVBAR_CURRENT', 'none');
+            elNavbarCollapse.classList.remove('show');
+            return;
+        }
+        else {
+            ServiceStorage.set('COP_NAVBAR_CURRENT', opt);
+            elNavbarCollapse.classList.add('show');
+        }
+        
+        switch(opt) {
+            case 'user-info':
+                this.makeUserInfoMenu(elNavbarCollapse);
+                break;
+            case 'options':
+                this.makeOptionsMenu(elNavbarCollapse);
+                break;
+            default:
+                break;
+        }
+    },
 
+    makeOptionsMenu(elNavbarCollapse) {
+        const elNavbarOptionsMenu = el('ul', ['navbar-nav', 'ms-auto'], { id: 'navbar-options-menu' });
+        
         const options = this.getOptions();
         if(options === null || options.length < 1) return;
         
@@ -102,10 +114,26 @@ export const SidebarUI = {
             elOptionText.innerHTML = opt.text;
 
             elOption.append(elOptionText);
-            elNavbarOptions.append(elOption);
+            elNavbarOptionsMenu.append(elOption);
         });
 
-        elNavbarNav.append(elNavbarOptions);
+        elNavbarCollapse.append(elNavbarOptionsMenu);
+    },
+
+    makeUserInfoMenu(elNavbarCollapse) {
+        const elNavbarUserInfoMenu = el('ul', ['navbar-nav', 'ms-auto'], { id: 'navbar-user-info-menu' });
+        
+        const elUsernameView = el('li', ['nav-item'], { id: 'username-view' });
+        elUsernameView.innerHTML = `<strong>Username:&nbsp</strong>${this.auth.username}`;
+
+        const elDocumentView = el('li', ['nav-item'], { id: 'document-view' });
+        elDocumentView.innerHTML = `<strong>${this.auth.document_type}:&nbsp</strong>${this.auth.document}`;
+
+        const elRoleView = el('li', ['nav-item'], { id: 'role-view' });
+        elRoleView.innerHTML = `<strong>Role:&nbsp</strong>${this.auth.role}`;
+
+        elNavbarUserInfoMenu.append(elUsernameView, elDocumentView, elRoleView);
+        elNavbarCollapse.append(elNavbarUserInfoMenu);
     },
 
     async dataInitAsync() {
