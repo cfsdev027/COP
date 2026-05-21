@@ -25,7 +25,7 @@ export const SidebarUI = {
         }
     },
 
-    render() {
+        render() {
         this.container.innerHTML = '';
         this.container.classList.remove('d-none');
 
@@ -34,34 +34,52 @@ export const SidebarUI = {
             message_error: 'el is not a function.'
         };
 
-        const elNavbarContainer = el('div',['container-fluid'], { id: 'navbar-container' });
+        // 1. Cria a barra principal da Navbar (Garante estilo Bootstrap)
+        // Adicionamos 'navbar-expand-lg' para ela ficar horizontal no desktop e colapsar no mobile
+        const elNavbar = el('nav', ['navbar', 'navbar-expand-lg', 'navbar-dark', 'bg-dark', 'w-100']);
+
+        // 2. Container interno fluido para alinhar os elementos nas extremidades
+        const elNavbarContainer = el('div', ['container-fluid']);
         
+        // 3. Marca/Logo do sistema
         const elNavbarBrand = el('a', ['navbar-brand'], { id: 'navbar-brand', href: `/COP?t=${Date.now()}` });
-        const elNavbarTogglerIcon = el('span', ['navbar-toggler-icon']);
-        elNavbarTogglerIcon.innerHTML = 'OP Controll';
-        
-        const elNavbarToggler = el('button', ['navbar-toggler'], 
-            { 
-                type: 'button'
-            }
-        );
+        elNavbarBrand.innerHTML = "OP-Control";
 
+        // 4. Botão Hamburguer (Aparece apenas no Mobile)
+        const elNavbarToggler = document.createElement('button');
+        elNavbarToggler.className = 'navbar-toggler';
+        elNavbarToggler.type = 'button';
         elNavbarToggler.setAttribute('data-bs-toggle', 'collapse');
-        elNavbarToggler.setAttribute('data-bs-target', '#navbarNav');
-        elNavbarToggler.setAttribute('aria-controls', 'navbarNav');
-        elNavbarToggler.setAttribute('aria-expanded', 'false');
-        elNavbarToggler.setAttribute('aria-label', 'Toggle navigation');
+        elNavbarToggler.setAttribute('data-bs-target', '#navbar-options');
 
+        const elNavbarTogglerIcon = el('span', ['navbar-toggler-icon']);
         elNavbarToggler.append(elNavbarTogglerIcon);
+
+        // 5. Container que vai guardar as opções e sumir no mobile (Colapsável)
+        const elNavbarCollapse = el('div', ['collapse', 'navbar-collapse'], { id: 'navbar-options' });
         
-        const elNavbarCollapse = el('div',['collapse', 'navbar-collapse'], { id: 'navbarNav' });
-        elNavbarContainer.append(elNavbarBrand, elNavbarToggler, elNavbarCollapse);
+        // 6. Lista horizontal de opções (nav)
+        const elNavbarNav = el('div', ['navbar-nav', 'ms-auto']); // 'ms-auto' joga os botões para a direita
 
-        this.container.append(elNavbarContainer);
+        // Mapeia e injeta as opções do menu
+        this.getOptions().forEach(opt => {
+            // Criando como link estilizado do bootstrap para ganhar o visual correto
+            const elOption = el('button', ['nav-link', 'btn', 'btn-link', 'text-start', 'mx-2'], { id: opt.id });
+            elOption.onclick = () => opt.action();
+            
+            const elOptionText = el('i', ['bi', 'bi-briefcase']);
+            elOptionText.innerHTML = ` ${opt.text}`; // Espaço para separar do ícone
 
-        (async () => {
-            await this.dataInitAsync();
-        })();
+            elOption.append(elOptionText);
+            elNavbarNav.append(elOption);
+        });
+
+        // --- MONTAGEM DA ÁRVORE DO DOM ---
+        elNavbarCollapse.append(elNavbarNav); // Coloca a lista dentro do bloco colapsável
+        elNavbarContainer.append(elNavbarBrand, elNavbarToggler, elNavbarCollapse); // Coloca tudo no container fluido
+        elNavbar.append(elNavbarContainer); // Adiciona o container na tag nav principal
+        
+        this.container.append(elNavbar); // Injeta a navbar completa no container do seu HTML
     },
 
     initSideNavbar() {
