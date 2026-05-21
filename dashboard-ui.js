@@ -35,28 +35,9 @@ export const DashboardUI = {
     render() {
         this.section.innerHTML = '';
         
-        if(SECTION_DASHBOARD_SIDEBAR_ID == null) 
-            throw {stack: 'DashboardUI.render()', error_message: 'Missing SECTION_DASHBOARD_SIDEBAR_ID'};
-        
-        if(SECTION_DASHBOARD_SBMC_ID == null) 
-            throw {stack: 'DashboardUI.render()', error_message: 'Missing SECTION_DASHBOARD_SBMC_ID'};
-
         const userInfoHeader = this.getUserInfoHeader();
         if(userInfoHeader != null) 
             this.section.append(userInfoHeader);
-      
-        // 1. Criar o Sidebar (Aside)
-        const aside = document.createElement('aside');
-        aside.id = SECTION_DASHBOARD_SIDEBAR_ID;
-
-        const brand = document.createElement('div');
-        brand.style.cssText = 'padding: 0 20px 20px; font-weight: bold; color: var(--accent);';
-        brand.textContent = 'DASHBOARD';
-
-        const nav = document.createElement('nav');
-        nav.id = SECTION_DASHBOARD_SBMC_ID;
-
-        aside.append(brand, nav);
 
         // 2. Criar o Container do Dashboard
         const dashDiv = document.createElement('div');
@@ -81,7 +62,7 @@ export const DashboardUI = {
         dashDiv.append(dashHeader, gridMetrics);
 
         // 3. Injetar no Container Principal
-        this.section.append(aside, dashDiv);
+        this.section.append(dashDiv);
 
         // Inicializa o conteúdo baseado na role inicial
         this.initDashboard();
