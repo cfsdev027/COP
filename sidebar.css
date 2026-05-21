@@ -14,15 +14,17 @@
 .sidebar .navbar-nav {
     flex-direction: column;
     padding-top: 1rem;
-    gap: 8px;
+    gap: 4px;
 }
 
 .sidebar .nav-item {
-    width: 100%;
-    color: #94a3b8;
-    text-decoration: none;
-    padding: 0.75rem 1rem;
-    border-radius: 8px;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    padding: 0.6rem 1rem !important;
+    margin-bottom: 0 !important;
 }
 
 .sidebar .nav-item:hover {
