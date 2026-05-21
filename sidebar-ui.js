@@ -56,20 +56,12 @@ export const SidebarUI = {
         })();
     },
 
-    initDataSideNavbar() {
-        if(this.options == null || this.options.length < 1)
-            return;
-        
+    initSideNavbar() {
         const elSideNavbar = document.getElementById(SIDEBAR_NAV_ID);
         elSideNavbar.innerHTML = '';
 
         const options = this.getOptions();
-        if(options === null || options.length < 1) {
-            alert('[Sidebar.options] No options loaded from this page');
-            return;
-        } else {
-            alert(`[Sidebar.options] Options loaded: ${options.length}`);
-        }
+        if(options === null || options.length < 1) return;
         
         options.ForEach(opt => {
             const elOption = el('button', ['nav-item'], { id: opt.id });
@@ -84,7 +76,7 @@ export const SidebarUI = {
     },
 
     async dataInitAsync() {
-        this.initDataSideNavbar();
+        this.initSideNavbar();
     },
 
     getOptions() {
