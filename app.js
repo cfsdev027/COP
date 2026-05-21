@@ -21,9 +21,9 @@ function appendStyleSheetWithoutCache(css) {
 
 (async () => {
     try {
-        this.appendStyleSheetWithoutCache('style.css');
-        this.appendStyleSheetWithoutCache('sidebar.css');
-        this.appendStyleSheetWithoutCache('section-login-ui.css');
+        appendStyleSheetWithoutCache('style.css');
+        appendStyleSheetWithoutCache('sidebar.css');
+        appendStyleSheetWithoutCache('section-login-ui.css');
         
         let isAuthenticated = await ServiceAuthentication.self_authenticate();
         if (isAuthenticated) {
