@@ -52,6 +52,15 @@ export const SidebarUI = {
         const elUserInfoTogglerIcon = el('span', ['bi', 'bi-person']);
 
         elUserInfoToggler.append(elUserInfoTogglerIcon);
+
+        const elLogoutToggler = el('button', ['btn', 'btn-dark', 'logout-toggler', 'pr-1'], { type: 'button' });
+        elLogoutToggler.addEventListener('click', () => {
+            this.logout();
+        });
+        
+        const elLogoutTogglerIcon = el('span', ['bi', 'bi-box-arrow-right']);
+
+        elLogoutToggler.append(elLogoutTogglerIcon);
         
         const elNavbarToggler = el('button', ['btn', 'btn-dark', 'options-toggler'], { type: 'button' });
         elNavbarToggler.addEventListener('click', () => {
@@ -61,7 +70,7 @@ export const SidebarUI = {
         const elNavbarTogglerIcon = el('span', ['navbar-toggler-icon']);
         elNavbarToggler.append(elNavbarTogglerIcon);
 
-        elNavbarGroup.append(elUserInfoToggler, elNavbarToggler);
+        elNavbarGroup.append(elUserInfoToggler, elLogoutToggler, elNavbarToggler);
 
         const elNavbarCollapse = el('div', ['collapse', 'navbar-collapse', 'w-100'], { id: 'navbar-collapse' });
         
@@ -70,6 +79,19 @@ export const SidebarUI = {
 
         (async () => {
             await this.dataInitAsync();
+        })();
+    },
+
+    logout() {
+        if(!confirm("Deseja realmente sair?")) return;
+
+        (async () => {
+            let isLogout = await ServiceAuthentication.logout();
+            if(!isLogout) {
+                return;
+            }
+
+            window.location.reload();
         })();
     },
 
