@@ -35,5 +35,6 @@ body {
 
 .section-base.active {
     display: flex !important;
-    animation: fadeIn 0.3s ease;
+    flex-direction: column;
+    justify-content: flex-start;
 }
