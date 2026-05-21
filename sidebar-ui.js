@@ -17,8 +17,8 @@ export const SidebarUI = {
     init() {
         try {
             if (!this.container) throw { stack: 'init', message_error: 'Missing CONTAINER.' };
+            
             this.render();
-            setTimeout(() => this.dataInitAsync(), 100);
         } catch (err) {
             if(typeof CatchError === 'function')
                 CatchError('SidebarUI', err);
@@ -64,7 +64,12 @@ export const SidebarUI = {
         elSideNavbar.innerHTML = '';
 
         const options = this.getOptions();
-        if(options === null || options.length < 1) return;
+        if(options === null || options.length < 1) {
+            alert('[Sidebar.options] No options loaded from this page');
+            return;
+        } else {
+            alert(`[Sidebar.options] Options loaded: ${options.length}`);
+        }
         
         options.ForEach(opt => {
             const elOption = el('button', ['nav-item'], { id: opt.id });
