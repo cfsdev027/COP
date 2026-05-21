@@ -73,8 +73,8 @@ export const DashboardUI = {
         if (metricsContainer) {
             metricsContainer.innerHTML = '';
 
-            const elMetricsHeader = el('div', ['d-flex', 'w-100']);
-            const elMetricsHeaderTitle = el('h1');
+            const elMetricsHeader = el('div', ['d-flex', 'w-100', 'pt-2']);
+            const elMetricsHeaderTitle = el('h2');
             elMetricsHeaderTitle.innerHTML = 'ORDENS DE PRODUÇÃO (OPs)';
 
             elMetricsHeader.append(elMetricsHeaderTitle);
