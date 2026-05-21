@@ -8,8 +8,9 @@ window.addEventListener('unhandledrejection', function (event) {
     alert("Erro de Promessa: " + event.reason);
 });
 
-import {AppRouter} from './app-router.js';
-import {ServiceAuthentication} from './service-authentication.js';
+import { AppRouter } from './app-router.js';
+import { CatchError } from './catch-error.js';
+import { ServiceAuthentication } from './service-authentication.js';
 
 function appendStyleSheetWithoutCache(css) {
     const link = document.createElement('link');
@@ -31,6 +32,6 @@ function appendStyleSheetWithoutCache(css) {
             AppRouter['login'].init();
         }
     } catch(err) {
-        alert(JSON.stringify(err));
+        CatchError('App', err);
     }
 })();
