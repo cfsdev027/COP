@@ -39,6 +39,13 @@
     width: 100% !important;                 /* Força o botão a ocupar toda a largura disponível */
 }
 
+.user-info-toggler {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+}
+
 /* ==========================================================================
    COMPORTAMENTO DESKTOP (Telas a partir de 992px)
    ========================================================================== */
