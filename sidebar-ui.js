@@ -44,7 +44,7 @@ export const SidebarUI = {
         const elNavbarBrand = el('a', ['navbar-brand', 'sidebar-header'], { id: 'navbar-brand', href: `/COP?t=${Date.now()}` });
         elNavbarBrand.innerHTML = '<i class="bi bi-gear-fill logo-icon"></i> <span class="logo-text">OP-Control</span>';
 
-        const elUserInfoToggler = el('button', ['navbar-toggler', 'user-info-toggler'], { type: 'button' });
+        const elUserInfoToggler = el('button', ['navbar-toggler', 'user-info-toggler', 'pr-0', 'pl-0'], { type: 'button' });
         elUserInfoToggler.setAttribute('data-bs-toggle', 'collapse');
         elUserInfoToggler.setAttribute('data-bs-target', '#navbar-user-info');
         
@@ -53,7 +53,7 @@ export const SidebarUI = {
         elUserInfoToggler.append(elUserInfoTogglerIcon);
         
         // 4. Botão Hambúrguer (Só aparece no Mobile)
-        const elNavbarToggler = el('button', ['navbar-toggler'], { type: 'button' });
+        const elNavbarToggler = el('button', ['navbar-toggler', 'pl-0'], { type: 'button' });
         elNavbarToggler.setAttribute('data-bs-toggle', 'collapse');
         elNavbarToggler.setAttribute('data-bs-target', '#navbar-options');
 
