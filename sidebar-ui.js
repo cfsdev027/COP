@@ -122,7 +122,7 @@ export const SidebarUI = {
 
     makeUserInfoMenu(elNavbarCollapse) {
         const elNavbarUserInfoMenu = el('ul', ['navbar-nav', 'ms-auto'], { id: 'navbar-user-info-menu' });
-        elNavbarUserInfoMenu.styles.color = '#ffffff';
+        elNavbarUserInfoMenu.style.color = '#ffffff';
         
         const elUsernameView = el('li', ['nav-item'], { id: 'username-view' });
         elUsernameView.innerHTML = `<strong>Username:&nbsp</strong>${this.auth.username}`;
