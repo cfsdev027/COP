@@ -46,7 +46,7 @@ export const SidebarUI = {
 
         const elNavbarGroup = el('div', ['navbar-toggler', 'btn-group'], { role: 'group' });
         
-        const elUserInfoToggler = el('button', ['user-info-toggler'], { type: 'button' });
+        const elUserInfoToggler = el('button', ['btn', 'btn-dark', 'user-info-toggler', 'pr-1'], { type: 'button' });
         elUserInfoToggler.setAttribute('data-bs-toggle', 'collapse');
         elUserInfoToggler.setAttribute('data-bs-target', '#navbar-user-info');
         
@@ -55,7 +55,7 @@ export const SidebarUI = {
         elUserInfoToggler.append(elUserInfoTogglerIcon);
         
         // 4. Botão Hambúrguer (Só aparece no Mobile)
-        const elNavbarToggler = el('button', ['options-toggler'], { type: 'button' });
+        const elNavbarToggler = el('button', ['btn', 'btn-dark', 'options-toggler'], { type: 'button' });
         elNavbarToggler.setAttribute('data-bs-toggle', 'collapse');
         elNavbarToggler.setAttribute('data-bs-target', '#navbar-options');
 
