@@ -25,18 +25,6 @@ export const SidebarUI = {
         }
     },
 
-    makeSidebarHeader() {
-        const elSidebarHeader = el('div',['sidebar-header']);
-        
-        const elLogoIcon = el('i',['bi','bi-gear-fill','logo-icon']);
-        const elLogoText = el('span',['logo-text']);
-        elLogoText.innerHTML = 'OP-Control';
-
-        elSidebarHeader.append(elLogoIcon,elLogoText);
-
-        return elSidebarHeader;
-    },
-
     render() {
         this.container.innerHTML = '';
         this.container.classList.remove('d-none');
@@ -46,10 +34,28 @@ export const SidebarUI = {
             message_error: 'el is not a function.'
         };
 
-        const elSidebarHeader = this.makeSidebarHeader();
-        const elSideNavbar = el('nav', [SIDEBAR_NAV_ID], { id: SIDEBAR_NAV_ID });
+        const elNavbarContainer = el('div',['container-fluid'], { id: 'navbar-container' });
+        
+        const elNavbarBrand = el('a', ['navbar-brand'], { id: 'navbar-brand', href: `/?t=${Date.now()}` });
+        const elNavbarTogglerIcon = el('span', ['navbar-toggler-icon']);
+        const elNavbarToggler = el('button', ['navbar-toggler'], 
+            { 
+                type: 'button', 
+                'data-bs-toggle': 'collapse', 
+                'data-bs-target': '#navbarNav', 
+                'aria-controls': 'navbarNav',
+                'aria-expanded': 'false',
+                'aria-label': 'Toggle navigation'
+            }
+        );
 
-        this.container.append(elSidebarHeader,elSideNavbar);
+        elNavbarToggler.append(elNavbarTogglerIcon);
+
+        const elNavbarCollapse = el('div',['collapse', 'navbar-collapse'], { id: 'navbarNav' });
+
+        elNavbarContainer.append(elNavbarBrand, elNavbarToggler, elNavbarCollapse);
+
+        this.container.append(elNavbarContainer);
 
         (async () => {
             await this.dataInitAsync();
@@ -57,22 +63,26 @@ export const SidebarUI = {
     },
 
     initSideNavbar() {
-        const elSideNavbar = document.getElementById(SIDEBAR_NAV_ID);
+        const elSideNavbar = document.getElementById('navbarNav');
         elSideNavbar.innerHTML = '';
+        
+        const elNavbarOptions = el('ul', ['navbar-nav'], { id: 'navbar-options' });
 
         const options = this.getOptions();
         if(options === null || options.length < 1) return;
         
         options.forEach(opt => {
-            const elOption = el('button', ['nav-item'], { id: opt.id });
-            elOption.onclick = () => opt.action();
+            const elOption = el('li', ['nav-item'], { id: opt.id });
             
-            const elOptionText = el('i', ['bi', 'bi-briefcase']);
+            const elOptionText = el('button', ['nav-link', 'bi', 'bi-briefcase']);
+            elOptionText.onclick = () => opt.action();
             elOptionText.innerHTML = opt.text;
 
             elOption.append(elOptionText);
-            elSideNavbar.append(elOption);
+            elNavbarOptions.append(elOption);
         });
+
+        elSideNavbar.append(elNavbarOptions);
     },
 
     async dataInitAsync() {
