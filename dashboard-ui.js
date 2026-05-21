@@ -12,6 +12,30 @@ import {ServiceAuthentication} from './service-authentication.js';
 export const DashboardUI = {
     section: document.getElementById(SECTION_DASHBOARD_ID),
     auth: ServiceAuthentication.get_auth(),
+    config: {
+        metrics: [
+            {
+                color: '#B83C08', // Ginger Red
+                label: 'Ordens de Produção (OPs) em atraso:',
+                value: 12
+            },
+            {
+                color: '#FFEF00', // Canary yellow
+                label: 'Ordens de Produção (OPs) em produção:',
+                value: 56
+            },
+            {
+                color: '#3B2F2F', // Dark Coffe
+                label: 'Ordens de Produção (OPs) inativas:',
+                value: 1
+            },
+            {
+                color: '#8FB31D', // Citron Green
+                label: 'Ordens de Produção (OPs) concluídas:',
+                value: 193
+            }
+        ]
+    },
     
     init() {
         try {
@@ -47,7 +71,7 @@ export const DashboardUI = {
         const metricsContainer = document.getElementById('metrics-container');
         if (metricsContainer) {
             metricsContainer.innerHTML = ''; // Limpa os cards atuais
-            config.metrics.forEach(m => {
+            this.config.metrics.forEach(m => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 // Estilização dinâmica baseada no modelo da imagem (faixa de cor no topo)
@@ -71,5 +95,5 @@ export const DashboardUI = {
     
     async initDataAsync() {
         await this.initMetricsAsync();
-    }
+    },
 };
