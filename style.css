@@ -29,11 +29,11 @@ body {
 
 /* Section base */
 .section-base {
-    display: none;
+    display: none !important;
     width: 100%;
 }
 
 .section-base.active {
-    display: block;
+    display: flex !important;
     animation: fadeIn 0.3s ease;
 }
