@@ -42,19 +42,19 @@ export const SidebarUI = {
         
         const elNavbarToggler = el('button', ['navbar-toggler'], 
             { 
-                type: 'button', 
-                'data-bs-toggle': 'collapse', 
-                'data-bs-target': '#navbarNav', 
-                'aria-controls': 'navbarNav',
-                'aria-expanded': 'false',
-                'aria-label': 'Toggle navigation'
+                type: 'button'
             }
         );
 
+        elNavbarToggler.setAttribute('data-bs-toggle', 'collapse');
+        elNavbarToggler.setAttribute('data-bs-target', '#navbarNav');
+        elNavbarToggler.setAttribute('aria-controls', 'navbarNav');
+        elNavbarToggler.setAttribute('aria-expanded', 'false');
+        elNavbarToggler.setAttribute('aria-label', 'Toggle navigation');
+
         elNavbarToggler.append(elNavbarTogglerIcon);
-
+        
         const elNavbarCollapse = el('div',['collapse', 'navbar-collapse'], { id: 'navbarNav' });
-
         elNavbarContainer.append(elNavbarBrand, elNavbarToggler, elNavbarCollapse);
 
         this.container.append(elNavbarContainer);
