@@ -1,10 +1,68 @@
-.nav-item {
+/* ==========================================================================
+   CONFIGURAÇÕES GERAIS E MOBILE (Telas menores que 992px)
+   ========================================================================== */
+.sidebar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1030;
+    padding: 0.5rem 1rem;
 }
 
-.nav-item:hover, .nav-item.active {
+/* Força os itens a se alinharem verticalmente dentro do colapso do mobile */
+.sidebar .navbar-nav {
+    flex-direction: column;
+    padding-top: 1rem;
+    gap: 8px;
 }
 
-/* --- COMPORTAMENTO RESPONSIVO (MOBILE) --- */
-@media (max-width: 768px) {
+.sidebar .nav-item {
+    width: 100%;
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+}
 
+.sidebar .nav-item:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+}
+
+/* ==========================================================================
+   COMPORTAMENTO DESKTOP (Telas a partir de 992px)
+   ========================================================================== */
+@media (min-width: 992px) {
+    .sidebar {
+        width: 260px;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        padding: 2rem 1rem !important;
+    }
+
+    /* Força o container do Bootstrap a agir como bloco vertical no Desktop */
+    .sidebar .container-fluid {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        height: 100%;
+        padding: 0;
+    }
+
+    /* Exibe o menu sempre aberto no Desktop */
+    .sidebar .navbar-collapse {
+        display: flex !important;
+        flex-basis: auto !important;
+        width: 100%;
+    }
+
+    .sidebar .sidebar-nav {
+        flex-direction: column !important; /* Itens um embaixo do outro */
+        margin-top: 2rem;
+    }
 }
