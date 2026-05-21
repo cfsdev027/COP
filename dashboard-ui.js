@@ -15,24 +15,24 @@ export const DashboardUI = {
     config: {
         metrics: [
             {
+                color: '#8FB31D', // Citron Green
+                label: 'concluídas:',
+                value: 193
+            }
+            {
                 color: '#B83C08', // Ginger Red
-                label: 'Ordens de Produção (OPs) em atraso:',
+                label: 'atraso:',
                 value: 12
             },
             {
                 color: '#FFEF00', // Canary yellow
-                label: 'Ordens de Produção (OPs) em produção:',
+                label: 'produção:',
                 value: 56
             },
             {
                 color: '#3B2F2F', // Dark Coffe
-                label: 'Ordens de Produção (OPs) inativas:',
+                label: 'inativas:',
                 value: 1
-            },
-            {
-                color: '#8FB31D', // Citron Green
-                label: 'Ordens de Produção (OPs) concluídas:',
-                value: 193
             }
         ]
     },
@@ -70,7 +70,15 @@ export const DashboardUI = {
     async initMetricsAsync() {
         const metricsContainer = document.getElementById('metrics-container');
         if (metricsContainer) {
-            metricsContainer.innerHTML = ''; // Limpa os cards atuais
+            metricsContainer.innerHTML = '';
+
+            const elMetricsHeader = el('div', ['d-flex', 'w-100']);
+            const elMetricsHeaderTitle = el('h1');
+            elMetricsHeaderTitle.innerHTML = 'ORDENS DE PRODUÇÃO (OPs)';
+
+            elMetricsHeader.append(elMetricsHeaderTitle);
+            metricsContainer.append(elMetricsHeader);
+            
             this.config.metrics.forEach(m => {
                 const card = document.createElement('div');
                 card.className = 'card';
