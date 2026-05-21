@@ -63,7 +63,7 @@ export const SidebarUI = {
         const options = this.getOptions();
         if(options === null || options.length < 1) return;
         
-        options.ForEach(opt => {
+        options.forEach(opt => {
             const elOption = el('button', ['nav-item'], { id: opt.id });
             elOption.onclick = () => opt.action();
             
