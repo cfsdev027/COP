@@ -36,8 +36,12 @@ export const SidebarUI = {
 
         const elNavbarContainer = el('div',['container-fluid'], { id: 'navbar-container' });
         
-        const elNavbarBrand = el('a', ['navbar-brand'], { id: 'navbar-brand', href: `/?t=${Date.now()}` });
+        const elNavbarBrand = el('a', ['navbar-brand'], { id: 'navbar-brand', href: `/COP?t=${Date.now()}` });
         const elNavbarTogglerIcon = el('span', ['navbar-toggler-icon']);
+        elNavbarTogglerIcon.innerHTML = 'OP Controll';
+
+        elNavbarToggler.append(elNavbarTogglerIcon);
+        
         const elNavbarToggler = el('button', ['navbar-toggler'], 
             { 
                 type: 'button', 
@@ -48,8 +52,6 @@ export const SidebarUI = {
                 'aria-label': 'Toggle navigation'
             }
         );
-
-        elNavbarToggler.append(elNavbarTogglerIcon);
 
         const elNavbarCollapse = el('div',['collapse', 'navbar-collapse'], { id: 'navbarNav' });
 
