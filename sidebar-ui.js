@@ -25,7 +25,7 @@ export const SidebarUI = {
         }
     },
 
-        render() {
+    render() {
         this.container.innerHTML = '';
         this.container.classList.remove('d-none');
 
@@ -59,20 +59,7 @@ export const SidebarUI = {
         const elNavbarCollapse = el('div', ['collapse', 'navbar-collapse'], { id: 'navbar-options' });
         
         // 6. Lista horizontal de opções (nav)
-        const elNavbarNav = el('div', ['navbar-nav', 'ms-auto']); // 'ms-auto' joga os botões para a direita
-
-        // Mapeia e injeta as opções do menu
-        this.getOptions().forEach(opt => {
-            // Criando como link estilizado do bootstrap para ganhar o visual correto
-            const elOption = el('button', ['nav-link', 'btn', 'btn-link', 'text-start', 'mx-2'], { id: opt.id });
-            elOption.onclick = () => opt.action();
-            
-            const elOptionText = el('i', ['bi', 'bi-briefcase']);
-            elOptionText.innerHTML = ` ${opt.text}`; // Espaço para separar do ícone
-
-            elOption.append(elOptionText);
-            elNavbarNav.append(elOption);
-        });
+        const elNavbarNav = el('div', ['navbar-nav', 'ms-auto'], { id: 'navbarNav' }); // 'ms-auto' joga os botões para a direita
 
         // --- MONTAGEM DA ÁRVORE DO DOM ---
         elNavbarCollapse.append(elNavbarNav); // Coloca a lista dentro do bloco colapsável
@@ -80,11 +67,15 @@ export const SidebarUI = {
         elNavbar.append(elNavbarContainer); // Adiciona o container na tag nav principal
         
         this.container.append(elNavbar); // Injeta a navbar completa no container do seu HTML
+
+        (async () => {
+            await this.dataInitAsync();
+        })();
     },
 
     initSideNavbar() {
-        const elSideNavbar = document.getElementById('navbarNav');
-        elSideNavbar.innerHTML = '';
+        const elNavbarNav = document.getElementById('navbarNav');
+        elNavbarNav.innerHTML = '';
         
         const elNavbarOptions = el('ul', ['navbar-nav'], { id: 'navbar-options' });
 
@@ -102,7 +93,7 @@ export const SidebarUI = {
             elNavbarOptions.append(elOption);
         });
 
-        elSideNavbar.append(elNavbarOptions);
+        elNavbarNav.append(elNavbarOptions);
     },
 
     async dataInitAsync() {
