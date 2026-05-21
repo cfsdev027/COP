@@ -32,6 +32,13 @@
     color: white;
 }
 
+.sidebar .nav-item button {
+    display: flex !important;
+    justify-content: flex-start !important; /* Alinha o conteúdo (ícone/texto) à esquerda */
+    text-align: left !important;            /* Garante o alinhamento do texto à esquerda */
+    width: 100% !important;                 /* Força o botão a ocupar toda a largura disponível */
+}
+
 /* ==========================================================================
    COMPORTAMENTO DESKTOP (Telas a partir de 992px)
    ========================================================================== */
