@@ -18,7 +18,7 @@ export const DashboardUI = {
                 color: '#8FB31D', // Citron Green
                 label: 'concluídas:',
                 value: 193
-            }
+            },
             {
                 color: '#B83C08', // Ginger Red
                 label: 'atraso:',
