@@ -55,6 +55,7 @@ export const SidebarUI = {
 
         const elLogoutToggler = el('button', ['btn', 'btn-dark', 'logout-toggler', 'pr-1'], { type: 'button' });
         elLogoutToggler.addEventListener('click', () => {
+            this.navbarCollapseController('logout');
             this.logout();
         });
         
@@ -116,6 +117,9 @@ export const SidebarUI = {
                 break;
             case 'options':
                 this.makeOptionsMenu(elNavbarCollapse);
+                break;
+            case 'logout':
+                elNavbarCollapse.classList.remove('show');
                 break;
             default:
                 break;
