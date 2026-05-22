@@ -9,11 +9,8 @@ import {SECTION_LOGIN_ID} from './config-login-ui.js';
 import {DashboardUI} from './dashboard-ui.js';
 import {SECTION_DASHBOARD_ID} from './config-dashboard-ui.js';
 
-import {DashboardUsersUI} from './dashboard-users-ui.js';
-import {SECTION_DASHBOARD_USERS_ID} from './config-dashboard-users-ui.js';
-
-import {SrpUI} from './srp-ui.js';
-import {SECTION_SRP_ID} from './config-srp-ui.js';
+import {SectionUsersUI} from './section-users-ui.js';
+import {SECTION_USERS_ID} from './config-users-ui.js';
 
 const transition = function(next, id, sidebar_enable = false) {
     const current = ServiceStorage.get('COP-CURRENT-SECTION');
@@ -73,22 +70,12 @@ export const AppRouter = {
             );
         }
     },
-    dashboard_users: {
-        section_id: SECTION_DASHBOARD_USERS_ID,
+    users: {
+        section_id: SECTION_USERS_ID,
         init: function() {
             transition(
-                DashboardUsersUI, 
-                SECTION_DASHBOARD_USERS_ID,
-                true
-            );
-        }
-    },
-    srp: {
-        section_id: SECTION_SRP_ID,
-        init: function() {
-            transition(
-                SrpUI, 
-                SECTION_SRP_ID,
+                SectionUsersUI, 
+                SECTION_USERS_ID,
                 true
             );
         }
