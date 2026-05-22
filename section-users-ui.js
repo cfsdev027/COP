@@ -87,7 +87,6 @@ export const SectionUsersUI = {
         // Sobrescrevemos o método de renderização interna do grid para construir as colunas baseadas nas propriedades do usuário
         RegistryComponent.render = function() {
             this.container.innerHTML = '';
-            this.container.className = "container-fluid p-4";
 
             // 1. TÍTULO
             const elHeader = el('div', ['row', 'mb-4']);
