@@ -39,70 +39,70 @@ export const DashboardUI = {
         steps: [
             {
                 order: 1,
-                color: '#8FB31D', // Citron Green
+                color: '#FF0000', // Vermelho
                 label: 'Fabricação',
                 description: 'Calandragem e confecção do corpo do tanque.',
                 value: 5
             },
             {
                 order: 2,
-                color: '#B83C08', // Ginger Red
+                color: '#CC2244', // Carmim
                 label: 'Montagem/Fabricação - 1',
                 description: 'Construção do corpo do tanque com quebra-ondas e anteparos (tanque vertical).',
                 value: 7
             },
             {
                 order: 3,
-                color: '#FFEF00', // Canary yellow
+                color: '#883388', // Roxo
                 label: 'Solda - 1',
                 description: 'Solda do corpo do tanque com quebra-ondas e anteparos (tanque horizontal).',
                 value: 11
             },
             {
                 order: 4,
-                color: '#3B2F2F', // Dark Coffe
+                color: '#4444CC', // Azul escuro
                 label: 'Montagem/Fabricação - 2',
                 description: 'Fabricação e instalação de berço, chapa de reforço, sobrechassis, escada, corrimão, fundo do tanque e itens auxiliares.',
                 value: 1
             },
             {
                 order: 5,
-                color: '#3B2F2F', // Dark Coffe
+                color: '#0066FF', // Azul Royal
                 label: 'Solda - 2',
                 description: 'Solda dos componentes do tanque (berço, chapa de reforço, sobrechassis, escada, corrimão, fundo do tanque e itens auxiliares).',
                 value: 3
             },
             {
                 order: 6,
-                color: '#FFEF00', // Canary yellow
+                color: '#0099FF', // Azul céu
                 label: 'Teste/Ensaio - 1',
                 description: 'Relatório de ensaio de pressão (Pneumático).',
                 value: 11
             },
             {
                 order: 7,
-                color: '#FFEF00', // Canary yellow
+                color: '#00BBCC', // Ciano
                 label: 'Pintura',
                 description: 'Preparação e pintura geral.',
                 value: 13
             },
             {
                 order: 8,
-                color: '#FFEF00', // Canary yellow
+                color: '#00CC88', // Verde menta
                 label: 'Instalação',
                 description: 'Montagem do tanque no veículo.',
                 value: 1
             },
             {
                 order: 9,
-                color: '#FFEF00', // Canary yellow
+                color: '#00AA44', // Verde bandeira
                 label: 'Teste/Ensaio - 2',
                 description: 'Relatório de ensaio de estanqueidade.',
                 value: 11
             },
             {
                 order: 10,
-                color: '#FFEF00', // Canary yellow
+                color: '#00FF00', // Verde lima
                 label: 'Checklist (checkout)',
                 description: 'Validação e conferência para checkout da OP.',
                 value: 9
