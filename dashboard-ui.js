@@ -14,7 +14,7 @@ export const DashboardUI = {
     section: document.getElementById(SECTION_DASHBOARD_ID),
     auth: ServiceAuthentication.get_auth(),
     config: {
-        metrics: [
+        ops: [
             {
                 color: '#8FB31D', // Citron Green
                 label: 'concluídas:',
@@ -35,6 +35,78 @@ export const DashboardUI = {
                 label: 'inativas:',
                 value: 1
             }
+        ],
+        steps: [
+            {
+                order: 1,
+                color: '#8FB31D', // Citron Green
+                label: 'Fabricação',
+                description: 'Calandragem e confecção do corpo do tanque.',
+                value: 5
+            },
+            {
+                order: 2,
+                color: '#B83C08', // Ginger Red
+                label: 'Montagem/Fabricação - 1',
+                description: 'Construção do corpo do tanque com quebra-ondas e anteparos (tanque vertical).',
+                value: 7
+            },
+            {
+                order: 3,
+                color: '#FFEF00', // Canary yellow
+                label: 'Solda - 1',
+                description: 'Solda do corpo do tanque com quebra-ondas e anteparos (tanque horizontal).',
+                value: 11
+            },
+            {
+                order: 4,
+                color: '#3B2F2F', // Dark Coffe
+                label: 'Montagem/Fabricação - 2',
+                description: 'Fabricação e instalação de berço, chapa de reforço, sobrechassis, escada, corrimão, fundo do tanque e itens auxiliares.',
+                value: 1
+            },
+            {
+                order: 5,
+                color: '#3B2F2F', // Dark Coffe
+                label: 'Solda - 2',
+                description: 'Solda dos componentes do tanque (berço, chapa de reforço, sobrechassis, escada, corrimão, fundo do tanque e itens auxiliares).',
+                value: 3
+            },
+            {
+                order: 6,
+                color: '#FFEF00', // Canary yellow
+                label: 'Teste/Ensaio - 1',
+                description: 'Relatório de ensaio de pressão (Pneumático).',
+                value: 11
+            },
+            {
+                order: 7,
+                color: '#FFEF00', // Canary yellow
+                label: 'Pintura',
+                description: 'Preparação e pintura geral.',
+                value: 13
+            },
+            {
+                order: 8,
+                color: '#FFEF00', // Canary yellow
+                label: 'Instalação',
+                description: 'Montagem do tanque no veículo.',
+                value: 1
+            },
+            {
+                order: 9,
+                color: '#FFEF00', // Canary yellow
+                label: 'Teste/Ensaio - 2',
+                description: 'Relatório de ensaio de estanqueidade.',
+                value: 11
+            },
+            {
+                order: 10,
+                color: '#FFEF00', // Canary yellow
+                label: 'Checklist (checkout)',
+                description: 'Validação e conferência para checkout da OP.',
+                value: 9
+            },
         ]
     },
     
@@ -56,33 +128,32 @@ export const DashboardUI = {
     render() {
         this.section.innerHTML = '';
 
-        // Grid de Métricas
-        const gridMetrics = document.createElement('div');
-        gridMetrics.className = 'grid-metrics';
-        gridMetrics.id = 'metrics-container';
+        const gridOpStatus = el('div', ['grid-metrics', 'grid-op-status'], { id: 'grid-op-status' });
+        const gridEtapasDispatch = el('div', ['grid-metrics', 'grid-etapas-dispatch'], { id: 'grid-etapas-dispatch' });
 
-        this.section.append(gridMetrics);
+        this.section.append(gridOpStatus);
+        this.section.append(gridEtapasDispatch);
 
         (async () => {
             await this.initDataAsync();
         })();
     },
 
-    async initMetricsAsync() {
-        const metricsContainer = document.getElementById('metrics-container');
+    async initDataOpStatusAsync() {
+        const metricsContainer = document.getElementById('grid-op-status');
         if (metricsContainer) {
             metricsContainer.innerHTML = '';
 
             const elMetricsHeader = el('div', ['d-flex', 'w-100']);
             const elMetricsHeaderTitle = el('h2', ['m-3']);
-            elMetricsHeaderTitle.innerHTML = 'ORDENS DE PRODUÇÃO (OPs)';
+            elMetricsHeaderTitle.innerHTML = 'LINHA DE PRODUÇÃO (OPs)';
 
             elMetricsHeader.append(elMetricsHeaderTitle);
             metricsContainer.append(elMetricsHeader);
             
-            this.config.metrics.forEach(m => {
+            this.config.ops.forEach(m => {
                 const card = document.createElement('div');
-                card.className = 'card';
+                card.className = 'card card-op-status';
                 // Estilização dinâmica baseada no modelo da imagem (faixa de cor no topo)
                 card.style.cssText = `
                 background: white; 
@@ -94,15 +165,53 @@ export const DashboardUI = {
             `;
 
                 card.innerHTML = `
-                <div style="color: #777; font-size: 0.85rem; font-weight: bold; text-transform: uppercase;">${m.label}</div>
-                <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333;">${m.value}</div>
+                     <div style="color: #777; font-size: 0.85rem; font-weight: bold; text-transform: uppercase;">${m.label}</div>
+                     <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333;">${m.value}</div>
+                `;
+                
+                metricsContainer.appendChild(card);
+            });
+        }
+    },
+
+    async initDataEtapasDispatcherAsync() {
+        const metricsContainer = document.getElementById('grid-etapas-dispatcher');
+        if (metricsContainer) {
+            metricsContainer.innerHTML = '';
+
+            const elMetricsHeader = el('div', ['d-flex', 'w-100']);
+            const elMetricsHeaderTitle = el('h2', ['m-3']);
+            elMetricsHeaderTitle.innerHTML = 'LINHA DE PRODUÇÃO (ETAPAS)';
+
+            elMetricsHeader.append(elMetricsHeaderTitle);
+            metricsContainer.append(elMetricsHeader);
+            
+            this.config.steps.forEach(m => {
+                const card = document.createElement('div');
+                card.className = 'card card-etapas-dispatch';
+                // Estilização dinâmica baseada no modelo da imagem (faixa de cor no topo)
+                card.style.cssText = `
+                background: white; 
+                padding: 20px; 
+                border-radius: 4px; 
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+                border-top: 5px solid ${m.color};
+                min-width: 180px;
             `;
+
+                card.innerHTML = `
+                     <div style="color: #777; font-size: 0.85rem; font-weight: bold; text-transform: uppercase;">${m.order}.&nbsp${m.label}</div>
+                     <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333;">Descrição:&nbsp${m.description}</div>
+                     <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333;">OPs:&nbsp${m.value}</div>
+                `;
+                
                 metricsContainer.appendChild(card);
             });
         }
     },
     
     async initDataAsync() {
-        await this.initMetricsAsync();
+        await this.initDataOpStatusAsync();
+        await this.initDataEtapasDispatcherAsync();
     },
 };
