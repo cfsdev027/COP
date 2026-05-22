@@ -136,7 +136,7 @@ export const SidebarUI = {
             const elOption = el('li', ['nav-item'], { id: opt.id });
             
             const elOptionText = el('button', ['nav-link', 'btn', 'btn-dark', 'w-100']);
-            elOptionText.onclick = () => opt.action(callbackOptionClick);
+            elOptionText.onclick = () => opt.action(this.callbackOptionClick);
             elOptionText.innerHTML = opt.text;
 
             elOption.append(elOptionText);
