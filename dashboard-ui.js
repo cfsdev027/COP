@@ -175,7 +175,7 @@ export const DashboardUI = {
     },
 
     async initDataEtapasDispatcherAsync() {
-        const metricsContainer = document.getElementById('grid-etapas-dispatcher');
+        const metricsContainer = document.getElementById('grid-etapas-dispatch');
         if (metricsContainer) {
             metricsContainer.innerHTML = '';
 
