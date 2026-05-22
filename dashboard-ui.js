@@ -203,9 +203,9 @@ export const DashboardUI = {
             `;
 
                 card.innerHTML = `
-                     <div style="color: ${m.color}; font-size: 1.5rem; font-weight: bold; text-transform: uppercase;">${m.order}.&nbsp${m.label}</div>
-                     <div style="font-size: 0.85rem; margin-top: 10px; color: #777;"><strong>Descrição:</strong>&nbsp${m.description}</div>
-                     <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333;">OPs (em produção):&nbsp${m.value}</div>
+                     <div style="color: ${m.color}; font-size: 1.25rem; font-weight: bold; text-transform: uppercase;">${m.order}.&nbsp${m.label}</div>
+                     <div style="font-size: 1rem; margin-top: 10px; color: #777;"><strong>Descrição:</strong>&nbsp${m.description}</div>
+                     <div style="font-size: 1.25rem; font-weight: bold; margin-top: 10px; color: #333;">OPs (em produção):&nbsp${m.value}</div>
                 `;
                 
                 metricsContainer.appendChild(card);
