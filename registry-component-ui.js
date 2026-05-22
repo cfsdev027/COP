@@ -3,8 +3,9 @@ import { CatchError } from './catch-error.js';
 import { ServiceStorage } from './service-storage.js'; // Caso precise persistir estados temporários
 
 export const RegistryComponent = {
-    container: null, // Será definido no init()
-    title: "Gerenciador de Registros",
+    container: null,
+    title: null,
+    data: null,
     
     // Dados em memória (Mock inicial que simula o banco de dados)
     database: [
@@ -16,12 +17,15 @@ export const RegistryComponent = {
     // Lista que o grid exibe atualmente (filtrada ou cheia)
     currentRows: [],
 
-    init(containerId, optionalTitle) {
+    init(containerId, title, data) {
         try {
+            if(!containerId || containerId === null) throw { stack: 'init', message_error: `containerId is null or empty.` };
+            
             this.container = document.getElementById(containerId);
             if (!this.container) throw { stack: 'init', message_error: `Missing CONTAINER with id ${containerId}.` };
             
-            if (optionalTitle) this.title = optionalTitle;
+            this.title = title;
+            this.data = data;
             
             // Inicializa os dados visíveis com o banco completo
             this.currentRows = [...this.database];
@@ -37,135 +41,9 @@ export const RegistryComponent = {
         this.container.innerHTML = '';
         this.container.className = "container-fluid p-4 registry-component";
 
-        if (typeof el !== 'function') throw { stack: 'render', message_error: 'el is not a function.' };
+        const elGrid = this.makeGridview();
 
-        // 1. TÍTULO DO COMPONENTE
-        const elHeader = el('div', ['row', 'mb-4']);
-        const elTitleCol = el('div', ['col-12']);
-        const elTitle = el('h2', ['display-6']);
-        elTitle.innerText = this.title;
-        elTitleCol.append(elTitle);
-        elHeader.append(elTitleCol);
-
-        // 2. COMPONENTE DE PESQUISA (FILTRO)
-        const elSearchRow = el('div', ['row', 'mb-3']);
-        const elSearchCol = el('div', ['col-12', 'input-group']);
-        
-        const elSearchInput = el('input', ['form-control'], { 
-            type: 'text', 
-            placeholder: 'Filtrar ex: status:Ativo & funcao:Operadora (Pressione Enter)' 
-        });
-        
-        // Evento de busca ao pressionar 'Enter'
-        elSearchInput.addEventListener('keyup', (e) => {
-            if (e.key === 'Enter') {
-                this.handleFilter(elSearchInput.value);
-            }
-        });
-
-        const elSearchButton = el('button', ['btn', 'btn-primary'], { type: 'button' });
-        elSearchButton.innerText = "Buscar";
-        elSearchButton.addEventListener('click', () => {
-            this.handleFilter(elSearchInput.value);
-        });
-
-        elSearchCol.append(elSearchInput, elSearchButton);
-        elSearchRow.append(elSearchCol);
-
-        // 3. GRID / TABELA
-        const elGridRow = el('div', ['row']);
-        const elGridCol = el('div', ['col-12', 'table-responsive']);
-        
-        const elTable = el('table', ['table', 'table-striped', 'table-bordered', 'align-middle']);
-        
-        // Cabeçalho da Tabela
-        const elThead = el('thead', ['table-dark']);
-        const elThRow = el('th', [], { style: 'width: 10%' }); elThRow.innerText = "ID";
-        const elThNome = el('th', [], { style: 'width: 40%' }); elThNome.innerText = "Nome";
-        const elThFuncao = el('th', [], { style: 'width: 30%' }); elThFuncao.innerText = "Função";
-        const elThStatus = el('th', [], { style: 'width: 10%' }); elThStatus.innerText = "Status";
-        const elThAcoes = el('th', [], { style: 'width: 10%' }); elThAcoes.innerText = "Ações";
-        
-        const elTheadRow = el('tr');
-        elTheadRow.append(elThRow, elThNome, elThFuncao, elThStatus, elThAcoes);
-        elThead.append(elTheadRow);
-
-        // Corpo da Tabela
-        const elTbody = el('tbody');
-
-        // --- LINHA DE CADASTRO (PRIMEIRA LINHA) ---
-        const elAddRow = el('tr', ['table-group-divider', 'bg-light']);
-        
-        const elAddTdId = el('td'); elAddTdId.innerText = "Novo";
-        
-        const elAddTdNome = el('td');
-        const elInputNewNome = el('input', ['form-control', 'form-control-sm'], { type: 'text', placeholder: 'Nome do registro...' });
-        elAddTdNome.append(elInputNewNome);
-
-        const elAddTdFuncao = el('td');
-        const elInputNewFuncao = el('input', ['form-control', 'form-control-sm'], { type: 'text', placeholder: 'Função...' });
-        elAddTdFuncao.append(elInputNewFuncao);
-
-        const elAddTdStatus = el('td');
-        const elInputNewStatus = el('input', ['form-control', 'form-control-sm'], { type: 'text', placeholder: 'Ativo/Inativo' });
-        elAddTdStatus.append(elInputNewStatus);
-
-        const elAddTdAcoes = el('td', ['text-center']);
-        const elBtnAdd = el('button', ['btn', 'btn-success', 'btn-sm', 'w-100']);
-        elBtnAdd.innerText = "Adicionar";
-        elBtnAdd.addEventListener('click', () => {
-            this.handleCreateRecord(elInputNewNome.value, elInputNewFuncao.value, elInputNewStatus.value);
-        });
-        elAddTdAcoes.append(elBtnAdd);
-
-        elAddRow.append(elAddTdId, elAddTdNome, elAddTdFuncao, elAddTdStatus, elAddTdAcoes);
-        elTbody.append(elAddRow);
-
-        // --- LINHAS DE CONSULTA / EDIÇÃO ---
-        this.currentRows.forEach((row, index) => {
-            const elRow = el('tr');
-
-            // ID (Não editável)
-            const elTdId = el('td');
-            elTdId.innerText = row.id;
-
-            // Nome (Editável)
-            const elTdNome = el('td');
-            const elInputNome = el('input', ['form-control', 'form-control-sm'], { type: 'text', value: row.nome });
-            elInputNome.addEventListener('change', (e) => { this.currentRows[index].nome = e.target.value; });
-            elTdNome.append(elInputNome);
-
-            // Função (Editável)
-            const elTdFuncao = el('td');
-            const elInputFuncao = el('input', ['form-control', 'form-control-sm'], { type: 'text', value: row.funcao });
-            elInputFuncao.addEventListener('change', (e) => { this.currentRows[index].funcao = e.target.value; });
-            elTdFuncao.append(elInputFuncao);
-
-            // Status (Editável)
-            const elTdStatus = el('td');
-            const elInputStatus = el('input', ['form-control', 'form-control-sm'], { type: 'text', value: row.status });
-            elInputStatus.addEventListener('change', (e) => { this.currentRows[index].status = e.target.value; });
-            elTdStatus.append(elInputStatus);
-
-            // Ação de Commit (Salvar Linha)
-            const elTdAcoes = el('td', ['text-center']);
-            const elBtnCommit = el('button', ['btn', 'btn-warning', 'btn-sm', 'w-100']);
-            elBtnCommit.innerText = "Commit";
-            elBtnCommit.addEventListener('click', () => {
-                this.handleCommitRecord(this.currentRows[index]);
-            });
-            elTdAcoes.append(elBtnCommit);
-
-            elRow.append(elTdId, elTdNome, elTdFuncao, elTdStatus, elTdAcoes);
-            elTbody.append(elRow);
-        });
-
-        elTable.append(elThead, elTbody);
-        elGridCol.append(elTable);
-        elGridRow.append(elGridCol);
-
-        // Append final no container principal
-        this.container.append(elHeader, elSearchRow, elGridRow);
+        this.container.append(elGrid);
     },
 
     // Processamento do motor de filtros baseados em String literais com operadores lógicos
@@ -222,144 +100,247 @@ export const RegistryComponent = {
         this.render();
     },
 
-    makeGridview() {
-        // --- DENTRO DE RegistryComponent.render() ---
-
-        // 1. Ajuste do cabeçalho (thead)
-        // Ocultamos colunas densas em telas pequenas usando d-none e reexibimos a partir do tamanho 'md' (Tablets/Desktops)
-        const elTheadRow = el('tr');
-        const colunas = [
-            { name: "Usuário", class: "" }, // Sempre visível
-            { name: "Role", class: "" },    // Sempre visível
-            { name: "Criado Em", class: "d-none d-md-table-cell" },
-            { name: "Password", class: "d-none d-lg-table-cell" }, // Só telas grandes
-            { name: "Ativo", class: "d-none d-sm-table-cell" },
-            { name: "Documento", class: "d-none d-md-table-cell" },
-            { name: "Ações", class: "text-center" }
-        ];
-
-        colunas.forEach(col => {
-            const th = el('th', col.class ? col.class.split(' ') : []);
-            th.innerText = col.name;
-            elTheadRow.append(th);
+    makeSearch() {
+        const elSearchRow = el('div', ['row', 'mb-4', 'justify-content-start']);
+        const elSearchCol = el('div', ['col-12', 'col-md-6', 'input-group']);
+        const elSearchInput = el('input', ['form-control'], { 
+            type: 'text', 
+            placeholder: 'Filtrar ex: role:ADMIN & active:true...' 
         });
         
-        elThead.append(elTheadRow);
+        const elSearchButton = el('button', ['btn', 'btn-primary'], { type: 'button' });
+        elSearchButton.innerText = "Buscar";
+        elSearchButton.addEventListener('click', () => {
+            this.handleFilter(elSearchInput.value);
+        });
 
+        elSearchCol.append(elSearchInput, elSearchButton);
+        elSearchRow.append(elSearchCol);
 
-        // 2. Renderização das Linhas de Usuários Existentes (tbody)
-        this.currentRows.forEach((user, index) => {
-            // Linha Principal (Sempre visível)
-            const elRow = el('tr');
+        return elSearchRow;
+    },
+
+    getType(valor) {
+        // 1. Identifica booleanos (tanto o tipo primitivo quanto strings "true"/"false")
+        if (typeof valor === 'boolean' || valor === 'true' || valor === 'false') {
+            return 'checkbox';
+        }
+
+        // 2. Identifica se o valor é uma data ou uma string conversível em data válida
+        if (valor instanceof Date && !isNaN(valor)) {
+            return 'data';
+        }
+  
+        if (typeof valor === 'string') {
+            // Evita que strings puramente numéricas vazias ou espaços sejam tratadas como data
+            if (valor.trim() !== '') {
+                const timestamp = Date.parse(valor);
+                // Se Date.parse retornar um número válido e a string não for apenas um número puro
+                if (!isNaN(timestamp) && isNaN(Number(valor))) {
+                   return 'data';
+                }
+            }
+        
+            return 'text';
+        }
+
+        // Tratamento opcional para tipos que fujam do escopo inicial (números, objetos, etc.)
+        return 'text';
+    },
+
+    getHash() {
+        // Converte o timestamp atual para base 36 e remove decimais se houver
+        return Date.now().toString(36);
+    },
+
+    encodeASCII(val) {
+        const regex = /[^\w\sÀ-ÿ]|_/g;
+
+        return val.replace(regex, (caracter) => {
+            return `_${caracter.charCodeAt(0)}_`;
+        });
+    },
+
+    decodeASCII(ascii) {
+        const regex = /(?<=_)\d+(?=_)/g;
+        return ascii.replace(regex, (_, codigo) => {
+            return String.fromCharCode(Number(codigo));
+        });
+    },
+
+    extractData(elTr) {
+        const dadosExtraidos = [];
+  
+       // Busca todas as 'td' que contêm os mapeamentos necessários
+       const celulas = trElement.querySelectorAll('td[data-column-name][data-input-id]');
+  
+       celulas.forEach(td => {
+           const propriedade = td.getAttribute('data-column-name');
+           const inputId = td.getAttribute('data-input-id');
     
-            // Username + Botão de Expansão para Mobile
-            const elTdUser = el('td');
-            // Botão que só aparece no mobile (d-md-none) para abrir os detalhes ocultos
-            const elBtnExpand = el('button', ['btn', 'btn-sm', 'btn-outline-secondary', 'me-2', 'd-md-none']);
-            elBtnExpand.innerHTML = '<i class="bi bi-eye"></i>';
+           // Busca o elemento de input no DOM pelo ID especificado
+           const inputElement = document.getElementById(inputId);
     
-            const elInUser = el('input', ['form-control', 'form-control-sm', 'd-inline-block'], { type: 'text', value: user.username, style: 'width: calc(100% - 40px);' });
-            elInUser.addEventListener('change', (e) => { this.currentRows[index].username = e.target.value; });
-            elTdUser.append(elBtnExpand, elInUser);
+           if (inputElement) {
+               // Captura o valor do input (funciona para text, number, date, etc.)
+               const valor = inputElement.value; 
+      
+               dadosExtraidos.push({ propriedade, valor });
+           }
+        });
+  
+        return dadosExtraidos; // Retorna uma array de objetos [{propriedade, valor}, ...]
+    },
 
-            // Role
-            const elTdRole = el('td');
-            const elInRole = el('select', ['form-select', 'form-select-sm']);
-            // ... preencher options do Role ...
-            elTdRole.append(elInRole);
+    makeDynamic(params) {
+        const result = {};
+        params.forEach(item => {
+            result[item.propriedade] = item.valor;
+        });
+  
+        return result;
+    },
 
-            // Colunas Ocultáveis (Seguindo rigorosamente a mesma regra do thead)
-            const elTdCreated = el('td', ['d-none', 'd-md-table-cell', 'small']);
-            elTdCreated.innerText = user.created_at;
+    addNew() {
+        const elTr = document.getElementById('gridview-new-tr');
+        if(!elTr || elTr === null) return;
 
-            const elTdPass = el('td', ['d-none', 'd-lg-table-cell']);
-            // ... input do password ...
+        const params = this.extractData(elTr);
+        if (!params || params === null) return;
 
-            const elTdAct = el('td', ['d-none', 'd-sm-table-cell']);
-            // ... select do active ...
+        const dynamic = this.makeDynamic(params);
+        if (!dynamic || dynamic === null) return;
 
-            const elTdDocu = el('td', ['d-none', 'd-md-table-cell']);
-            // ... input do documento ...
+        this.handleCreateRecord(dynamic);
+    },
 
-            // Botão de Commit
-            const elTdAcoes = el('td', ['text-center']);
-            const elBtnCommit = el('button', ['btn', 'btn-warning', 'btn-sm', 'w-100']);
-            elBtnCommit.innerText = "Commit";
-            elBtnCommit.addEventListener('click', () => this.handleCommitRecord(this.currentRows[index]));
-            elTdAcoes.append(elBtnCommit);
+    commit(id) {
+        const elTr = document.getElementById('gridview-new-tr');
+        if(!elTr || elTr === null) return;
 
-            elRow.append(elTdUser, elTdRole, elTdCreated, elTdPass, elTdAct, elTdDocu, elTdAcoes);
-            elTbody.append(elRow);
+        const params = this.extractData(elTr);
+        if (!params || params === null) return;
 
-            // --- LINHA DE DETALHES (MOBILE ONLY) ---
-            // Uma linha extra que fica escondida e guarda as informações que sumiram do grid principal
-            const elRowDetails = el('tr', ['d-none', 'bg-light']);
-            const elTdDetailsContainer = el('td', [], { colspan: "7" });
-    
-            // Monta um sumário em blocos col-6 usando o Grid do Bootstrap
-            elTdDetailsContainer.innerHTML = `
-                <div class="row g-2 p-2" style="font-size: 13px;">
-                    <div class="col-6"><strong>ID Completo:</strong> <br><span class="text-muted">${user.id}</span></div>
-                    <div class="col-6"><strong>Criado em:</strong> <br>${user.created_at}</div>
-                    <div class="col-6 d-sm-none"><strong>Status:</strong> <br>${user.active === 'true' ? 'Ativo' : 'Inativo'}</div>
-                    <div class="col-6 d-lg-none"><strong>Senha oculta:</strong> <br>******</div>
-                    <div class="col-12 d-md-none"><strong>${user.document_type}:</strong> ${user.document}</div>
-                </div>
-            `;
-    
-            elRowDetails.append(elTdDetailsContainer);
-            elTbody.append(elRowDetails);
+        const dynamic = this.makeDynamic(params);
+        if (!dynamic || dynamic === null) return;
 
-            // Evento de clique para expandir/recolher os detalhes no mobile
-            elBtnExpand.addEventListener('click', () => {
-                elRowDetails.classList.toggle('d-none');
-                elBtnExpand.classList.toggle('btn-secondary');
-                elBtnExpand.classList.toggle('btn-outline-secondary');
+        this.handleCommitRecord(dynamic);
+    },
+
+    makeGridviewHeader() {
+        const elTheader = el('div', ['container-fluid'], { id: 'gridview-header' });
+        const elTheadRow = el('tr', [], { id: 'gridview-header-tr' });
+        const elTNewRow = el('tr', ['table-group-divider', 'bg-light'], { id: 'gridview-new-tr' });
+        
+        if(!this.data || this.data === null) return elTheadRow;
+
+        Object.entries(this.data[0]).forEach(([p,val]) => {
+            const columnType = this.getType(val);
+            const hash = this.getHash(p);
+            const tdId = `new-${hash}`;
+            const inputId = `new-input-${hash}`;
+            
+            const elTh = el('th', [], { id: `header-tr-${ascii}` });
+            elTh.innerText = p;
+            elTh.setAttribute('data-column-type', columnType);
+            elTh.setAttribute('data-column-name', p);
+            
+            elTheadRow.append(elTh);
+
+            const elTd = el('td', [], { id: tdId });
+            elTd.setAttribute('data-column-type', columnType);
+            elTd.setAttribute('data-column-name', p);
+            elTd.setAttribute('data-input-id', inputId);
+            
+            const elInput = el('input', ['form-control', 'form-control-sm'], { id: inputId, type: columnType });
+            
+            elTd.append(elInput);
+            elTNewRow.append(elTd);
+        });
+
+        const elTheadActions = el('th', [], { id: 'h-actions' });
+        elTheadRow.append(elTheadActions);
+        
+        const elAddTdActions = el('td', ['text-center'], { id: 'new-actions' });
+        const elBtnAdd = el('button', ['btn', 'btn-success', 'btn-sm', 'w-100']);
+        elBtnAdd.innerText = "Adicionar";
+        elBtnAdd.addEventListener('click', this.addNew.bind(this));
+        
+        elAddTdActions.append(elBtnAdd);
+        elTNewRow.append(elAddTdActions);
+        
+        elTheader.append(elTheadRow, elTNewRow);
+
+        return elTheader;
+    },
+
+    makeGridviewContent() {
+        const elTbody = el('tbody',[], { id: 'gridview-tbody' });
+        if(!this.data || this.data === null) return elTbody;
+
+        this.data.forEach((d) => {
+            const hash = this.getHash();
+            const rowId = `reg-${hash}`;
+            const elRow = el('tr', [], { id: rowId);
+            Object.entries(d).forEach(([p,val]) => {
+                const columnType = this.getType(val);
+                const tdId = `reg-td-${hash}`;
+                const inputId = `reg-input-${hash}`;
+                
+                const elTd = el('td', [], { id: tdId });
+                elTd.setAttribute('data-column-type', columnType);
+                elTd.setAttribute('data-column-name', p);
+                elTd.setAttribute('data-input-id', inputId);
+            
+                const elInput = el('input', ['form-control', 'form-control-sm'], { id: inputId, type: columnType });
+                elInput.value = val;
+                
+                elTd.append(elInput);
+                elRow.append(elTd);
             });
-        }); 
+
+            const elTdActions = el('td', ['text-center']);
+            const elBtnCommit = el('button', ['btn', 'btn-success', 'btn-sm', 'w-100']);
+            elBtnCommit.innerText = "Commit";
+            elBtnCommit.addEventListener('click', () => {
+                RegistryComponent.commit(rowId);
+            });
+        
+            elTdActions.append(elBtnCommit);
+            elRow.append(elTdActions);
+            elTbody.append(elRow);
+        });
+
+        return elTbody;
+    },
+
+    makeGridview() {
+        const elGridRow = el('div', ['row']);
+        const elGridCol = el('div', ['col-12', 'table-responsive']);
+        const elTable = el('table', ['table', 'table-striped', 'table-bordered', 'align-middle']);
+        const elThead = this.makeGridviewHeader();
+        const elTbody = this.makeGridviewContent();
+        
+        elTable.append(elThead, elTbody);
+        elGridCol.append(elTable);
+        elGridRow.append(elGridCol);
+
+        return elGridRow;
     },
 
     // Ação para criar um novo registro (Disparada pela linha 1)
-    async handleCreateRecord(nome, funcao, status) {
-        if (!nome || !funcao) {
-            alert("Por favor, preencha pelo menos Nome e Função para o novo registro.");
-            return;
-        }
+    async handleCreateRecord(data) {
+        if (!data || data === null) throw { stack: 'handleCreateRecord', message_error: `Invalid "data" eq. null.` };
 
-        const newId = String(this.database.length + 1);
-        const newRecord = {
-            id: newId,
-            nome: nome,
-            funcao: funcao,
-            status: status || "Ativo"
-        };
-
-        // Simulação de salvamento assíncrono no banco (Commit de criação)
-        console.log("Enviando novo registro para o banco de dados...", newRecord);
-        
-        this.database.push(newRecord);
+        this.data.push(data);
+        this.database.push(data);
         this.currentRows = [...this.database];
         
-        alert(`Registro criado com sucesso! ID: ${newId}`);
         this.render();
     },
 
     // Ação de salvamento (Commit de linha individual)
     async handleCommitRecord(record) {
         if (!confirm(`Deseja salvar as alterações do registro ID: ${record.id}?`)) return;
-
-        // Atualiza a nossa "tabela mestre" (database simulado)
-        const dbIndex = this.database.findIndex(item => item.id === record.id);
-        if (dbIndex !== -1) {
-            this.database[dbIndex] = { ...record };
-            
-            // Aqui seria a chamada assíncrona real de API, exemplo:
-            // await ServiceAPI.put(`/registros/${record.id}`, record);
-            
-            console.log(`Commit realizado com sucesso no Banco de Dados para o ID: ${record.id}`, record);
-            alert(`Alterações salvas com sucesso no banco para o ID: ${record.id}!`);
-        }
-        
-        this.render();
-    }
-};
+    },
+}
