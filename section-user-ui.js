@@ -48,7 +48,7 @@ export const SectionUsersUI = {
             const link = el('link', [], {
                 id: 'css-section-users',
                 rel: 'stylesheet',
-                href: './section-users-ui.css'
+                href: './section-users-ui.css?v=' + Date.now()
             });
             document.head.appendChild(link);
         }
