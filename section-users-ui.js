@@ -32,13 +32,12 @@ export const SectionUsersUI = {
 
     init() {
         try {
-            if (!this.appWrapper) throw { stack: 'SectionUsersUI.init', message_error: 'App main wrapper content element not found.' };
+            if (!this.container) throw { stack: 'SectionUsersUI.init', message_error: 'App main wrapper content element not found.' };
             
             this.loadStyles();
             this.render();
         } catch (err) {
-            if (typeof CatchError === 'function') CatchError('SectionUsersUI', err);
-            else console.error('SectionUsersUI Error:', err);
+            CatchError('SectionUsersUI', err);
         }
     },
 
@@ -276,6 +275,6 @@ export const SectionUsersUI = {
         };
 
         // Inicializa de fato o componente passando o ID do elemento da section que criamos acima
-        RegistryComponent.init(USERS_CONTAINER_ID);
+        RegistryComponent.init(USERS_SECTION_ID);
     }
 };          
