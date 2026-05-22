@@ -1,5 +1,5 @@
 import { USERS_SECTION_ID, USERS_CONTAINER_ID, USERS_DEFAULT_TITLE } from './config-users-ui.js';
-import { RegistryComponent } from './registry-component.js';
+import { RegistryComponent } from './registry-component-ui.js';
 import { el } from './el-ui.js';
 import { CatchError } from './catch-error.js';
 
