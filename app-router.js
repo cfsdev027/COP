@@ -10,7 +10,7 @@ import {DashboardUI} from './dashboard-ui.js';
 import {SECTION_DASHBOARD_ID} from './config-dashboard-ui.js';
 
 import {SectionUsersUI} from './section-users-ui.js';
-import {SECTION_USERS_ID} from './config-users-ui.js';
+import {USERS_SECTION_ID} from './config-users-ui.js';
 
 const transition = function(next, id, sidebar_enable = false) {
     const current = ServiceStorage.get('COP-CURRENT-SECTION');
@@ -71,11 +71,11 @@ export const AppRouter = {
         }
     },
     users: {
-        section_id: SECTION_USERS_ID,
+        section_id: USERS_SECTION_ID,
         init: function() {
             transition(
                 SectionUsersUI, 
-                SECTION_USERS_ID,
+                USERS_SECTION_ID,
                 true
             );
         }
