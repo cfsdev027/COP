@@ -4,7 +4,7 @@ import { el } from './el-ui.js';
 import { CatchError } from './catch-error.js';
 
 export const SectionUsersUI = {
-    container: document.getElementById(USER_SECTION_ID),
+    container: document.getElementById(USERS_SECTION_ID),
     
     // Dados iniciais baseados no modelo fornecido
     usersMockData: [
