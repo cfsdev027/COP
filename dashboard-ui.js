@@ -17,22 +17,22 @@ export const DashboardUI = {
         ops: [
             {
                 color: '#8FB31D', // Citron Green
-                label: 'concluídas:',
+                label: 'concluídas/Finalizadas:',
                 value: 193
             },
             {
                 color: '#B83C08', // Ginger Red
-                label: 'atraso:',
+                label: 'Em Atraso:',
                 value: 12
             },
             {
                 color: '#FFEF00', // Canary yellow
-                label: 'produção:',
+                label: 'Em Produção:',
                 value: 56
             },
             {
                 color: '#3B2F2F', // Dark Coffe
-                label: 'inativas:',
+                label: 'Inativas:',
                 value: 1
             }
         ],
@@ -165,7 +165,7 @@ export const DashboardUI = {
             `;
 
                 card.innerHTML = `
-                     <div style="color: #777; font-size: 0.85rem; font-weight: bold; text-transform: uppercase;">${m.label}</div>
+                     <div style="color: ${m.color}; font-size: 1.5rem; font-weight: bold; text-transform: uppercase;">${m.label}</div>
                      <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333;">${m.value}</div>
                 `;
                 
