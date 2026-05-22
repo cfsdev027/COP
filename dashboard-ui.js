@@ -197,12 +197,15 @@ export const DashboardUI = {
                 box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
                 border-top: 5px solid ${m.color};
                 min-width: 180px;
+                max-width: 378px;
+                overflow-wrap: break-word;
+                word-brake: break-word;
             `;
 
                 card.innerHTML = `
-                     <div style="color: ${m.color}; font-size: 1.8rem; font-weight: bold; text-transform: uppercase;">${m.order}.&nbsp${m.label}</div>
+                     <div style="color: ${m.color}; font-size: 1.5rem; font-weight: bold; text-transform: uppercase;">${m.order}.&nbsp${m.label}</div>
                      <div style="font-size: 0.85rem; margin-top: 10px; color: #777;"><strong>Descrição:</strong>&nbsp${m.description}</div>
-                     <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333;">OPs:&nbsp${m.value}</div>
+                     <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333;">OPs (em produção):&nbsp${m.value}</div>
                 `;
                 
                 metricsContainer.appendChild(card);
