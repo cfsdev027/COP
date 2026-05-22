@@ -180,7 +180,7 @@ export const DashboardUI = {
             metricsContainer.innerHTML = '';
 
             const elMetricsHeader = el('div', ['d-flex', 'w-100']);
-            const elMetricsHeaderTitle = el('h2', ['m-3']);
+            const elMetricsHeaderTitle = el('h3', ['m-3']);
             elMetricsHeaderTitle.innerHTML = 'LINHA DE PRODUÇÃO (ETAPAS)';
 
             elMetricsHeader.append(elMetricsHeaderTitle);
@@ -200,8 +200,8 @@ export const DashboardUI = {
             `;
 
                 card.innerHTML = `
-                     <div style="color: #777; font-size: 0.85rem; font-weight: bold; text-transform: uppercase;">${m.order}.&nbsp${m.label}</div>
-                     <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333;">Descrição:&nbsp${m.description}</div>
+                     <div style="color: ${m.color}; font-size: 1.8rem; font-weight: bold; text-transform: uppercase;">${m.order}.&nbsp${m.label}</div>
+                     <div style="font-size: 0.85rem; margin-top: 10px; color: #777;"><strong>Descrição:</strong>&nbsp${m.description}</div>
                      <div style="font-size: 1.8rem; font-weight: bold; margin-top: 10px; color: #333;">OPs:&nbsp${m.value}</div>
                 `;
                 
