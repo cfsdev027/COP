@@ -136,7 +136,7 @@ export const SidebarUI = {
             const elOption = el('li', ['nav-item'], { id: opt.id });
             
             const elOptionText = el('button', ['nav-link', 'btn', 'btn-dark', 'w-100']);
-            elOptionText.onclick = () => opt.action();
+            elOptionText.onclick = () => opt.action(callbackOptionClick);
             elOptionText.innerHTML = opt.text;
 
             elOption.append(elOptionText);
@@ -166,48 +166,70 @@ export const SidebarUI = {
     async dataInitAsync() {
     },
 
+    callbackOptionClick() {
+        this.navbarCollapseController('options');
+    },
+
     getOptions() {
         return [
             {
                 id: 'opt-users',
                 text: 'Usuários',
-                action: () => {
-                    alert('USUÁRIOS');
+                action: (callback) => {
+                    if(typeof callback !== 'function') return;
+                    
+                    AppRouter['users'].init();
+                    callback();
                 }
             },
             {
                 id: 'opt-services',
                 text: 'Serviços',
-                action: () => {
-                    alert('SERVIÇOS');
+                action: (callback) => {
+                    if(typeof callback !== 'function') return;
+                    
+                    AppRouter['services'].init();
+                    callback();
                 }
             },
             {
                 id: 'opt-steps',
                 text: 'Etapas',
-                action: () => {
-                    alert('ETAPAS');
+                action: (callback) => {
+                    if(typeof callback !== 'function') return;
+                    
+                    AppRouter['steps'].init();
+                    callback();
                 }
             },
             {
                 id: 'opt-ops',
                 text: 'Ordens de Produção (OPs)',
-                action: () => {
-                    alert('ORDENS DE PRODUÇÃO (OPs)');
+                action: (callback) => {
+                    if(typeof callback !== 'function') return;
+                    
+                    AppRouter['ops'].init();
+                    callback();
                 }
             },
             {
                 id: 'opt-journeys',
                 text: 'Jornadas',
-                action: () => {
-                    alert('JORNADAS');
+                action: (callback) => {
+                    if(typeof callback !== 'function') return;
+                    
+                    AppRouter['journeys'].init();
+                    callback();
                 }
             },
             {
                 id: 'opt-relatorios',
                 text: 'Relatórios',
-                action: () => {
-                    alert('RELATÓRIOS');
+                action: (callback) => {
+                    if(typeof callback !== 'function') return;
+                    
+                    AppRouter['reports'].init();
+                    callback();
                 }
             },
         ];
