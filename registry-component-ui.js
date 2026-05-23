@@ -6,29 +6,18 @@ export const RegistryComponent = {
     container: null,
     title: null,
     data: null,
-    
-    // Dados em memória (Mock inicial que simula o banco de dados)
-    database: [
-        { id: "1", nome: "Ana Silva", funcao: "Operadora", status: "Ativo" },
-        { id: "2", nome: "Bruno Costa", funcao: "Supervisor", status: "Ativo" },
-        { id: "3", nome: "Carlos Souza", funcao: "Técnico", status: "Inativo" }
-    ],
-    
-    // Lista que o grid exibe atualmente (filtrada ou cheia)
-    currentRows: [],
 
     init(containerId, title, data) {
         try {
-            if(!containerId || containerId === null) throw { stack: 'init', message_error: `containerId is null or empty.` };
+            if(!containerId || containerId === null) throw { stack: 'init', message_error: `'containerId' is null or empty.` };
+            if(!title || title === null || title.trim() === '') throw { stack: 'init', message_error: `'title' is null or empty.` };
+            if(!data || data === null) throw { stack: 'init', message_error: `'data' is null or empty.` };
             
             this.container = document.getElementById(containerId);
             if (!this.container) throw { stack: 'init', message_error: `Missing CONTAINER with id ${containerId}.` };
             
             this.title = title;
             this.data = data;
-            
-            // Inicializa os dados visíveis com o banco completo
-            this.currentRows = [...this.database];
             
             this.render();
         } catch (err) {
@@ -44,161 +33,6 @@ export const RegistryComponent = {
         const elGrid = this.makeGridview();
 
         this.container.append(elGrid);
-    },
-
-    // Processamento do motor de filtros baseados em String literais com operadores lógicos
-    handleFilter(filterString) {
-        if (!filterString || filterString.trim() === "") {
-            this.currentRows = [...this.database];
-            this.render();
-            return;
-        }
-
-        // Regex para capturar os blocos "propriedade:valor" e os operadores "&" ou "|"
-        const tokens = filterString.match(/([^\s&|]+:[^\s&|]+)|([&|])/g);
-        
-        if (!tokens) {
-            this.currentRows = [...this.database];
-            this.render();
-            return;
-        }
-
-        this.currentRows = this.database.filter(item => {
-            let evalExpression = "";
-
-            tokens.forEach(token => {
-                if (token === '&') {
-                    evalExpression += " && ";
-                } else if (token === '|') {
-                    evalExpression += " || ";
-                } else {
-                    // É um par propriedade:valor
-                    const [prop, val] = token.split(':');
-                    
-                    // Valida se a propriedade existe no objeto
-                    if (item[prop] !== undefined) {
-                        const itemValue = String(item[prop]).toLowerCase();
-                        const searchValue = String(val).toLowerCase();
-                        
-                        // Verifica correspondência parcial ou total
-                        const isMatch = itemValue.includes(searchValue);
-                        evalExpression += isMatch ? "true" : "false";
-                    } else {
-                        evalExpression += "false";
-                    }
-                }
-            });
-
-            // Executa com segurança o resultado lógico da expressão montada stringificada
-            try {
-                return Function(`"use strict"; return (${evalExpression})`)();
-            } catch {
-                return false;
-            }
-        });
-
-        this.render();
-    },
-
-    makeSearch() {
-        const elSearchRow = el('div', ['row', 'mb-4', 'justify-content-start']);
-        const elSearchCol = el('div', ['col-12', 'col-md-6', 'input-group']);
-        const elSearchInput = el('input', ['form-control'], { 
-            type: 'text', 
-            placeholder: 'Filtrar ex: role:ADMIN & active:true...' 
-        });
-        
-        const elSearchButton = el('button', ['btn', 'btn-primary'], { type: 'button' });
-        elSearchButton.innerText = "Buscar";
-        elSearchButton.addEventListener('click', () => {
-            this.handleFilter(elSearchInput.value);
-        });
-
-        elSearchCol.append(elSearchInput, elSearchButton);
-        elSearchRow.append(elSearchCol);
-
-        return elSearchRow;
-    },
-
-    getType(valor) {
-        // 1. Identifica booleanos (tanto o tipo primitivo quanto strings "true"/"false")
-        if (typeof valor === 'boolean' || valor === 'true' || valor === 'false') {
-            return 'checkbox';
-        }
-
-        // 2. Identifica se o valor é uma data ou uma string conversível em data válida
-        if (valor instanceof Date && !isNaN(valor)) {
-            return 'data';
-        }
-  
-        if (typeof valor === 'string') {
-            // Evita que strings puramente numéricas vazias ou espaços sejam tratadas como data
-            if (valor.trim() !== '') {
-                const timestamp = Date.parse(valor);
-                // Se Date.parse retornar um número válido e a string não for apenas um número puro
-                if (!isNaN(timestamp) && isNaN(Number(valor))) {
-                   return 'data';
-                }
-            }
-        
-            return 'text';
-        }
-
-        // Tratamento opcional para tipos que fujam do escopo inicial (números, objetos, etc.)
-        return 'text';
-    },
-
-    getHash() {
-        // Converte o timestamp atual para base 36 e remove decimais se houver
-        return Date.now().toString(36);
-    },
-
-    encodeASCII(val) {
-        const regex = /[^\w\sÀ-ÿ]|_/g;
-
-        return val.replace(regex, (caracter) => {
-            return `_${caracter.charCodeAt(0)}_`;
-        });
-    },
-
-    decodeASCII(ascii) {
-        const regex = /(?<=_)\d+(?=_)/g;
-        return ascii.replace(regex, (_, codigo) => {
-            return String.fromCharCode(Number(codigo));
-        });
-    },
-
-    extractData(elTr) {
-        const dadosExtraidos = [];
-  
-       // Busca todas as 'td' que contêm os mapeamentos necessários
-       const celulas = trElement.querySelectorAll('td[data-column-name][data-input-id]');
-  
-       celulas.forEach(td => {
-           const propriedade = td.getAttribute('data-column-name');
-           const inputId = td.getAttribute('data-input-id');
-    
-           // Busca o elemento de input no DOM pelo ID especificado
-           const inputElement = document.getElementById(inputId);
-    
-           if (inputElement) {
-               // Captura o valor do input (funciona para text, number, date, etc.)
-               const valor = inputElement.value; 
-      
-               dadosExtraidos.push({ propriedade, valor });
-           }
-        });
-  
-        return dadosExtraidos; // Retorna uma array de objetos [{propriedade, valor}, ...]
-    },
-
-    makeDynamic(params) {
-        const result = {};
-        params.forEach(item => {
-            result[item.propriedade] = item.valor;
-        });
-  
-        return result;
     },
 
     addNew() {
@@ -225,6 +59,144 @@ export const RegistryComponent = {
         if (!dynamic || dynamic === null) return;
 
         this.handleCommitRecord(dynamic);
+    },
+
+    decodeASCII(ascii) {
+        const regex = /(?<=_)\d+(?=_)/g;
+        return ascii.replace(regex, (_, codigo) => {
+            return String.fromCharCode(Number(codigo));
+        });
+    },
+
+    encodeASCII(val) {
+        const regex = /[^\w\sÀ-ÿ]|_/g;
+
+        return val.replace(regex, (caracter) => {
+            return `_${caracter.charCodeAt(0)}_`;
+        });
+    },
+
+    extractData(elTr) {
+        const dadosExtraidos = [];
+  
+       const celulas = trElement.querySelectorAll('td[data-column-name][data-input-id]');
+  
+       celulas.forEach(td => {
+           const propriedade = td.getAttribute('data-column-name');
+           const inputId = td.getAttribute('data-input-id');
+           const inputElement = document.getElementById(inputId);
+    
+           if (inputElement) {
+               const valor = inputElement.value; 
+      
+               dadosExtraidos.push({ propriedade, valor });
+           }
+        });
+  
+        return dadosExtraidos;
+    },
+
+    filter(expression) {
+        if (!this.data || this.data === null || this.data.length < 1) {
+            this.reloadGridviewContent();
+            return;
+        }
+
+        if (!expression || expression === null || expression.trim() === "") {
+            this.reloadGridviewContent();
+            return;
+        }
+
+        this.data = this.data.filter(this.makeFilter(expression));
+        this.reloadGridviewContent();
+    },
+
+    getHash() {
+        return Date.now().toString(36);
+    },
+
+    getType(valor) {
+        if (typeof valor === 'boolean' || valor === 'true' || valor === 'false') {
+            return 'checkbox';
+        }
+
+        if (valor instanceof Date && !isNaN(valor)) {
+            return 'data';
+        }
+  
+        if (typeof valor === 'string') {
+            if (valor.trim() !== '') {
+                const timestamp = Date.parse(valor);
+                if (!isNaN(timestamp) && isNaN(Number(valor))) {
+                   return 'data';
+                }
+            }
+        
+            return 'text';
+        }
+
+        return 'text';
+    },
+
+    async handleCreateRecord(data) {
+        if (!data || data === null) throw { stack: 'handleCreateRecord', message_error: `Invalid "data" eq. null.` };
+        
+        this.data.push(data);
+        this.render();
+    },
+
+    async handleCommitRecord(record) {
+        if (!confirm(`Deseja salvar as alterações do registro ID: ${record.id}?`)) return;
+    },
+
+    makeDynamic(params) {
+        const result = {};
+        params.forEach(item => {
+            result[item.propriedade] = item.valor;
+        });
+  
+        return result;
+    },
+
+    makeFilter(expression) {
+        if (!this.makeFilterValidateExpression(expression)) return () => true;
+
+        const roles = expressao.split('|').map(group => {
+            const regrasAnd = group.split('&').map(regra => {
+                const indexSeparador = regra.indexOf(':');
+                if (indexSeparador === -1) return null;
+
+                const propriedade = regra.substring(0, indexSeparador).trim();
+                const valor = regra.substring(indexSeparador + 1);
+
+                return { propriedade, valor };
+            }).filter(Boolean);
+
+            return regrasAnd;
+        }).filter(group => group.length > 0);
+
+        return (objeto) => {
+            return roles.some(groupAnd => {
+                return groupAnd.every(({ propriedade, valor }) => {
+                    if (!(propriedade in objeto)) return false;
+
+                    const valorObjeto = objeto[propriedade];
+                    if (typeof valorObjeto === 'number') return valorObjeto === Number(valor);
+                    if (typeof valorObjeto === 'boolean') return valorObjeto === (valor === 'true');
+
+                    return String(valorObjeto) === valor;
+                });
+            });
+        };
+    },
+
+    makeFilterValidateExpression(expression) {
+        const regex = /^[a-zA-Z_][a-zA-Z0-9_]*:[^&]+(&[a-zA-Z_][a-zA-0-9_]*:[^&]+)*$/;
+        if (!expression || typeof expression !== 'string' || expression.trim() === '') {
+            return false;
+        }
+
+        return regex.test(expression);
     },
 
     makeGridviewHeader() {
@@ -274,44 +246,24 @@ export const RegistryComponent = {
         return elTheader;
     },
 
-    makeGridviewContent() {
-        const elTbody = el('tbody',[], { id: 'gridview-tbody' });
-        if(!this.data || this.data === null) return elTbody;
-
-        this.data.forEach((d) => {
-            const hash = this.getHash();
-            const rowId = `reg-${hash}`;
-            const elRow = el('tr', [], { id: rowId });
-            Object.entries(d).forEach(([p,val]) => {
-                const columnType = this.getType(val);
-                const tdId = `reg-td-${hash}`;
-                const inputId = `reg-input-${hash}`;
-                
-                const elTd = el('td', [], { id: tdId });
-                elTd.setAttribute('data-column-type', columnType);
-                elTd.setAttribute('data-column-name', p);
-                elTd.setAttribute('data-input-id', inputId);
-            
-                const elInput = el('input', ['form-control', 'form-control-sm'], { id: inputId, type: columnType });
-                elInput.value = val;
-                
-                elTd.append(elInput);
-                elRow.append(elTd);
-            });
-
-            const elTdActions = el('td', ['text-center']);
-            const elBtnCommit = el('button', ['btn', 'btn-success', 'btn-sm', 'w-100']);
-            elBtnCommit.innerText = "Commit";
-            elBtnCommit.addEventListener('click', () => {
-                RegistryComponent.commit(rowId);
-            });
+    makeSearch() {
+        const elSearchRow = el('div', ['row', 'mb-4', 'justify-content-start']);
+        const elSearchCol = el('div', ['col-12', 'col-md-6', 'input-group']);
+        const elSearchInput = el('input', ['form-control'], { 
+            type: 'text', 
+            placeholder: 'Filtrar ex: role:ADMIN & active:true...' 
+        });
         
-            elTdActions.append(elBtnCommit);
-            elRow.append(elTdActions);
-            elTbody.append(elRow);
+        const elSearchButton = el('button', ['btn', 'btn-primary'], { type: 'button' });
+        elSearchButton.innerText = "Buscar";
+        elSearchButton.addEventListener('click', () => {
+            this.filter(elSearchInput.value);
         });
 
-        return elTbody;
+        elSearchCol.append(elSearchInput, elSearchButton);
+        elSearchRow.append(elSearchCol);
+
+        return elSearchRow;
     },
 
     makeGridview() {
@@ -319,28 +271,75 @@ export const RegistryComponent = {
         const elGridCol = el('div', ['col-12', 'table-responsive']);
         const elTable = el('table', ['table', 'table-striped', 'table-bordered', 'align-middle']);
         const elThead = this.makeGridviewHeader();
+        const elSearch = this.makeSearch();
         const elTbody = this.makeGridviewContent();
         
-        elTable.append(elThead, elTbody);
+        elTable.append(elThead, elSearch, elTbody);
         elGridCol.append(elTable);
         elGridRow.append(elGridCol);
 
         return elGridRow;
     },
 
-    // Ação para criar um novo registro (Disparada pela linha 1)
-    async handleCreateRecord(data) {
-        if (!data || data === null) throw { stack: 'handleCreateRecord', message_error: `Invalid "data" eq. null.` };
+    makeGridviewContent() {
+        const elTbody = el('tbody',[], { id: 'gridview-tbody' });
+        if(!this.data || this.data === null) return elTbody;
 
-        this.data.push(data);
-        this.database.push(data);
-        this.currentRows = [...this.database];
-        
-        this.render();
+        this.data.forEach((entry) => {
+            const elRow = this.makeGridviewContentRow(entry);
+            elTbody.append(elRow);
+        });
+
+        return elTbody;
     },
 
-    // Ação de salvamento (Commit de linha individual)
-    async handleCommitRecord(record) {
-        if (!confirm(`Deseja salvar as alterações do registro ID: ${record.id}?`)) return;
+    makeGridviewContentRow(entry) {
+        const hash = this.getHash();
+        const rowId = `reg-${hash}`;
+        const elRow = el('tr', [], { id: rowId });
+        Object.entries(entry).forEach(([p,val]) => {
+            const columnType = this.getType(val);
+            const tdId = `reg-td-${hash}`;
+            const inputId = `reg-input-${hash}`;
+                
+            const elTd = el('td', [], { id: tdId });
+            elTd.setAttribute('data-column-type', columnType);
+            elTd.setAttribute('data-column-name', p);
+            elTd.setAttribute('data-input-id', inputId);
+            
+            const elInput = el('input', ['form-control', 'form-control-sm'], { id: inputId, type: columnType });
+            elInput.value = val;
+                
+            elTd.append(elInput);
+            elRow.append(elTd);
+        });
+
+        const elTdActions = el('td', ['text-center']);
+        const elBtnCommit = el('button', ['btn', 'btn-success', 'btn-sm', 'w-100']);
+        elBtnCommit.innerText = "Commit";
+        elBtnCommit.addEventListener('click', () => {
+            RegistryComponent.commit(rowId);
+        });
+        
+        elTdActions.append(elBtnCommit);
+        elRow.append(elTdActions);
+
+        return elRow;
+    },
+
+    reloadGridviewContent() {
+        const elTbody = document.getElementById('gridview-tbody');
+        if (!elTbody || elTbody === null) return;
+
+        elTbody.innerHTML = '';
+
+        if(!this.data || this.data === null) return;
+
+        this.data.forEach((entry) => {
+            const elRow = this.makeGridviewContentRow(entry);
+            elTbody.append(elRow);
+        });
+
+        return elTbody;
     },
 }
