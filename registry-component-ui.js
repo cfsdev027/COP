@@ -191,7 +191,7 @@ export const RegistryComponent = {
     },
 
     makeFilterValidateExpression(expression) {
-        const regex = /^[a-zA-Z_][a-zA-Z0-9_]*:[^&|]+([&|][a-zA-Z_][a-zA-0-9_]*:[^&|]+)*$/;
+        const regexFiltro = /^[a-zA-Z_][a-zA-Z0-9_]*:[^&|]+([&|][a-zA-Z_][a-zA-Z0-9_]*:[^&|]+)*$/;
         if (!expression || typeof expression !== 'string' || expression.trim() === '') {
             return false;
         }
