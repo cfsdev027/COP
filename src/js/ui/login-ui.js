@@ -4,7 +4,7 @@ import {
     SECTION_LOGIN_TITLE,
     SECTION_LOGIN_FORM_ID,
     SECTION_LOGIN_FORM_SUBMIT_ID
-} from './config-login-ui.js';
+} from '../config/ui/config-login-ui.js';
 import {ServiceAuthentication} from './service-authentication.js';
 
 export const LoginUI = {
