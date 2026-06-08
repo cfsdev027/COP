@@ -39,7 +39,7 @@ export const RegistryComponent = {
         const elSearch = this.makeSearch();
         elHeaderBlock.append(elTitle, elSearch);
 
-        // Bloco do Grid principal (Card + Tabela interna com scroll isolado)
+        // Bloco do Grid principal (Card + Tabela interna)
         const elGrid = this.makeGridview();
 
         this.container.append(elHeaderBlock, elGrid);
@@ -123,7 +123,7 @@ export const RegistryComponent = {
     },
 
     makeFilter(expression) {
-        return (objeto) => true; // Mantido seu algoritmo original de filtros baseado em tokens
+        return (objeto) => true; 
     },
 
     makeGridviewHeader() {
@@ -138,7 +138,6 @@ export const RegistryComponent = {
             elTheadRow.append(elTh);
         });
 
-        // Coluna reservada às Ações do Grid
         const elTheadActions = el('th', []);
         elTheadActions.innerText = 'Action';
         elTheadRow.append(elTheadActions);
@@ -173,9 +172,7 @@ export const RegistryComponent = {
         elTable.append(elThead, elTbody);
         elTableResponsive.append(elTable);
         
-        // Rodapé de paginação limpo estruturado
         const elFooter = this.makeGridviewFooter();
-        
         elCard.append(elTableResponsive, elFooter);
         return elCard;
     },
@@ -207,7 +204,6 @@ export const RegistryComponent = {
             elTd.setAttribute('data-column-name', p);
             elTd.setAttribute('data-input-id', inputId);
 
-            // Inputs elegantes injetados de forma invisível
             const elInput = el('input', ['datagrid-cell-input'], { id: inputId, type: columnType });
             elInput.value = val;
             
@@ -215,8 +211,7 @@ export const RegistryComponent = {
             elRow.append(elTd);
         });
 
-        // Botões de ação idênticos ao modelo quadrado do GIF
-        const elTdActions = el('td', ['text-nowrap']);
+        const elTdActions = el('td', ['text-nowrap', 'datagrid-actions-cell']);
         const elActionGroup = el('div', ['d-flex', 'gap-1']);
         
         const btnView = el('button', ['btn-action', 'btn-action-view'], { title: 'Visualizar' });
@@ -248,9 +243,7 @@ export const RegistryComponent = {
         elPagination.append(btnPrev, btnP1, btnP2, btnP3, btnNext);
 
         const elInfo = el('div', ['d-flex', 'align-items-center', 'gap-3', 'text-muted', 'font-size-sm']);
-        elInfo.innerHTML = `
-            <div>Showing 1 to 2 of 2 entries</div>
-        `;
+        elInfo.innerHTML = `<div>Showing 1 to 2 of 2 entries</div>`;
 
         elFooter.append(elPagination, elInfo);
         return elFooter;
