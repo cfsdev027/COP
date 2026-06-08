@@ -1,4 +1,4 @@
-import {ServiceSupabase} from './src/js/services/service-supabase.js';
+import {ServiceSupabase} from './service-supabase.js';
 
 export const ServiceUsers = {
     get: async function() {
