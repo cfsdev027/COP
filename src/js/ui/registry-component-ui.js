@@ -253,14 +253,22 @@ export const RegistryComponent = {
 
     makeGridview() {
         const elGridRow = el('div', ['row']);
-        const elGridCol = el('div', ['col-12', 'table-responsive']);
-        const elTable = el('table', ['table', 'table-striped', 'table-bordered', 'align-middle']);
+        const elGridCol = el('div', ['col-12']); // Removida a classe table-responsive daqui
+        
+        // Criamos um container exclusivo para a tabela ter scroll horizontal individual
+        const elTableResponsive = el('div', ['table-responsive', 'w-100']); 
+        const elTable = el('table', ['table', 'table-striped', 'table-bordered', 'align-middle', 'm-0']);
+        
         const elThead = this.makeGridviewHeader();
         const elSearch = this.makeSearch();
         const elTbody = this.makeGridviewContent();
         
-        elTable.append(elThead, elSearch, elTbody);
-        elGridCol.append(elTable);
+        // CORREÇÃO: O elSearch NÃO pode ficar dentro da tag <table>. Ele fica acima dela.
+        elTable.append(elThead, elTbody);
+        elTableResponsive.append(elTable);
+        
+        // Montamos a estrutura na ordem correta: Busca em cima, Tabela responsiva embaixo
+        elGridCol.append(elSearch, elTableResponsive);
         elGridRow.append(elGridCol);
 
         return elGridRow;
