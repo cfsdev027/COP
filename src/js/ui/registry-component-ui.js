@@ -197,7 +197,7 @@ export const RegistryComponent = {
             const tdId = `new-${hash}`;
             const inputId = `new-input-${hash}`;
             
-            const elTh = el('th', [], { id: `header-tr-${ascii}` });
+            const elTh = el('th', [], { id: `header-tr-${hash}` });
             elTh.innerText = p;
             elTh.setAttribute('data-column-type', columnType);
             elTh.setAttribute('data-column-name', p);
