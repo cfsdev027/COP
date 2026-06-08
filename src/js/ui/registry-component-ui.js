@@ -1,6 +1,6 @@
 import { el } from './el-ui.js';
-import { CatchError } from './catch-error.js';
-import { ServiceStorage } from './service-storage.js'; // Caso precise persistir estados temporários
+import { CatchError } from '../catch-error.js';
+import { ServiceStorage } from '../services/service-storage.js'; // Caso precise persistir estados temporários
 
 export const RegistryComponent = {
     container: null,
