@@ -8,9 +8,9 @@ window.addEventListener('unhandledrejection', function (event) {
     alert("Erro de Promessa: " + event.reason);
 });
 
-import { AppRouter } from './src/js/app-router.js';
-import { CatchError } from './src/js/catch-error.js';
-import { ServiceAuthentication } from './src/js/services/service-authentication.js';
+import { AppRouter } from './app-router.js';
+import { CatchError } from './catch-error.js';
+import { ServiceAuthentication } from './services/service-authentication.js';
 
 // Função utilitária para injetar CSS com cache-busting
 function appendStyleSheetWithoutCache(css) {
