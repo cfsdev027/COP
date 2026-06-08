@@ -1,26 +1,193 @@
-/* 1. Resolve o Header cobrindo a tabela no Mobile */
-.registry-component {
-    /* Ajuste os 60px para a altura real do seu header 'OP-Control' se necessário */
-    margin-top: 60px; 
+/* Layout Global do Grid */
+.datagrid-wrapper {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #4b5563;
+    margin-top: 20px;
 }
 
-/* 2. Garante que os inputs não estiquem a tabela infinitamente e quebra o texto se necessário */
-.registry-component .table input.form-control {
-    min-width: 140px; /* Impede que as colunas fiquem esmagadas no mobile */
-    max-width: 100%;
-    text-overflow: ellipsis; /* Adiciona '...' se o texto do GUID for maior que o input */
+.datagrid-title {
+    color: #374151;
+    font-weight: 600;
 }
 
-/* 3. Ajuste fino de alinhamento vertical para inputs dentro da tabela */
-.registry-component .table td, 
-.registry-component .table th {
-    vertical-align: middle !important;
-    padding: 8px var(--bs-table-padding-x, 8px);
+.datagrid-search-input {
+    max-width: 250px;
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
 }
 
-/* 4. Força a barra de rolagem horizontal a aparecer explicitamente no mobile se o conteúdo transbordar */
-.registry-component .table-responsive {
+/* Card Principal da Tabela */
+.datagrid-card {
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    background: #fff;
+}
+
+/* Tabela Customizada */
+.datagrid-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Header Azul Royal */
+.datagrid-header {
+    background-color: #3b82f6 !important; /* Cor exata do seu modelo */
+}
+
+.datagrid-header th {
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem;
+    padding: 14px 16px !important;
+    border: none !important;
+    text-transform: capitalize;
+}
+
+.sort-icons {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin-left: 4px;
+}
+
+/* Linhas e Células */
+.datagrid-table tbody tr {
+    border-bottom: 1px solid #e5e7eb;
+    transition: background-color 0.2s;
+}
+
+.datagrid-table tbody tr:hover {
+    background-color: #f9fafb;
+}
+
+.datagrid-table td {
+    padding: 12px 16px !important;
+    font-size: 0.875rem;
+    border-bottom: 1px solid #e5e7eb !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* Inputs das células invisíveis (Parecem texto comum até clicar) */
+.datagrid-cell-input {
+    border: 1px solid transparent;
+    background: transparent;
+    width: 100%;
+    padding: 4px;
+    color: #4b5563;
+    font-size: 0.875rem;
+    border-radius: 4px;
+    text-overflow: ellipsis;
+}
+
+.datagrid-cell-input:focus {
+    border-color: #cbd5e1;
+    background: #fff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+/* Badges de Status do Modelo */
+.datagrid-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-icon {
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    color: #fff;
+}
+
+.badge-completed { background-color: #ecfdf5; color: #10b981; }
+.badge-completed .badge-icon { background-color: #10b981; }
+
+.badge-inprogress { background-color: #fffbeb; color: #f59e0b; }
+.badge-inprogress .badge-icon { background-color: #f59e0b; }
+
+.badge-failed { background-color: #fef2f2; color: #ef4444; }
+.badge-failed .badge-icon { background-color: #ef4444; }
+
+/* Círculos de Contagem (Count) */
+.circle-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+}
+.circle-count-green { border-color: #10b981; color: #10b981; background: #ecfdf5; }
+.circle-count-orange { border-color: #f59e0b; color: #f59e0b; background: #fffbeb; }
+.circle-count-red { border-color: #ef4444; color: #ef4444; background: #fef2f2; }
+
+/* Botões Quadrados de Ação (Action) */
+.btn-action {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-action:hover { background-color: #f3f4f6; }
+.btn-action-view { color: #3b82f6; }
+.btn-action-edit { color: #10b981; }
+.btn-action-delete { color: #ef4444; }
+
+/* Rodapé de Paginação */
+.datagrid-footer {
+    background-color: #f9fafb;
+    padding: 12px 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.btn-page {
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    color: #4b5563;
+    cursor: pointer;
+}
+
+.btn-page.active {
+    background-color: #3b82f6;
+    color: #fff;
+    border-color: #3b82f6;
+}
+
+.btn-page:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Responsividade de Tela Isolada */
+.table-responsive {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
-    margin-bottom: 1rem;
-}
+    }
