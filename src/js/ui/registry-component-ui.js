@@ -28,22 +28,29 @@ export const RegistryComponent = {
 
     render() {
         this.container.innerHTML = '';
-        this.container.className = "datagrid-wrapper registry-component";
+        this.container.className = "datagrid-wrapper registry-component container-fluid p-3";
 
-        // Título do Grid (Employee Task Table)
-        const elTitleRow = el('div', ['d-flex', 'justify-content-between', 'align-items-center', 'mb-3']);
+        // Título do Grid (Ocupa uma linha inteira própria)
+        const elTitleRow = el('div', ['row', 'mb-2']);
+        const elTitleCol = el('div', ['col-12']);
         const elTitle = el('h5', ['datagrid-title', 'm-0']);
         elTitle.innerText = this.title;
+        elTitleCol.append(elTitle);
+        elTitleRow.append(elTitleCol);
         
-        // Barra de busca superior alinhada à direita
+        // Barra de busca superior (Ocupa outra linha, alinhada à direita no desktop e 100% no mobile)
+        const elSearchRow = el('div', ['row', 'mb-3', 'justify-content-md-end']);
+        const elSearchCol = el('div', ['col-12', 'col-md-4', 'col-lg-3']);
         const elSearch = this.makeSearch();
-        elTitleRow.append(elTitle, elSearch);
+        elSearchCol.append(elSearch);
+        elSearchRow.append(elSearchCol);
 
-        // Grid principal
+        // Grid principal (Tabela)
         const elGrid = this.makeGridview();
 
-        this.container.append(elTitleRow, elGrid);
+        this.container.append(elTitleRow, elSearchRow, elGrid);
     },
+    
 
     addNew() {
         const elTr = document.getElementById('gridview-new-tr');
