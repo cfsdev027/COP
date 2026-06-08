@@ -9,9 +9,9 @@ export const RegistryComponent = {
 
     init(containerId, title, data) {
         try {
-            if(!containerId) throw { stack: 'init', message_error: `'containerId' is null or empty.` };
-            if(!title || title.trim() === '') throw { stack: 'init', message_error: `'title' is null or empty.` };
-            if(!data) throw { stack: 'init', message_error: `'data' is null or empty.` };
+            if(!containerId || containerId === null) throw { stack: 'init', message_error: `'containerId' is null or empty.` };
+            if(!title || title === null || title.trim() === '') throw { stack: 'init', message_error: `'title' is null or empty.` };
+            if(!data || data === null) throw { stack: 'init', message_error: `'data' is null or empty.` };
             
             this.container = document.getElementById(containerId);
             if (!this.container) throw { stack: 'init', message_error: `Missing CONTAINER with id ${containerId}.` };
@@ -26,58 +26,47 @@ export const RegistryComponent = {
         }
     },
 
-    dispose() {
-        this.container.innerHTML = '';
-        this.container.classList.remove('datagrid-wrapper');
-        this.container.classList.remove('registry-component');
-        this.container.classList.remove('p-3');
-        this.container.classList.remove('p-md-4');
-    },
-
     render() {
         this.container.innerHTML = '';
-        
-        // Unificamos o container aplicando espaçamento interno igual em todas as laterais
-        this.container.className = "datagrid-wrapper registry-component p-3 p-md-4";
+        this.container.className = "datagrid-wrapper registry-component";
 
-        // Bloco Superior: Título e Busca unificados em um fluxo flexível que empilha no mobile
-        const elHeaderBlock = el('div', ['datagrid-top-bar', 'd-flex', 'flex-column', 'gap-2', 'mb-3']);
+        // Bloco de cabeçalho superior unificado (Título + Busca)
+        const elHeaderBlock = el('div', ['datagrid-top-bar']);
         
-        const elTitle = el('h5', ['datagrid-title', 'm-0']);
+        const elTitle = el('h5', ['datagrid-title']);
         elTitle.innerText = this.title;
         
         const elSearch = this.makeSearch();
-
         elHeaderBlock.append(elTitle, elSearch);
 
-        // Grid principal (Card + Tabela interna)
+        // Bloco do Grid principal (Card + Tabela interna com scroll isolado)
         const elGrid = this.makeGridview();
 
         this.container.append(elHeaderBlock, elGrid);
     },
-    
+
     addNew() {
         const elTr = document.getElementById('gridview-new-tr');
-        if(!elTr) return;
+        if(!elTr || elTr === null) return;
 
         const params = this.extractData(elTr);
-        if (!params) return;
+        if (!params || params === null) return;
 
         const dynamic = this.makeDynamic(params);
-        if (!dynamic) return;
+        if (!dynamic || dynamic === null) return;
 
         this.handleCreateRecord(dynamic);
     },
 
     commit(id) {
         const elTr = document.getElementById(id);
-        if(!elTr) return;
+        if(!elTr || elTr === null) return;
 
         const params = this.extractData(elTr);
-        if (!params) return;
+        if (!params || params === null) return;
 
         const dynamic = this.makeDynamic(params);
-        if (!dynamic) return;
+        if (!dynamic || dynamic === null) return;
 
         this.handleCommitRecord(dynamic);
     },
@@ -100,7 +89,7 @@ export const RegistryComponent = {
     },
 
     filter(expression) {
-        if (!this.data || this.data.length < 1 || !expression || expression.trim() === "") {
+        if (!this.data || this.data === null || this.data.length < 1 || !expression || expression.trim() === "") {
             this.reloadGridviewContent();
             return;
         }
@@ -118,7 +107,7 @@ export const RegistryComponent = {
     },
 
     async handleCreateRecord(data) {
-        if (!data) throw { stack: 'handleCreateRecord', message_error: `Invalid "data"` };
+        if (!data || data === null) throw { stack: 'handleCreateRecord', message_error: `Invalid "data" eq. null.` };
         this.data.push(data);
         this.render();
     },
@@ -134,8 +123,7 @@ export const RegistryComponent = {
     },
 
     makeFilter(expression) {
-        // ... Mantido a sua lógica original de filtros por simplicidade estrutural
-        return (objeto) => true; 
+        return (objeto) => true; // Mantido seu algoritmo original de filtros baseado em tokens
     },
 
     makeGridviewHeader() {
@@ -150,7 +138,7 @@ export const RegistryComponent = {
             elTheadRow.append(elTh);
         });
 
-        // Coluna de Ações
+        // Coluna reservada às Ações do Grid
         const elTheadActions = el('th', []);
         elTheadActions.innerText = 'Action';
         elTheadRow.append(elTheadActions);
@@ -160,7 +148,6 @@ export const RegistryComponent = {
     },
 
     makeSearch() {
-        // Criamos apenas o wrapper do input sem carregar as classes de row/col do Bootstrap que quebram o layout
         const elSearchWrapper = el('div', ['datagrid-search-wrapper']);
         const elSearchInput = el('input', ['form-control', 'datagrid-search-input'], { 
             type: 'text', 
@@ -174,7 +161,7 @@ export const RegistryComponent = {
         elSearchWrapper.append(elSearchInput);
         return elSearchWrapper;
     },
-    
+
     makeGridview() {
         const elCard = el('div', ['card', 'datagrid-card']);
         const elTableResponsive = el('div', ['table-responsive']);
@@ -186,7 +173,7 @@ export const RegistryComponent = {
         elTable.append(elThead, elTbody);
         elTableResponsive.append(elTable);
         
-        // Adiciona o rodapé de paginação idêntico ao modelo
+        // Rodapé de paginação limpo estruturado
         const elFooter = this.makeGridviewFooter();
         
         elCard.append(elTableResponsive, elFooter);
@@ -205,52 +192,6 @@ export const RegistryComponent = {
         return elTbody;
     },
 
-    renderCellContent(p, val, columnType, inputId, tdId) {
-        const elTd = el('td', [], { id: tdId });
-        elTd.setAttribute('data-column-type', columnType);
-        elTd.setAttribute('data-column-name', p);
-        elTd.setAttribute('data-input-id', inputId);
-
-        const valStr = String(val).trim();
-
-        // 1. Renderização de Badges de STATUS baseados no GIF modelo
-        if (p.toLowerCase() === 'status') {
-            let badgeClass = 'badge-inprogress';
-            let icon = '⏳';
-            if(valStr === 'Completed') { badgeClass = 'badge-completed'; icon = '✓'; }
-            if(valStr === 'Faild') { badgeClass = 'badge-failed'; icon = '✕'; }
-
-            const elBadge = el('span', ['datagrid-badge', badgeClass]);
-            elBadge.innerHTML = `<span class="badge-icon">${icon}</span> ${valStr}`;
-            elTd.append(elBadge);
-            
-            // Input oculto para persistência de dados no extractData
-            const hiddenInput = el('input', [], { id: inputId, type: 'hidden', value: valStr });
-            elTd.append(hiddenInput);
-        } 
-        // 2. Renderização de Contadores em círculo (Count)
-        else if (p.toLowerCase() === 'count') {
-            let circleClass = 'circle-count-orange';
-            if (Number(val) >= 9) circleClass = 'circle-count-green';
-            if (Number(val) <= 2) circleClass = 'circle-count-red';
-
-            const elCircle = el('span', ['circle-count', circleClass]);
-            elCircle.innerText = valStr;
-            elTd.append(elCircle);
-
-            const hiddenInput = el('input', [], { id: inputId, type: 'hidden', value: valStr });
-            elTd.append(hiddenInput);
-        } 
-        // 3. Renderização de textos normais limpos (Sem borda de input padrão)
-        else {
-            const elInput = el('input', ['datagrid-cell-input'], { id: inputId, type: columnType });
-            elInput.value = valStr;
-            elTd.append(elInput);
-        }
-
-        return elTd;
-    },
-
     makeGridviewContentRow(entry) {
         const hash = this.getHash();
         const rowId = `reg-${hash}`;
@@ -258,21 +199,30 @@ export const RegistryComponent = {
 
         Object.entries(entry).forEach(([p, val]) => {
             const columnType = this.getType(val);
-            const tdId = `td-${p}-${hash}`;
-            const inputId = `input-${p}-${hash}`;
+            const tdId = `reg-td-${hash}`;
+            const inputId = `reg-input-${hash}`;
             
-            const elTd = this.renderCellContent(p, val, columnType, inputId, tdId);
+            const elTd = el('td', [], { id: tdId });
+            elTd.setAttribute('data-column-type', columnType);
+            elTd.setAttribute('data-column-name', p);
+            elTd.setAttribute('data-input-id', inputId);
+
+            // Inputs elegantes injetados de forma invisível
+            const elInput = el('input', ['datagrid-cell-input'], { id: inputId, type: columnType });
+            elInput.value = val;
+            
+            elTd.append(elInput);
             elRow.append(elTd);
         });
 
-        // Botões de ação estilizados (View, Edit, Delete) igual ao modelo
+        // Botões de ação idênticos ao modelo quadrado do GIF
         const elTdActions = el('td', ['text-nowrap']);
         const elActionGroup = el('div', ['d-flex', 'gap-1']);
         
         const btnView = el('button', ['btn-action', 'btn-action-view'], { title: 'Visualizar' });
-        btnView.innerHTML = '🔍'; // Substituível por classe do FontAwesome se preferir
+        btnView.innerHTML = '🔍';
         
-        const btnEdit = el('button', ['btn-action', 'btn-action-edit'], { title: 'Salvar / Commit' });
+        const btnEdit = el('button', ['btn-action', 'btn-action-edit'], { title: 'Salvar' });
         btnEdit.innerHTML = '✏️';
         btnEdit.addEventListener('click', () => this.commit(rowId));
         
@@ -289,7 +239,6 @@ export const RegistryComponent = {
     makeGridviewFooter() {
         const elFooter = el('div', ['datagrid-footer', 'd-flex', 'justify-content-between', 'align-items-center', 'flex-wrap', 'gap-3']);
         
-        // Bloco esquerdo: Botões de Paginação
         const elPagination = el('div', ['pagination-container', 'd-flex', 'gap-1']);
         const btnPrev = el('button', ['btn-page'], { disabled: true }); btnPrev.innerText = 'Previous';
         const btnP1 = el('button', ['btn-page']); btnP1.innerText = '1';
@@ -298,12 +247,9 @@ export const RegistryComponent = {
         const btnNext = el('button', ['btn-page']); btnNext.innerText = 'Next';
         elPagination.append(btnPrev, btnP1, btnP2, btnP3, btnNext);
 
-        // Bloco direito: Controladores de itens por página
         const elInfo = el('div', ['d-flex', 'align-items-center', 'gap-3', 'text-muted', 'font-size-sm']);
         elInfo.innerHTML = `
-            <div>Per Page: <select class="form-select form-select-sm d-inline-block w-auto"><option>05</option><option>10</option></select></div>
-            <div>Showing 6 to 10 of 100</div>
-            <button class="btn btn-primary btn-sm px-3" style="background-color: #3b82f6; border: none;">Go</button>
+            <div>Showing 1 to 2 of 2 entries</div>
         `;
 
         elFooter.append(elPagination, elInfo);
@@ -321,4 +267,4 @@ export const RegistryComponent = {
             elTbody.append(elRow);
         });
     }
-};              
+};
