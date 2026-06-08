@@ -1,5 +1,5 @@
 /* ==========================================================================
-   1. Alinhamento Global, Centralização e Margens Simétricas
+   1. Alinhamento Global, Centralização e Margens Simétricas Laterais
    ========================================================================== */
 .registry-component {
     margin-top: 85px !important; 
@@ -7,20 +7,21 @@
     margin-right: auto !important;
     padding-left: 16px !important;
     padding-right: 16px !important;
-    max-width: 1240px; /* Garante que o grid fique perfeitamente centralizado e elegante no Desktop */
-    width: 100%;
-    box-sizing: border-box;
+    max-width: 1240px; /* Alinhamento central perfeito em telas grandes */
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 /* ==========================================================================
    2. Cabeçalho Superior Dinâmico (Empilha no Mobile, Alinha no Desktop)
    ========================================================================== */
 .datagrid-top-bar {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 16px;
-    width: 100%;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    margin-bottom: 16px !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .datagrid-title {
@@ -32,23 +33,24 @@
     word-wrap: break-word;
 }
 
-/* Limitação estrita e controle de tamanho da Searchbar */
+/* Limitação e controle estrito de tamanho horizontal do Input de Pesquisa */
 .datagrid-search-wrapper {
-    width: 100%;
-    max-width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 .datagrid-search-input {
     width: 100% !important;
     max-width: 100% !important;
-    border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    padding: 0.45rem 0.75rem;
-    font-size: 0.875rem;
-    box-sizing: border-box;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    padding: 0.45rem 0.75rem !important;
+    font-size: 0.875rem !important;
+    box-sizing: border-box !important;
 }
 
-/* Media Query para Telas Maiores (Desktop/Tablets em paisagem) */
+/* Organização Lado a Lado para Desktop/Tablets */
 @media (min-width: 768px) {
     .datagrid-top-bar {
         flex-direction: row !important;
@@ -57,39 +59,44 @@
     }
     
     .datagrid-search-wrapper {
-        width: 260px; /* Mantém a busca compacta e alinhada à direita no PC */
+        width: 260px !important; /* Limita o tamanho do input de busca no desktop */
     }
 }
 
 /* ==========================================================================
-   3. Estrutura do Card e Forçamento de Scroll Horizontal Interno
+   3. Estrutura do Card e Forçamento do Scroll Horizontal Interno
    ========================================================================== */
 .datagrid-card {
     border: 1px solid #e5e7eb !important;
     border-radius: 8px !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    background: #fff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    background: #fff !important;
     width: 100% !important;
-    overflow: hidden; /* Corta o transbordo para fora do card branco */
+    max-width: 100% !important;
+    overflow: hidden !important; /* Impede o card de vazar do container */
+    box-sizing: border-box !important;
 }
 
 .table-responsive {
     width: 100% !important;
-    overflow-x: auto !important; /* Libera o scroll horizontal estritamente aqui dentro */
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    display: block;
+    max-width: 100% !important;
+    overflow-x: auto !important; /* ATIVA O SCROLL HORIZONTAL AQUI */
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: block !important;
+    box-sizing: border-box !important;
 }
 
-/* CRÍTICO: Desativa as travas de compressão de tabela nativas do Bootstrap */
+/* Força as colunas a manterem seu tamanho natural, gerando o scroll necessário */
 .datagrid-table {
-    width: 100% !important;
+    width: auto !important; /* Mudado de 100% para auto para permitir o transbordo saudável */
+    min-width: 100% !important; 
     max-width: none !important; 
-    border-collapse: collapse;
-    white-space: nowrap; /* Impede quebras de linhas estranhas no meio das strings */
+    border-collapse: collapse !important;
+    white-space: nowrap !important; /* Impede quebras de linha esdrúxulas nas células */
 }
 
-/* Header Azul Royal Idêntico ao Modelo */
+/* Header Azul Royal */
 .datagrid-header {
     background-color: #3b82f6 !important;
 }
@@ -109,14 +116,14 @@
     margin-left: 4px;
 }
 
-/* Linhas e Células */
+/* Estilização de Células e Linhas */
 .datagrid-table tbody tr {
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb !important;
     transition: background-color 0.2s;
 }
 
 .datagrid-table tbody tr:hover {
-    background-color: #f9fafb;
+    background-color: #f9fafb !important;
 }
 
 .datagrid-table td {
@@ -125,79 +132,85 @@
     border-bottom: 1px solid #e5e7eb !important;
 }
 
-/* Inputs embutidos invisíveis (Estilo Texto Puro até focar) */
+/* Inputs embutidos invisíveis */
 .datagrid-cell-input {
-    border: 1px solid transparent;
-    background: transparent;
-    width: 100%;
-    min-width: 160px; /* Evita o esmagamento de hashes/GUIDs longos, forçando o scroll */
-    padding: 4px;
-    color: #4b5563;
-    font-size: 0.875rem;
-    border-radius: 4px;
-    text-overflow: ellipsis;
+    border: 1px solid transparent !important;
+    background: transparent !important;
+    width: 100% !important;
+    min-width: 180px !important; /* Espaço seguro para GUIDs/Hashes longos sem esmagar */
+    padding: 4px !important;
+    color: #4b5563 !important;
+    font-size: 0.875rem !important;
+    border-radius: 4px !important;
+    text-overflow: ellipsis !important;
 }
 
 .datagrid-cell-input:focus {
-    border-color: #cbd5e1;
-    background: #fff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    border-color: #cbd5e1 !important;
+    background: #fff !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1) !important;
 }
 
-/* Checkbox estilizado centralizado */
+/* Alinhamento da célula de ações */
+.datagrid-actions-cell {
+    min-width: 120px !important; /* Garante que a coluna de botões nunca seja cortada ou esmagada */
+    width: 120px !important;
+}
+
+/* Checkbox centralizado responsivo */
 .datagrid-table td input[type="checkbox"] {
     min-width: auto !important;
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
+    width: 16px !important;
+    height: 16px !important;
+    cursor: pointer !important;
 }
 
 /* ==========================================================================
-   4. Componentes Visuais Menores (Botões de Ação e Rodapé)
+   4. Elementos Adicionais (Ações e Paginação do Rodapé)
    ========================================================================== */
 .btn-action {
-    border: 1px solid #e5e7eb;
-    background: #fff;
-    width: 28px;
-    height: 28px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
+    border: 1px solid #e5e7eb !important;
+    background: #fff !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 4px !important;
+    font-size: 0.85rem !important;
+    cursor: pointer !important;
+    transition: all 0.2s !important;
 }
 
-.btn-action:hover { background-color: #f3f4f6; }
-.btn-action-view { color: #3b82f6; }
-.btn-action-edit { color: #10b981; }
-.btn-action-delete { color: #ef4444; }
+.btn-action:hover { background-color: #f3f4f6 !important; }
+.btn-action-view { color: #3b82f6 !important; }
+.btn-action-edit { color: #10b981 !important; }
+.btn-action-delete { color: #ef4444 !important; }
 
 .datagrid-footer {
-    background-color: #f9fafb;
-    padding: 12px 16px;
-    border-top: 1px solid #e5e7eb;
+    background-color: #f9fafb !important;
+    padding: 12px 16px !important;
+    border-top: 1px solid #e5e7eb !important;
 }
 
 .btn-page {
-    border: 1px solid #e5e7eb;
-    background: #fff;
-    padding: 4px 12px;
-    font-size: 0.85rem;
-    border-radius: 4px;
-    color: #4b5563;
-    cursor: pointer;
+    border: 1px solid #e5e7eb !important;
+    background: #fff !important;
+    padding: 4px 12px !important;
+    font-size: 0.85rem !important;
+    border-radius: 4px !important;
+    color: #4b5563 !important;
+    cursor: pointer !important;
 }
 
 .btn-page.active {
-    background-color: #3b82f6;
-    color: #fff;
-    border-color: #3b82f6;
+    background-color: #3b82f6 !important;
+    color: #fff !important;
+    border-color: #3b82f6 !important;
 }
 
 .btn-page:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
 }
