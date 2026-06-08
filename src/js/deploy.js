@@ -1,5 +1,5 @@
 (async function() {
-    const src = './src/app.js';
+    const src = './app.js';
     try {
         const current = document.querySelector('script[src="./src/app.js"][type="module"]');
         if (current) current.remove();
