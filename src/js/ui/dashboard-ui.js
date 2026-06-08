@@ -2,7 +2,7 @@ import {
     SECTION_DASHBOARD_ID,
     SECTION_DASHBOARD_SIDEBAR_ID,
     SECTION_DASHBOARD_SBMC_ID
-} from './config-dashboard-ui.js';
+} from '../config/ui/config-dashboard-ui.js';
 
 import {el} from './el-ui.js';
 import {ENV} from '../config/configurations.js';
