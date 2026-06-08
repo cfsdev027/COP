@@ -1,10 +1,10 @@
-import { ENV } from './configurations.js';
-import { SIDEBAR_ID, SIDEBAR_NAV_ID } from './config-sidebar-ui.js';
-import { CatchError } from './catch-error.js';
+import { ENV } from '../config/configurations.js';
+import { SIDEBAR_ID, SIDEBAR_NAV_ID } from '../config/ui/config-sidebar-ui.js';
+import { CatchError } from '../catch-error.js';
 import { el } from './el-ui.js';
-import { AppRouter } from './app-router.js';
-import { ServiceStorage } from './service-storage.js';
-import { ServiceAuthentication } from './service-authentication.js';
+import { AppRouter } from '../app-router.js';
+import { ServiceStorage } from '../services/service-storage.js';
+import { ServiceAuthentication } from '../services/service-authentication.js';
 
 export const SidebarUI = {
     container: document.getElementById(SIDEBAR_ID),
