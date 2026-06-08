@@ -1,7 +1,7 @@
 import { SECTION_DASHBOARD_USERS_ID } from '../config/ui/config-dashboard-users-ui.js';
 import { ENV } from '../config/configurations.js';
-import { ServiceAuthentication } from './service-authentication.js';
-import { ServiceUsers } from './service-users.js';
+import { ServiceAuthentication } from '../services/service-authentication.js';
+import { ServiceUsers } from '../services/service-users.js';
 import { AppRouter } from '../app-router.js';
 
 export const DashboardUsersUI = {
