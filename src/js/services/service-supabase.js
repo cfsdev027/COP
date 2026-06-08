@@ -1,4 +1,4 @@
-import {SUPABASE_URL,SUPABASE_ANON_KEY} from './src/js/config/configurations.js';
+import {SUPABASE_URL,SUPABASE_ANON_KEY} from '../config/configurations.js';
 
 export const ServiceSupabase = {
     client: function(){
