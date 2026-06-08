@@ -148,6 +148,7 @@ export const RegistryComponent = {
 
     makeSearch() {
         const elSearchWrapper = el('div', ['datagrid-search-wrapper']);
+        const elSearchGroup = el('div', ['input-group']);
         const elSearchInput = el('input', ['form-control', 'datagrid-search-input'], {
             id: 'datagrid-search-input',
             type: 'text', 
@@ -158,7 +159,6 @@ export const RegistryComponent = {
             this.filter(elSearchInput.value);
         });
 
-        const elActionGroup = el('div', ['btn-group']);
         const elReload = el('button', ['btn', 'btn-secondary'], { id: 'gridview-reload', role: 'button' });
         elReload.innerHTML = `
             <span class="d-inline-flex align-items-center gap-1">
@@ -173,8 +173,8 @@ export const RegistryComponent = {
             this.filter(elInput.value);
         });
 
-        elActionGroup.append(elReload);
-        elSearchWrapper.append(elSearchInput, elActionGroup);
+        elSearchGroup.append(elSearchInput, elReload);
+        elSearchWrapper.append(elSearchGroup);
         
         return elSearchWrapper;
     },
