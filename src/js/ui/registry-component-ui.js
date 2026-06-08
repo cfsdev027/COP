@@ -148,7 +148,8 @@ export const RegistryComponent = {
 
     makeSearch() {
         const elSearchWrapper = el('div', ['datagrid-search-wrapper']);
-        const elSearchInput = el('input', ['form-control', 'datagrid-search-input'], { 
+        const elSearchInput = el('input', ['form-control', 'datagrid-search-input'], {
+            id: 'datagrid-search-input',
             type: 'text', 
             placeholder: 'Search by Keywords...' 
         });
@@ -157,7 +158,24 @@ export const RegistryComponent = {
             this.filter(elSearchInput.value);
         });
 
-        elSearchWrapper.append(elSearchInput);
+        const elActionGroup = el('div', ['btn-group']);
+        const elReload = el('button', ['btn', 'btn-secondary'], { id: 'gridview-reload', role: 'button' });
+        elReload.innerHTML = `
+            <span class="d-inline-flex align-items-center gap-1">
+                <i class="bi bi-arrow-clockwise"></i>
+            </span>
+        `;
+
+        elReload.addEventListener('click', () => {
+            const elInput = document.getElementById('datagrid-search-input');
+            if(!elInput || elInput === null) return;
+            
+            this.filter(elInput.value);
+        });
+
+        elActionGroup.append(elReload);
+        elSearchWrapper.append(elSearchInput, elActionGroup);
+        
         return elSearchWrapper;
     },
 
