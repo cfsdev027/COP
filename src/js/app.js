@@ -16,7 +16,7 @@ import { ServiceAuthentication } from './services/service-authentication.js';
 function appendStyleSheetWithoutCache(css) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = `./src/css/${css}?v=${Date.now()}`; 
+    link.href = `./css/${css}?v=${Date.now()}`; 
     document.head.appendChild(link);
 }
 
