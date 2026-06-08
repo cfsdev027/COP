@@ -1,7 +1,7 @@
-import {COP_AUTH_COOKIE,COP_LS_KEY} from './src/js/config/configurations.js';
-import {ServiceCookies} from './src/js/services/service-cookies.js';
-import {ServiceStorage} from './src/js/services/service-storage.js';
-import {ServiceUsers} from './src/js/services/service-users.js';
+import {COP_AUTH_COOKIE,COP_LS_KEY} from '../config/configurations.js';
+import {ServiceCookies} from './service-cookies.js';
+import {ServiceStorage} from './service-storage.js';
+import {ServiceUsers} from './service-users.js';
 
 export const ServiceAuthentication = {
     get_auth_id: function() {
