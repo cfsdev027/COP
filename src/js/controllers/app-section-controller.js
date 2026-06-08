@@ -1,4 +1,4 @@
-import {SECTION_ACTIVE_CLASSNAME } from './src/js/config/ui/config-sections.js';
+import {SECTION_ACTIVE_CLASSNAME } from '../config/ui/config-sections.js';
 
 export const AppSectionController = {
     currentActiveSection: function(){
