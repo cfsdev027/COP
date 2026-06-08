@@ -5,7 +5,7 @@ import {
     SECTION_LOGIN_FORM_ID,
     SECTION_LOGIN_FORM_SUBMIT_ID
 } from '../config/ui/config-login-ui.js';
-import {ServiceAuthentication} from './service-authentication.js';
+import {ServiceAuthentication} from '../services/service-authentication.js';
 
 export const LoginUI = {
     // Referência da Section mapeada no seu HTML
