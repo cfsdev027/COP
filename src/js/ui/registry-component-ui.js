@@ -26,32 +26,36 @@ export const RegistryComponent = {
         }
     },
 
+    dispose() {
+        this.container.innerHTML = '';
+        this.container.classList.remove('datagrid-wrapper');
+        this.container.classList.remove('registry-component');
+        this.container.classList.remove('p-3');
+        this.container.classList.remove('p-md-4');
+    },
+
     render() {
         this.container.innerHTML = '';
-        this.container.className = "datagrid-wrapper registry-component container-fluid p-3";
+        
+        // Unificamos o container aplicando espaçamento interno igual em todas as laterais
+        this.container.className = "datagrid-wrapper registry-component p-3 p-md-4";
 
-        // Título do Grid (Ocupa uma linha inteira própria)
-        const elTitleRow = el('div', ['row', 'mb-2']);
-        const elTitleCol = el('div', ['col-12']);
+        // Bloco Superior: Título e Busca unificados em um fluxo flexível que empilha no mobile
+        const elHeaderBlock = el('div', ['datagrid-top-bar', 'd-flex', 'flex-column', 'gap-2', 'mb-3']);
+        
         const elTitle = el('h5', ['datagrid-title', 'm-0']);
         elTitle.innerText = this.title;
-        elTitleCol.append(elTitle);
-        elTitleRow.append(elTitleCol);
         
-        // Barra de busca superior (Ocupa outra linha, alinhada à direita no desktop e 100% no mobile)
-        const elSearchRow = el('div', ['row', 'mb-3', 'justify-content-md-end']);
-        const elSearchCol = el('div', ['col-12', 'col-md-4', 'col-lg-3']);
         const elSearch = this.makeSearch();
-        elSearchCol.append(elSearch);
-        elSearchRow.append(elSearchCol);
 
-        // Grid principal (Tabela)
+        elHeaderBlock.append(elTitle, elSearch);
+
+        // Grid principal (Card + Tabela interna)
         const elGrid = this.makeGridview();
 
-        this.container.append(elTitleRow, elSearchRow, elGrid);
+        this.container.append(elHeaderBlock, elGrid);
     },
     
-
     addNew() {
         const elTr = document.getElementById('gridview-new-tr');
         if(!elTr) return;
@@ -156,7 +160,8 @@ export const RegistryComponent = {
     },
 
     makeSearch() {
-        const elSearchContainer = el('div', ['d-flex', 'gap-2']);
+        // Criamos apenas o wrapper do input sem carregar as classes de row/col do Bootstrap que quebram o layout
+        const elSearchWrapper = el('div', ['datagrid-search-wrapper']);
         const elSearchInput = el('input', ['form-control', 'datagrid-search-input'], { 
             type: 'text', 
             placeholder: 'Search by Keywords...' 
@@ -166,10 +171,10 @@ export const RegistryComponent = {
             this.filter(elSearchInput.value);
         });
 
-        elSearchContainer.append(elSearchInput);
-        return elSearchContainer;
+        elSearchWrapper.append(elSearchInput);
+        return elSearchWrapper;
     },
-
+    
     makeGridview() {
         const elCard = el('div', ['card', 'datagrid-card']);
         const elTableResponsive = el('div', ['table-responsive']);
