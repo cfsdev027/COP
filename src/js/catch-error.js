@@ -1,4 +1,4 @@
-import { ENV } from './src/js/config/configurations.js';
+import { ENV } from './config/configurations.js';
 
 export function CatchError(prefix, err) {
     let e;
