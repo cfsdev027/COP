@@ -27,6 +27,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // Injeta as folhas de estilo com segurança
             appendStyleSheetWithoutCache('style.css');
             appendStyleSheetWithoutCache('sidebar.css');
+            appendStyleSheetWithoutCache('gridview-ui.css');
             appendStyleSheetWithoutCache('section-login-ui.css');
             
             // Segue com o fluxo de autenticação e roteamento
