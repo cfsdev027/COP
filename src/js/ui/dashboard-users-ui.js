@@ -1,8 +1,8 @@
-import { SECTION_DASHBOARD_USERS_ID } from './config-dashboard-users-ui.js';
-import { ENV } from './configurations.js';
+import { SECTION_DASHBOARD_USERS_ID } from '../config/ui/config-dashboard-users-ui.js';
+import { ENV } from '../config/configurations.js';
 import { ServiceAuthentication } from './service-authentication.js';
 import { ServiceUsers } from './service-users.js';
-import { AppRouter } from './app-router.js';
+import { AppRouter } from '../app-router.js';
 
 export const DashboardUsersUI = {
     section: document.getElementById(SECTION_DASHBOARD_USERS_ID),
