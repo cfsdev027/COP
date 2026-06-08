@@ -5,10 +5,10 @@ import {
 } from './config-dashboard-ui.js';
 
 import {el} from './el-ui.js';
-import {ENV} from './configurations.js';
-import {AppRouter} from './app-router.js';
-import {CatchError} from './catch-error.js';
-import {ServiceAuthentication} from './service-authentication.js';
+import {ENV} from '../config/configurations.js';
+import {AppRouter} from '../app-router.js';
+import {CatchError} from '../catch-error.js';
+import {ServiceAuthentication} from '../services/service-authentication.js';
 
 export const DashboardUI = {
     section: document.getElementById(SECTION_DASHBOARD_ID),
