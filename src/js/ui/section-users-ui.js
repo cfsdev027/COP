@@ -78,13 +78,8 @@ export const SectionUsersUI = {
         const elRegistryContainer = el('div', [], { id: USERS_CONTAINER_ID });
         
         this.container.append(elRegistryContainer);
-
-        // --- INTEGRAÇÃO COM O REGISTRY COMPONENT ---
-        // Adaptamos as propriedades internas do RegistryComponent para bater com o modelo de Usuários antes de inicializá-lo
-        RegistryComponent.title = USERS_DEFAULT_TITLE;
-        RegistryComponent.data = [...this.usersMockData];
         
         // Inicializa de fato o componente passando o ID do elemento da section que criamos acima
-        RegistryComponent.init(USERS_SECTION_ID);
+        RegistryComponent.init(USERS_SECTION_ID, USERS_DEFAULT_TITLE, [...this.usersMockData]);
     }
 };          
