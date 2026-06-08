@@ -1,0 +1,26 @@
+/* 1. Resolve o Header cobrindo a tabela no Mobile */
+.registry-component {
+    /* Ajuste os 60px para a altura real do seu header 'OP-Control' se necessário */
+    margin-top: 60px; 
+}
+
+/* 2. Garante que os inputs não estiquem a tabela infinitamente e quebra o texto se necessário */
+.registry-component .table input.form-control {
+    min-width: 140px; /* Impede que as colunas fiquem esmagadas no mobile */
+    max-width: 100%;
+    text-overflow: ellipsis; /* Adiciona '...' se o texto do GUID for maior que o input */
+}
+
+/* 3. Ajuste fino de alinhamento vertical para inputs dentro da tabela */
+.registry-component .table td, 
+.registry-component .table th {
+    vertical-align: middle !important;
+    padding: 8px var(--bs-table-padding-x, 8px);
+}
+
+/* 4. Força a barra de rolagem horizontal a aparecer explicitamente no mobile se o conteúdo transbordar */
+.registry-component .table-responsive {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+}
