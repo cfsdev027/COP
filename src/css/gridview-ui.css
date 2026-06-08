@@ -5,10 +5,44 @@
     margin-top: 20px;
 }
 
+/* 2. Garante que o título quebre linha caso seja muito longo no mobile */
 .datagrid-title {
     color: #374151;
     font-weight: 600;
+    white-space: normal;
+    word-wrap: break-word;
 }
+
+/* 3. Ajuste responsivo da Searchbar */
+.datagrid-search-input {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+/* 4. Correção Definitiva do Scroll da Tabela */
+.datagrid-card {
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    width: 100% !important;
+    overflow: hidden; /* Impede que o card herde o estouro */
+}
+
+.table-responsive {
+    width: 100% !important;
+    overflow-x: auto !important; /* Força o scroll horizontal interno */
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    display: block;
+}
+
+/* Garante que os inputs dentro da tabela tenham um tamanho mínimo para não esmagar, gerando o scroll horizontal necessário */
+.datagrid-table td input.datagrid-cell-input {
+    min-width: 100px;
+}
+
 
 /* 1. Aplica o espaçamento no topo do container principal para empurrar TUDO para baixo do header */
 .registry-component {
@@ -29,15 +63,6 @@
 .datagrid-search-input {
     width: 100% !important;
     max-width: 100% !important;
-}
-
-/* Card Principal da Tabela */
-.datagrid-card {
-    border: 1px solid #e5e7eb !important;
-    border-radius: 8px !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    background: #fff;
 }
 
 /* Tabela Customizada */
@@ -197,12 +222,6 @@
 .btn-page:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-/* Responsividade de Tela Isolada */
-.table-responsive {
-    overflow-x: auto !important;
-    -webkit-overflow-scrolling: touch;
 }
 
 @media (min-width: 768px) {
