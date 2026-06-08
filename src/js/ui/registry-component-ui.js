@@ -61,21 +61,6 @@ export const RegistryComponent = {
         this.handleCommitRecord(dynamic);
     },
 
-    decodeASCII(ascii) {
-        const regex = /(?<=_)\d+(?=_)/g;
-        return ascii.replace(regex, (_, codigo) => {
-            return String.fromCharCode(Number(codigo));
-        });
-    },
-
-    encodeASCII(val) {
-        const regex = /[^\w\sÀ-ÿ]|_/g;
-
-        return val.replace(regex, (caracter) => {
-            return `_${caracter.charCodeAt(0)}_`;
-        });
-    },
-
     extractData(elTr) {
         const dadosExtraidos = [];
   
