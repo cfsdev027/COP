@@ -10,12 +10,25 @@
     font-weight: 600;
 }
 
+/* 1. Aplica o espaçamento no topo do container principal para empurrar TUDO para baixo do header */
+.registry-component {
+    /* Ajuste os 70px baseado na altura exata do seu menu OP-Control se precisar */
+    margin-top: 75px !important; 
+    padding-top: 10px !important;
+}
+
+/* 2. Garante que os elementos de busca e título se comportem bem no mobile (empilhando se necessário) */
+.registry-component > .d-flex {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px !important;
+}
+
+/* 3. Ajuste para o input de busca não sumir e ocupar o espaço correto no mobile */
 .datagrid-search-input {
-    max-width: 250px;
-    border-radius: 4px;
-    border: 1px solid #d1d5db;
-    padding: 0.375rem 0.75rem;
-    font-size: 0.875rem;
+    width: 100% !important;
+    max-width: 100% !important;
 }
 
 /* Card Principal da Tabela */
@@ -190,4 +203,10 @@
 .table-responsive {
     overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 768px) {
+    .datagrid-search-input {
+        max-width: 250px !important;
     }
+}
