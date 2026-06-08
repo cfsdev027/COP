@@ -1,7 +1,7 @@
-import { SECTION_LOGIN_ID } from './config-login-ui.js';
-import { CatchError } from './catch-error.js';
+import { SECTION_LOGIN_ID } from '../config/ui/config-login-ui.js';
+import { CatchError } from '../catch-error.js';
 import { el } from './el-ui.js';
-import { ServiceAuthentication } from './service-authentication.js';
+import { ServiceAuthentication } from '../services/service-authentication.js';
 
 export const SectionLoginUI = {
     container: document.getElementById(SECTION_LOGIN_ID),
