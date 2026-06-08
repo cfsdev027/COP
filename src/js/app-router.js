@@ -1,16 +1,16 @@
-import {AppSectionController} from './src/js/controllers/app-section-controller.js';
-import {ServiceStorage} from './src/js/services/service-storage.js';
+import {AppSectionController} from './controllers/app-section-controller.js';
+import {ServiceStorage} from './services/service-storage.js';
 
-import {SidebarUI} from './src/js/ui/sidebar-ui.js';
+import {SidebarUI} from './ui/sidebar-ui.js';
 
-import {SectionLoginUI} from './src/js/ui/section-login-ui.js';
-import {SECTION_LOGIN_ID} from './src/js/config/ui/config-login-ui.js';
+import {SectionLoginUI} from './ui/section-login-ui.js';
+import {SECTION_LOGIN_ID} from './config/ui/config-login-ui.js';
 
-import {DashboardUI} from './src/js/ui/dashboard-ui.js';
-import {SECTION_DASHBOARD_ID} from './src/js/config/ui/config-dashboard-ui.js';
+import {DashboardUI} from './ui/dashboard-ui.js';
+import {SECTION_DASHBOARD_ID} from './config/ui/config-dashboard-ui.js';
 
-import {SectionUsersUI} from './src/js/ui/section-users-ui.js';
-import {USERS_SECTION_ID} from './src/js/config/ui/config-users-ui.js';
+import {SectionUsersUI} from './ui/section-users-ui.js';
+import {USERS_SECTION_ID} from './config/ui/config-users-ui.js';
 
 const transition = function(next, id, sidebar_enable = false) {
     const current = ServiceStorage.get('COP-CURRENT-SECTION');
