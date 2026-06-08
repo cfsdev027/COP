@@ -1,7 +1,7 @@
-import { USERS_SECTION_ID, USERS_CONTAINER_ID, USERS_DEFAULT_TITLE } from './config-users-ui.js';
+import { USERS_SECTION_ID, USERS_CONTAINER_ID, USERS_DEFAULT_TITLE } from '../config/ui/config-users-ui.js';
 import { RegistryComponent } from './registry-component-ui.js';
 import { el } from './el-ui.js';
-import { CatchError } from './catch-error.js';
+import { CatchError } from '../catch-error.js';
 
 export const SectionUsersUI = {
     container: document.getElementById(USERS_SECTION_ID),
