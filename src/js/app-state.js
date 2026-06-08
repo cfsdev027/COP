@@ -1,4 +1,4 @@
-import {ServiceStorage} from './src/js/services/service-storage.js';
+import {ServiceStorage} from './services/service-storage.js';
 
 const COP_AS_CURRENT_SECTION = 'COP_AS_CURRENT_SECTION';
 const COP_AS_AUTHENTICATED_USER = 'COP_AS_AUTHENTICATED_USER';
