@@ -89,7 +89,7 @@
 
 .table-responsive {
     width: 100% !important;
-    max-width: 358px !important;
+    max-width: 336px !important;
     overflow-x: auto !important; /* ATIVA O SCROLL HORIZONTAL AQUI */
     overflow-y: hidden !important;
     -webkit-overflow-scrolling: touch !important;
