@@ -40,6 +40,10 @@
     box-sizing: border-box !important;
 }
 
+.datagrid-search-group {
+   margin-right: 1rem !important!
+}
+
 .datagrid-search-input {
     width: 70% !important;
     max-width: 70% !important;
