@@ -41,7 +41,8 @@
 }
 
 .datagrid-search-group {
-   margin-right: 1rem !important!
+   max-width: 378px !important;
+   margin-right: 1rem !important!;
 }
 
 .datagrid-search-input {
@@ -64,6 +65,11 @@
     
     .datagrid-search-wrapper {
         width: 260px !important; /* Limita o tamanho do input de busca no desktop */
+    }
+
+    .datagrid-search-group {
+       width: 100% !important;
+       max-width: 100% !important!
     }
 }
 
