@@ -41,13 +41,13 @@
 }
 
 .datagrid-search-group {
+   width: 100% !important;
    max-width: 378px !important;
-   margin-right: 1rem !important!;
 }
 
 .datagrid-search-input {
     width: 100% !important;
-    max-width: 260px !important;
+    max-width: 300px !important;
     border: 1px solid #cbd5e1 !important;
     border-radius: 6px !important;
     padding: 0.45rem 0.75rem !important;
@@ -64,12 +64,12 @@
     }
     
     .datagrid-search-wrapper {
-        width: 260px !important; /* Limita o tamanho do input de busca no desktop */
+        width: 100% !important; /* Limita o tamanho do input de busca no desktop */
     }
 
     .datagrid-search-group {
        width: 100% !important;
-       max-width: 100% !important!
+       max-width: 768% !important!
     }
 }
 
