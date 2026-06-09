@@ -108,7 +108,7 @@
 
 /* Header Azul Royal */
 .datagrid-header {
-    background-color: #3b82f6 !important;
+    background-color: rgb(33, 37, 41) !important;
 }
 
 .datagrid-header th {
