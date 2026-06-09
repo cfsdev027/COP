@@ -148,7 +148,7 @@ export const RegistryComponent = {
 
     makeSearch() {
         const elSearchWrapper = el('div', ['datagrid-search-wrapper']);
-        const elSearchGroup = el('div', ['input-group']);
+        const elSearchGroup = el('div', ['input-group', 'datagrid-search-group']);
         const elSearchInput = el('input', ['form-control', 'datagrid-search-input'], {
             id: 'datagrid-search-input',
             type: 'text', 
