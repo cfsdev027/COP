@@ -266,7 +266,7 @@ export const RegistryComponent = {
 
         elAdd.addEventListener('click', () => this.add());
 
-        elActionGroup.append(btnView, btnEdit, btnDelete);
+        elActionGroup.append(elAdd);
         elTdActions.append(elActionGroup);
         elRow.append(elTdActions);
 
