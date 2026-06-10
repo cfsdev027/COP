@@ -30,7 +30,7 @@ export const RegistryComponent = {
             
             this.render();
         } catch (err) {
-            if (of CatchError === 'function') CatchError('RegistryComponent', err);
+            if (typeof CatchError === 'function') CatchError('RegistryComponent', err);
             else console.error('RegistryComponent Error:', err);
         }
     },
