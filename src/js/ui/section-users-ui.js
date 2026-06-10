@@ -18,19 +18,10 @@ export const SectionUsersUI = {
         }
     },
 
-    disposeStyles() {
-        // Garante que o CSS da seção não seja duplicado se o init for chamado múltiplas vezes
-        const css = document.getElementById('css-section-users');
-        if (!css || css === null) return;
-
-        css.remove();
-    },
-
     dispose() {
         if (!this.container || this.container === null) return;
 
         this.container.innerHTML = '';
-        this.disposeStyles();
     },
 
     render() {
