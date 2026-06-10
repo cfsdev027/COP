@@ -155,8 +155,13 @@ export const RegistryComponent = {
         const elTheadRow = el('tr', []);
 
         Object.entries(new this.model()).forEach(([p, val]) => {
+            const s = this.schema[p];
+            if(!s || s === null) return;
+            
             const elTh = el('th', []);
             elTh.innerHTML = `${p} <span class="sort-icons">⇅</span>`;
+            if(!s.display) elTh.style.display = 'none';
+            
             elTheadRow.append(elTh);
         });
 
@@ -236,13 +241,13 @@ export const RegistryComponent = {
             elTd.setAttribute('data-column-type', s.type);
             elTd.setAttribute('data-column-name', p);
 
-            const elInput = null;
+            let elInput = null;
 
             switch(s.type) {
                 case 'select':
                     elInput = el('select', ['datagrid-cell-input'], { type: s.type });
                     
-                    const elOpt = el('option');
+                    let elOpt = el('option');
                     elOpt.value = '';
                     elOpt.text = '';
 
@@ -298,13 +303,13 @@ export const RegistryComponent = {
             elTd.setAttribute('data-column-name', p);
             if(!s.display) elTd.style.display = 'none';
 
-            const elInput = null;
+            let elInput = null;
 
             switch(s.type) {
                 case 'select':
                     elInput = el('select', ['datagrid-cell-input'], { type: s.type });
                     
-                    const elOpt = el('option');
+                    let elOpt = el('option');
                     elOpt.value = '';
                     elOpt.text = '';
 
