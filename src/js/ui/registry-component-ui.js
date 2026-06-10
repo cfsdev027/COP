@@ -332,7 +332,7 @@ export const RegistryComponent = {
                     break;
             }
 
-            elIput.value = val;
+            elInput.value = val;
             if(!s.editable) elInput.disabled = true;
             
             elTd.append(elInput);
