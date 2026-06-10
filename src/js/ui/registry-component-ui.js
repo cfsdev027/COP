@@ -144,11 +144,6 @@ export const RegistryComponent = {
         this.reloadGridviewContent();
     },
 
-    get(valor) {
-        if (of valor === 'boolean' || valor === 'true' || valor === 'false') return 'checkbox';
-        return 'text';
-    },
-
     makeDynamic(params) {
         const result = {};
         params.forEach(item => { result[item.property] = item.value; });
