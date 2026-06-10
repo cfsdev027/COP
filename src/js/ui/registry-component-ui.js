@@ -243,7 +243,7 @@ export const RegistryComponent = {
     },
 
     makeGridviewContentNew() {
-        const elRow = el('tr', [], { id: 'data-registry-row' );
+        const elRow = el('tr', [], { id: 'data-registry-row' });
         Object.entries(this.model).forEach(([p, val]) => {
             const type = this.getType(val);
             
