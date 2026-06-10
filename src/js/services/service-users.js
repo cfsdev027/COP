@@ -165,7 +165,7 @@ export const ServiceUsers = {
         if(!entry || entry === null);
         return await this.add(entry.username, entry.password, entry.documentType, entry.document, entry.role);
     },
-    update: async function(id,username,password,document_type,document,role,active) {
+    update: async function(id,username,password,documentType,document,role,active) {
         try {
             const client = ServiceSupabase.client();
 
@@ -174,7 +174,7 @@ export const ServiceUsers = {
                 .update({
                     username: username,
                     password: password,
-                    document_type: document_type,
+                    document_type: documentType,
                     document: document,
                     role: role,
                     active: active
@@ -190,6 +190,10 @@ export const ServiceUsers = {
           
             return null;
         }
+    },
+    updateEntry: async function(entry) {
+        if(!entry || entry === null) return null;
+        return this.update(entry.id, entry.username, entry.password, entry.documentType, entry.document, entry.role, entry.active);
     },
     delete: async function(id) {
         try {
