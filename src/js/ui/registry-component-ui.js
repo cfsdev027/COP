@@ -265,7 +265,7 @@ export const RegistryComponent = {
                     
                     break;
                 default:
-                    elInput = el('input', ['datagrid-cell-input'], { type: type });
+                    elInput = el('input', ['datagrid-cell-input'], { type: s.type });
                     break;
             }
 
@@ -327,7 +327,7 @@ export const RegistryComponent = {
                     
                     break;
                 default:
-                    elInput = el('input', ['datagrid-cell-input'], { type: type });
+                    elInput = el('input', ['datagrid-cell-input'], { type: s.type });
                     
                     break;
             }
