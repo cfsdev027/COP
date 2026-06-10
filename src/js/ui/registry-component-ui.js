@@ -5,14 +5,16 @@ import { ServiceStorage } from '../services/service-storage.js';
 export const RegistryComponent = {
     container: null,
     title: null,
+    model: null,
     schema: null,
     service: null,
     data: null,
 
-    async initAsync(containerId, title, schema, service) {
+    async initAsync(containerId, title, model, schema, service) {
         try {
             if(!containerId || containerId === null) throw { stack: 'init', message_error: `'containerId' is null or empty.` };
             if(!title || title === null || title.trim() === '') throw { stack: 'init', message_error: `'title' is null or empty.` };
+            if(!model || model === null) throw { stack: 'init', message_error: `'model' is null or empty.` };
             if(!schema || schema === null) throw { stack: 'init', message_error: `'schema' is null or empty.` };
             if(!service || service === null) throw { stack: 'init', message_error: `'service' is null or empty.` };
             
@@ -20,6 +22,7 @@ export const RegistryComponent = {
             if (!this.container) throw { stack: 'init', message_error: `Missing CONTAINER with id ${containerId}.` };
             
             this.title = title;
+            this.model = model;
             this.schema = schema;
             this.service = service;
 
@@ -156,7 +159,7 @@ export const RegistryComponent = {
         const elThead = el('thead', ['datagrid-header']);
         const elTheadRow = el('tr', []);
 
-        Object.entries(new this.schema.model()).forEach(([p, val]) => {
+        Object.entries(new this.model()).forEach(([p, val]) => {
             const elTh = el('th', []);
             elTh.innerHTML = `${p} <span class="sort-icons">⇅</span>`;
             elTheadRow.append(elTh);
@@ -228,7 +231,7 @@ export const RegistryComponent = {
 
     makeGridviewContentNew() {
         const elRow = el('tr', [], { id: 'data-registry-row' });
-        Object.entries(new this.schema.model()).forEach(([p, val]) => {
+        Object.entries(new this.model()).forEach(([p, val]) => {
             const s = this.schema[p];
             if(!s || s === null) return;
 
