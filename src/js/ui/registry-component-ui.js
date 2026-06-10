@@ -73,7 +73,7 @@ export const RegistryComponent = {
     },
 
     commit(id) {
-        const elTr = document.querySelector(`tr[data-id=${id}]`);
+        const elTr = document.querySelector(`tr[data-id='${id}']`);
         if(!elTr || elTr === null) return;
 
         const params = this.extractData(elTr);
@@ -90,7 +90,7 @@ export const RegistryComponent = {
     },
 
     delete(id) {
-        const elTr = document.querySelector(`tr[data-id=${id}]`);
+        const elTr = document.querySelector(`tr[data-id='${id}']`);
         if(!elTr || elTr === null) return;
 
         (async () => {
