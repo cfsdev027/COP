@@ -2,7 +2,7 @@ import { USERS_SECTION_ID, USERS_CONTAINER_ID, USERS_DEFAULT_TITLE } from '../co
 import { RegistryComponent } from './registry-component-ui.js';
 import { el } from './el-ui.js';
 import { CatchError } from '../catch-error.js';
-import {UserModel} from '../models/user-model.js';
+import {UserSchema} from '../schemas/user-schema.js';
 import {ServiceUsers} from '../services/service-users.js';
 
 export const SectionUsersUI = {
@@ -37,7 +37,7 @@ export const SectionUsersUI = {
 
         (async () => {
             // Inicializa de fato o componente passando o ID do elemento da section que criamos acima
-            await RegistryComponent.initAsync(USERS_SECTION_ID, USERS_DEFAULT_TITLE, UserModel, ServiceUsers);
+            await RegistryComponent.initAsync(USERS_SECTION_ID, USERS_DEFAULT_TITLE, UserSchema, ServiceUsers);
         })();
     }
 };          
