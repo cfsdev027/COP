@@ -5,19 +5,27 @@ import { ServiceStorage } from '../services/service-storage.js';
 export const RegistryComponent = {
     container: null,
     title: null,
+    model: null,
+    service: null,
     data: null,
 
-    init(containerId, title, data) {
+    init(containerId, title, model, service) {
         try {
             if(!containerId || containerId === null) throw { stack: 'init', message_error: `'containerId' is null or empty.` };
             if(!title || title === null || title.trim() === '') throw { stack: 'init', message_error: `'title' is null or empty.` };
-            if(!data || data === null) throw { stack: 'init', message_error: `'data' is null or empty.` };
+            if(!model || model === null) throw { stack: 'init', message_error: `'model' is null or empty.` };
+            if(!service || service === null) throw { stack: 'init', message_error: `'service' is null or empty.` };
             
             this.container = document.getElementById(containerId);
             if (!this.container) throw { stack: 'init', message_error: `Missing CONTAINER with id ${containerId}.` };
             
             this.title = title;
-            this.data = data;
+            this.model = model;
+            this.service = service;
+
+            (async () => {
+                this.data = await this.service.get();
+            })();
             
             this.render();
         } catch (err) {
@@ -45,8 +53,8 @@ export const RegistryComponent = {
         this.container.append(elHeaderBlock, elGrid);
     },
 
-    addNew() {
-        const elTr = document.getElementById('gridview-new-tr');
+    add() {
+        const elTr = document.getElementById('data-registry-row');
         if(!elTr || elTr === null) return;
 
         const params = this.extractData(elTr);
@@ -73,7 +81,7 @@ export const RegistryComponent = {
 
     extractData(elTr) {
         const dadosExtraidos = [];
-        const celulas = elTr.querySelectorAll('td[data-column-name][data-input-id]');
+        const celulas = elTr.querySelectorAll('td[data-column-type][data-column-name]');
   
         celulas.forEach(td => {
             const propriedade = td.getAttribute('data-column-name');
@@ -88,12 +96,8 @@ export const RegistryComponent = {
         return dadosExtraidos;
     },
 
-    filter(expression) {
-        if (!this.data || this.data === null || this.data.length < 1 || !expression || expression.trim() === "") {
-            this.reloadGridviewContent();
-            return;
-        }
-        this.data = this.data.filter(this.makeFilter(expression));
+    filter: async function(expression) {
+        this.data = this.service.fetchByExpression(expression);
         this.reloadGridviewContent();
     },
 
@@ -197,32 +201,63 @@ export const RegistryComponent = {
 
     makeGridviewContent() {
         const elTbody = el('tbody', [], { id: 'gridview-tbody' });
-        if(!this.data) return elTbody;
 
-        this.data.forEach((entry) => {
-            const elRow = this.makeGridviewContentRow(entry);
+        const elNewRow = this.makeGridviewContentNew();
+        elTbody.append(elNewRow);
+        
+        const rows = this.makeGridviewContentRows();
+        if(!rows || rows === null) return elTbody;
+
+        rows.forEach((elRow) => {
             elTbody.append(elRow);
         });
 
         return elTbody;
     },
 
+    makeGridviewContentNew() {
+        const elRow = el('tr', [], { id: 'data-registry-row' );
+        Object.entries(this.model).forEach(([p, val]) => {
+            const type = this.getType(val);
+            
+            const elTd = el('td');
+            elTd.setAttribute('data-column-type', type);
+            elTd.setAttribute('data-column-name', p);
+
+            const elInput = el('input', ['datagrid-cell-input'], { type: type });
+            elInput.value = val;
+            
+            elTd.append(elInput);
+            elRow.append(elTd);
+        });
+
+        const elTdActions = el('td', ['text-nowrap', 'datagrid-actions-cell']);
+        const elActionGroup = el('div', ['d-flex', 'gap-1']);
+        
+        const elAdd = el('button', ['btn-action'], { title: 'Adicionar novo registro.' });
+        elAdd.innerHTML = '✅';
+
+        elAdd.addEventListener('click', () => this.add());
+
+        elActionGroup.append(btnView, btnEdit, btnDelete);
+        elTdActions.append(elActionGroup);
+        elRow.append(elTdActions);
+
+        return elRow;
+    },
+
     makeGridviewContentRow(entry) {
-        const hash = this.getHash();
-        const rowId = `reg-${hash}`;
-        const elRow = el('tr', [], { id: rowId });
+        const elRow = el('tr', []);
+        elRow.setAttribute('data-id', entry.id);
 
         Object.entries(entry).forEach(([p, val]) => {
             const columnType = this.getType(val);
-            const tdId = `reg-td-${hash}`;
-            const inputId = `reg-input-${hash}`;
             
-            const elTd = el('td', [], { id: tdId });
+            const elTd = el('td');
             elTd.setAttribute('data-column-type', columnType);
             elTd.setAttribute('data-column-name', p);
-            elTd.setAttribute('data-input-id', inputId);
 
-            const elInput = el('input', ['datagrid-cell-input'], { id: inputId, type: columnType });
+            const elInput = el('input', ['datagrid-cell-input'], { type: columnType });
             elInput.value = val;
             
             elTd.append(elInput);
@@ -249,6 +284,18 @@ export const RegistryComponent = {
         return elRow;
     },
 
+    makeGridviewContentRows() {
+        const rows = [];
+        if(!this.data || this.data === null) return rows;
+
+        this.data.forEach((entry) => {
+            const elRow = this.makeGridviewContentRow(entry);
+            rows.push(elRow);
+        });
+
+        return rows;
+    },
+
     makeGridviewFooter() {
         const elFooter = el('div', ['datagrid-footer', 'd-flex', 'justify-content-between', 'align-items-center', 'flex-wrap', 'gap-3']);
         
@@ -271,10 +318,14 @@ export const RegistryComponent = {
         const elTbody = document.getElementById('gridview-tbody');
         if (!elTbody) return;
         elTbody.innerHTML = '';
-        if(!this.data) return;
+        
+        const elNewRow = this.makeGridviewContentNew();
+        elTbody.append(elNewRow);
+        
+        const rows = this.makeGridviewContentRows();
+        if(!rows || rows === null) return elTbody;
 
-        this.data.forEach((entry) => {
-            const elRow = this.makeGridviewContentRow(entry);
+        rows.forEach((elRow) => {
             elTbody.append(elRow);
         });
     }
