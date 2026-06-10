@@ -29,6 +29,7 @@ window.addEventListener('DOMContentLoaded', () => {
             appendStyleSheetWithoutCache('sidebar.css');
             appendStyleSheetWithoutCache('gridview-ui.css');
             appendStyleSheetWithoutCache('section-login-ui.css');
+            appendStyleSheetWithoutCache('section-users-ui.css');
             
             // Segue com o fluxo de autenticação e roteamento
             let isAuthenticated = await ServiceAuthentication.self_authenticate();
