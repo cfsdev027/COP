@@ -5,11 +5,11 @@ import { ServiceStorage } from '../services/service-storage.js';
 export const RegistryComponent = {
     container: null,
     title: null,
-    model: null,
+    schema: null,
     service: null,
     data: null,
 
-    async initAsync(containerId, title, model, service) {
+    async initAsync(containerId, title, schema, service) {
         try {
             if(!containerId || containerId === null) throw { stack: 'init', message_error: `'containerId' is null or empty.` };
             if(!title || title === null || title.trim() === '') throw { stack: 'init', message_error: `'title' is null or empty.` };
@@ -20,7 +20,7 @@ export const RegistryComponent = {
             if (!this.container) throw { stack: 'init', message_error: `Missing CONTAINER with id ${containerId}.` };
             
             this.title = title;
-            this.model = model;
+            this.schema = schema;
             this.service = service;
 
             this.data = await this.service.get();
@@ -92,6 +92,7 @@ export const RegistryComponent = {
     delete(id) {
         const elTr = document.querySelector(`tr[data-id='${id}']`);
         if(!elTr || elTr === null) return;
+        if(!confirm('Deseja realmente deletar o registro?')) return;
 
         (async () => {
             const entry = await this.service.delete(id);
@@ -131,7 +132,12 @@ export const RegistryComponent = {
     },
 
     filter: async function(expression) {
-        this.data = await this.service.fetchByExpression(expression);
+        if(!expression || expression === null || expression.trim() === '') {
+            this.data = await this.service.get();
+        } else {
+            this.data = await this.service.fetchByExpression(expression);
+        }
+        
         this.reloadGridviewContent();
     },
 
@@ -150,7 +156,7 @@ export const RegistryComponent = {
         const elThead = el('thead', ['datagrid-header']);
         const elTheadRow = el('tr', []);
 
-        Object.entries(new this.model()).forEach(([p, val]) => {
+        Object.entries(new this.schema.model()).forEach(([p, val]) => {
             const elTh = el('th', []);
             elTh.innerHTML = `${p} <span class="sort-icons">⇅</span>`;
             elTheadRow.append(elTh);
@@ -222,15 +228,45 @@ export const RegistryComponent = {
 
     makeGridviewContentNew() {
         const elRow = el('tr', [], { id: 'data-registry-row' });
-        Object.entries(new this.model()).forEach(([p, val]) => {
-            const type = this.getType(val);
-            
+        Object.entries(new this.schema.model()).forEach(([p, val]) => {
+            const s = this.schema[p];
+            if(!s || s === null) continue;
+
             const elTd = el('td');
-            elTd.setAttribute('data-column-type', type);
+            if(!s.display) elTd.style.display = 'none';
+            
+            elTd.setAttribute('data-column-type', s.type);
             elTd.setAttribute('data-column-name', p);
 
-            const elInput = el('input', ['datagrid-cell-input'], { type: type });
-            elInput.value = val;
+            const elInput = null;
+
+            switch(s.type) {
+                case 'select':
+                    elInput = el('select', ['datagrid-cell-input'], { type: s.type });
+                    
+                    const elOpt = el('option');
+                    elOpt.value = '';
+                    elOpt.text = '';
+
+                    elInput.append(elOpt);
+                    
+                    if(s.options){
+                        s.options.forEach(opt => {
+                            elOpt = el('option');
+                            elOpt.value = opt.value;
+                            elOpt.innerHTML = opt.text;
+
+                            elInput.append(elOpt);
+                        });
+                    }
+                    
+                    break;
+                default:
+                    elInput = el('input', ['datagrid-cell-input'], { type: type });
+                    break;
+            }
+
+            if(!s.editable) elInput.disabled = true;
             
             elTd.append(elInput);
             elRow.append(elTd);
@@ -256,14 +292,45 @@ export const RegistryComponent = {
         elRow.setAttribute('data-id', entry.id);
 
         Object.entries(entry).forEach(([p, val]) => {
-            const columnType = this.getType(val);
+            const s = this.schema[p];
+            if(!s || s === null) continue;
             
             const elTd = el('td');
             elTd.setAttribute('data-column-type', columnType);
             elTd.setAttribute('data-column-name', p);
+            if(!s.display) elTd.style.display = 'none';
 
-            const elInput = el('input', ['datagrid-cell-input'], { type: columnType });
-            elInput.value = val;
+            const elInput = null;
+
+            switch(s.type) {
+                case 'select':
+                    elInput = el('select', ['datagrid-cell-input'], { type: s.type });
+                    
+                    const elOpt = el('option');
+                    elOpt.value = '';
+                    elOpt.text = '';
+
+                    elInput.append(elOpt);
+                    
+                    if(s.options){
+                        s.options.forEach(opt => {
+                            elOpt = el('option');
+                            elOpt.value = opt.value;
+                            elOpt.innerHTML = opt.text;
+
+                            elInput.append(elOpt);
+                        });
+                    }
+                    
+                    break;
+                default:
+                    elInput = el('input', ['datagrid-cell-input'], { type: type });
+                    
+                    break;
+            }
+
+            elIput.value = val;
+            if(!s.editable) elInput.disabled = true;
             
             elTd.append(elInput);
             elRow.append(elTd);
