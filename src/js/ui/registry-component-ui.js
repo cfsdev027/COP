@@ -63,11 +63,19 @@ export const RegistryComponent = {
         const dynamic = this.makeDynamic(params);
         if (!dynamic || dynamic === null) return;
 
-        this.handleCreateRecord(dynamic);
+        (async () => {
+            const entry = await this.service.addEntry(dynamic);
+            if(!entry || entry === null) return;
+
+            this.data.push(entry);
+            this.reloadGridviewContent();
+
+            alert(`Registro ${entry.id} adicionado com sucesso.`);
+        })(); 
     },
 
     commit(id) {
-        const elTr = document.getElementById(id);
+        const elTr = document.querySelector(`tr[data-id=${id}]`);
         if(!elTr || elTr === null) return;
 
         const params = this.extractData(elTr);
@@ -76,7 +84,23 @@ export const RegistryComponent = {
         const dynamic = this.makeDynamic(params);
         if (!dynamic || dynamic === null) return;
 
-        this.handleCommitRecord(dynamic);
+        (async () => {
+            const entry = await this.service.updateEntry(dynamic);
+            
+            alert(`Registro ${entry.id} atualizado com sucesso.`);
+        })(); 
+    },
+
+    delete(id) {
+        const elTr = document.querySelector(`tr[data-id=${id}]`);
+        if(!elTr || elTr === null) return;
+
+        (async () => {
+            const entry = await this.service.delete(id);
+            this.updateData(entry);
+            
+            alert(`Registro ${entry.id} deletado com sucesso.`);
+        })(); 
     },
 
     extractData(elTr) {
@@ -96,13 +120,22 @@ export const RegistryComponent = {
         return dadosExtraidos;
     },
 
+    updateData(entry) {
+        const elTr = document.querySelector(`tr[data-id=${entry.id}]`);
+        if(!elTr || elTr === null) return;
+
+        Object.entries(entry).forEach(([p, val]) => {
+            const elTd = elTr.querySelector(`td[data-column-name=${p}]`);
+            if(elTd) {
+                const elInput = elTd.querySelector('input');
+                if(elInput) elInput.value = val;
+            }
+        });
+    },
+
     filter: async function(expression) {
         this.data = this.service.fetchByExpression(expression);
         this.reloadGridviewContent();
-    },
-
-    getHash() {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
     },
 
     getType(valor) {
@@ -126,17 +159,11 @@ export const RegistryComponent = {
         return result;
     },
 
-    makeFilter(expression) {
-        return (objeto) => true; 
-    },
-
     makeGridviewHeader() {
         const elThead = el('thead', ['datagrid-header']);
         const elTheadRow = el('tr', []);
-        
-        if(!this.data || this.data.length === 0) return elThead;
 
-        Object.entries(this.data[0]).forEach(([p, val]) => {
+        Object.entries(new this.model()).forEach(([p, val]) => {
             const elTh = el('th', []);
             elTh.innerHTML = `${p} <span class="sort-icons">⇅</span>`;
             elTheadRow.append(elTh);
@@ -272,10 +299,11 @@ export const RegistryComponent = {
         
         const btnEdit = el('button', ['btn-action', 'btn-action-edit'], { title: 'Salvar' });
         btnEdit.innerHTML = '✏️';
-        btnEdit.addEventListener('click', () => this.commit(rowId));
+        btnEdit.addEventListener('click', () => this.commit(entry.id));
         
         const btnDelete = el('button', ['btn-action', 'btn-action-delete'], { title: 'Excluir' });
         btnDelete.innerHTML = '🗑️';
+        btnDelete.addEventListener('click', () => this.delete(entry.id));
 
         elActionGroup.append(btnView, btnEdit, btnDelete);
         elTdActions.append(elActionGroup);
