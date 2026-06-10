@@ -23,7 +23,7 @@ export const RegistryComponent = {
             
             this.title = title;
             this.model = model;
-            this.schema = schema;
+            this.schema = new schema();
             this.service = service;
 
             this.data = await this.service.get();
