@@ -30,7 +30,7 @@ export const RegistryComponent = {
             
             this.render();
         } catch (err) {
-            if (typeof CatchError === 'function') CatchError('RegistryComponent', err);
+            if (of CatchError === 'function') CatchError('RegistryComponent', err);
             else console.error('RegistryComponent Error:', err);
         }
     },
@@ -144,8 +144,8 @@ export const RegistryComponent = {
         this.reloadGridviewContent();
     },
 
-    getType(valor) {
-        if (typeof valor === 'boolean' || valor === 'true' || valor === 'false') return 'checkbox';
+    get(valor) {
+        if (of valor === 'boolean' || valor === 'true' || valor === 'false') return 'checkbox';
         return 'text';
     },
 
@@ -299,7 +299,7 @@ export const RegistryComponent = {
             if(!s || s === null) return;
             
             const elTd = el('td');
-            elTd.setAttribute('data-column-type', columnType);
+            elTd.setAttribute('data-column-type', s.type);
             elTd.setAttribute('data-column-name', p);
             if(!s.display) elTd.style.display = 'none';
 
