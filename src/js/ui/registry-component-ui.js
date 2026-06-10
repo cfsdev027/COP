@@ -13,7 +13,7 @@ export const RegistryComponent = {
         try {
             if(!containerId || containerId === null) throw { stack: 'init', message_error: `'containerId' is null or empty.` };
             if(!title || title === null || title.trim() === '') throw { stack: 'init', message_error: `'title' is null or empty.` };
-            if(!model || model === null) throw { stack: 'init', message_error: `'model' is null or empty.` };
+            if(!schema || schema === null) throw { stack: 'init', message_error: `'schema' is null or empty.` };
             if(!service || service === null) throw { stack: 'init', message_error: `'service' is null or empty.` };
             
             this.container = document.getElementById(containerId);
