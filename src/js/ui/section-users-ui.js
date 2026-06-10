@@ -34,8 +34,10 @@ export const SectionUsersUI = {
         const elRegistryContainer = el('div', [], { id: USERS_CONTAINER_ID });
         
         this.container.append(elRegistryContainer);
-        
-        // Inicializa de fato o componente passando o ID do elemento da section que criamos acima
-        RegistryComponent.init(USERS_SECTION_ID, USERS_DEFAULT_TITLE, UserModel, ServiceUsers);
+
+        (async () => {
+            // Inicializa de fato o componente passando o ID do elemento da section que criamos acima
+            await RegistryComponent.initAsync(USERS_SECTION_ID, USERS_DEFAULT_TITLE, UserModel, ServiceUsers);
+        })();
     }
 };          
