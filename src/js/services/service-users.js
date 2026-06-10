@@ -1,4 +1,5 @@
 import {ServiceSupabase} from './service-supabase.js';
+import {ServiceQuery} from './service-query.js';
 
 export const ServiceUsers = {
     get: async function() {
@@ -30,6 +31,17 @@ export const ServiceUsers = {
             if (error) throw error;
 
             return data;
+        } catch(err) {
+            alert('An exception has ben throw in service Users.fetch: ' + err.message);
+            console.log('An exception has ben throw in service Users.fetch: ' + err.message);
+            return null;
+        }
+    },
+    fetchByExpression: async function(expression) {
+        try {
+            if (!expression || expression === null) return null;
+                    
+            return await ServiceQuery.fetch('users', expression);
         } catch(err) {
             alert('An exception has ben throw in service Users.fetch: ' + err.message);
             console.log('An exception has ben throw in service Users.fetch: ' + err.message);
