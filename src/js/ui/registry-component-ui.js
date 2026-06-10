@@ -230,7 +230,7 @@ export const RegistryComponent = {
         const elRow = el('tr', [], { id: 'data-registry-row' });
         Object.entries(new this.schema.model()).forEach(([p, val]) => {
             const s = this.schema[p];
-            if(!s || s === null) continue;
+            if(!s || s === null) return;
 
             const elTd = el('td');
             if(!s.display) elTd.style.display = 'none';
@@ -293,7 +293,7 @@ export const RegistryComponent = {
 
         Object.entries(entry).forEach(([p, val]) => {
             const s = this.schema[p];
-            if(!s || s === null) continue;
+            if(!s || s === null) return;
             
             const elTd = el('td');
             elTd.setAttribute('data-column-type', columnType);
