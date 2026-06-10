@@ -9,7 +9,7 @@ export const RegistryComponent = {
     service: null,
     data: null,
 
-    init(containerId, title, model, service) {
+    async initAsync(containerId, title, model, service) {
         try {
             if(!containerId || containerId === null) throw { stack: 'init', message_error: `'containerId' is null or empty.` };
             if(!title || title === null || title.trim() === '') throw { stack: 'init', message_error: `'title' is null or empty.` };
@@ -23,9 +23,7 @@ export const RegistryComponent = {
             this.model = model;
             this.service = service;
 
-            (async () => {
-                this.data = await this.service.get();
-            })();
+            this.data = await this.service.get();
             
             this.render();
         } catch (err) {
@@ -104,20 +102,19 @@ export const RegistryComponent = {
     },
 
     extractData(elTr) {
-        const dadosExtraidos = [];
-        const celulas = elTr.querySelectorAll('td[data-column-type][data-column-name]');
+        const data = [];
+        const columns = elTr.querySelectorAll('td[data-column-type][data-column-name]');
   
-        celulas.forEach(td => {
-            const propriedade = td.getAttribute('data-column-name');
-            const inputId = td.getAttribute('data-input-id');
-            const inputElement = document.getElementById(inputId);
+        columns.forEach(td => {
+            const prop = td.getAttribute('data-column-name');
+            const elInput = document.querySelector('input');
     
-            if (inputElement) {
-                dadosExtraidos.push({ propriedade, valor: inputElement.value });
+            if (elInput) {
+                data.push({ property: prop, value: elInput.value });
             }
         });
   
-        return dadosExtraidos;
+        return data;
     },
 
     updateData(entry) {
@@ -134,7 +131,7 @@ export const RegistryComponent = {
     },
 
     filter: async function(expression) {
-        this.data = this.service.fetchByExpression(expression);
+        this.data = await this.service.fetchByExpression(expression);
         this.reloadGridviewContent();
     },
 
@@ -143,19 +140,9 @@ export const RegistryComponent = {
         return 'text';
     },
 
-    async handleCreateRecord(data) {
-        if (!data || data === null) throw { stack: 'handleCreateRecord', message_error: `Invalid "data" eq. null.` };
-        this.data.push(data);
-        this.render();
-    },
-
-    async handleCommitRecord(record) {
-        if (!confirm(`Deseja salvar as alterações do registro ID: ${record.id || ''}?`)) return;
-    },
-
     makeDynamic(params) {
         const result = {};
-        params.forEach(item => { result[item.propriedade] = item.valor; });
+        params.forEach(item => { result[item.property] = item.value; });
         return result;
     },
 
@@ -228,23 +215,14 @@ export const RegistryComponent = {
 
     makeGridviewContent() {
         const elTbody = el('tbody', [], { id: 'gridview-tbody' });
-
-        const elNewRow = this.makeGridviewContentNew();
-        elTbody.append(elNewRow);
-        
-        const rows = this.makeGridviewContentRows();
-        if(!rows || rows === null) return elTbody;
-
-        rows.forEach((elRow) => {
-            elTbody.append(elRow);
-        });
+        this.appendGridviewContentRows(elTbody);
 
         return elTbody;
     },
 
     makeGridviewContentNew() {
         const elRow = el('tr', [], { id: 'data-registry-row' });
-        Object.entries(this.model).forEach(([p, val]) => {
+        Object.entries(new this.model()).forEach(([p, val]) => {
             const type = this.getType(val);
             
             const elTd = el('td');
@@ -347,14 +325,15 @@ export const RegistryComponent = {
         if (!elTbody) return;
         elTbody.innerHTML = '';
         
-        const elNewRow = this.makeGridviewContentNew();
-        elTbody.append(elNewRow);
-        
-        const rows = this.makeGridviewContentRows();
-        if(!rows || rows === null) return elTbody;
+        this.appendGridviewContentRows(elTbody);
+    },
 
-        rows.forEach((elRow) => {
-            elTbody.append(elRow);
-        });
+    // Método auxiliar interno para evitar repetição de código
+    appendGridviewContentRows(container) {
+        container.append(this.makeGridviewContentNew());
+        const rows = this.makeGridviewContentRows();
+        if (rows && rows.length > 0) {
+            rows.forEach(elRow => container.append(elRow));
+        }
     }
 };
