@@ -161,6 +161,10 @@ export const ServiceUsers = {
             return null;
         }
     },
+    addEntry: async function(entry) {
+        if(!entry || entry === null);
+        return await this.add(entry.username, entry.password, entry.documentType, entry.document, entry.role);
+    },
     update: async function(id,username,password,document_type,document,role,active) {
         try {
             const client = ServiceSupabase.client();
