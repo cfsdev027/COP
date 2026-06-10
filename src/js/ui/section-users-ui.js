@@ -2,34 +2,12 @@ import { USERS_SECTION_ID, USERS_CONTAINER_ID, USERS_DEFAULT_TITLE } from '../co
 import { RegistryComponent } from './registry-component-ui.js';
 import { el } from './el-ui.js';
 import { CatchError } from '../catch-error.js';
+import {UserModel} from '../models/user-model.js';
+import {ServiceUsers} from '../services/service-users.js';
 
 export const SectionUsersUI = {
     container: document.getElementById(USERS_SECTION_ID),
     
-    // Dados iniciais baseados no modelo fornecido
-    usersMockData: [
-        {
-            "id": "bf7406ae-e0a7-4ae8-9668-a85c57cfe43a",
-            "created_at": "2026-05-11 10:35:43",
-            "username": "admin",
-            "password": "123mudar",
-            "active": "true",
-            "document": "41.714.641/0001-95",
-            "document_type": "CNPJ",
-            "role": "ADMIN"
-        },
-        {
-            "id": "c5babc88-2ef3-49f3-9e44-010d92233544",
-            "created_at": "2026-05-13 12:46:32",
-            "username": "operador",
-            "password": "123mudar",
-            "active": "true",
-            "document": "157.769.760-06",
-            "document_type": "CPF",
-            "role": "DEFAULT"
-        }
-    ],
-
     init() {
         try {
             if (!this.container) throw { stack: 'SectionUsersUI.init', message_error: 'App main wrapper content element not found.' };
@@ -80,6 +58,6 @@ export const SectionUsersUI = {
         this.container.append(elRegistryContainer);
         
         // Inicializa de fato o componente passando o ID do elemento da section que criamos acima
-        RegistryComponent.init(USERS_SECTION_ID, USERS_DEFAULT_TITLE, [...this.usersMockData]);
+        RegistryComponent.init(USERS_SECTION_ID, USERS_DEFAULT_TITLE, UserModel, ServiceUsers);
     }
 };          
