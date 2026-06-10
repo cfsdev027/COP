@@ -122,7 +122,7 @@ export const RegistryComponent = {
     },
 
     updateData(entry) {
-        const elTr = document.querySelector(`tr[data-id=${entry.id}]`);
+        const elTr = document.querySelector(`tr[data-id='${entry.id}']`);
         if(!elTr || elTr === null) return;
 
         Object.entries(entry).forEach(([p, val]) => {
