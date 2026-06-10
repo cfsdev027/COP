@@ -103,11 +103,11 @@ export const RegistryComponent = {
 
     extractData(elTr) {
         const data = [];
-        const columns = elTr.querySelectorAll('td[data-column-type][data-column-name]');
+        const columns = elTr.querySelectorAll('td[data-column-name]');
   
         columns.forEach(td => {
             const prop = td.getAttribute('data-column-name');
-            const elInput = document.querySelector('input');
+            const elInput = td.querySelector('input');
     
             if (elInput) {
                 data.push({ property: prop, value: elInput.value });
