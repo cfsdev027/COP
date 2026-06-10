@@ -12,22 +12,9 @@ export const SectionUsersUI = {
         try {
             if (!this.container) throw { stack: 'SectionUsersUI.init', message_error: 'App main wrapper content element not found.' };
             
-            this.loadStyles();
             this.render();
         } catch (err) {
             CatchError('SectionUsersUI', err);
-        }
-    },
-
-    loadStyles() {
-        // Garante que o CSS da seção não seja duplicado se o init for chamado múltiplas vezes
-        if (!document.getElementById('css-section-users')) {
-            const link = el('link', [], {
-                id: 'css-section-users',
-                rel: 'stylesheet',
-                href: './section-users-ui.css?v=' + Date.now()
-            });
-            document.head.appendChild(link);
         }
     },
 
