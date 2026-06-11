@@ -119,6 +119,23 @@ export const RegistryComponent = {
         }
         
         this.reloadGridviewContent();
+        this.makeGridviewFooterPaginationContainer(this.calculateNumberOfPages(10), true);
+        this.makeGridviewFooterPaginationInfo(this.calculateNumberOfPages(10), true);
+    },
+
+    pagination: function(target) {
+        const currentPageController = e.currentTarget;
+        const activePageController = document.querySelector('.pagination-controller.active');
+        if(currentPageController === activePageController) return;
+
+        activePageController.classList.remove('active');
+        currentPageController.classList.add('active');
+
+        const index = currentPageController.getAttribute('data-page-index');
+        const offset = (index - 1) * 10;
+        
+        this.reloadGridviewContent(offset, 10);
+        this.makeGridviewFooterPaginationInfo(this.calculateNumberOfPages(10), true);
     },
 
     //#endregion
@@ -127,20 +144,74 @@ export const RegistryComponent = {
 
     makeGridviewFooter() {
         const elFooter = el('div', ['datagrid-footer', 'd-flex', 'justify-content-between', 'align-items-center', 'flex-wrap', 'gap-3']);
+        const numberOfPages = this.calculateNumberOfPages(10);
         
-        const elPagination = el('div', ['pagination-container', 'd-flex', 'gap-1']);
-        const btnPrev = el('button', ['btn-page'], { disabled: true }); btnPrev.innerText = 'Previous';
-        const btnP1 = el('button', ['btn-page']); btnP1.innerText = '1';
-        const btnP2 = el('button', ['btn-page', 'active']); btnP2.innerText = '2';
-        const btnP3 = el('button', ['btn-page']); btnP3.innerText = '3';
-        const btnNext = el('button', ['btn-page']); btnNext.innerText = 'Next';
-        elPagination.append(btnPrev, btnP1, btnP2, btnP3, btnNext);
-
-        const elInfo = el('div', ['d-flex', 'align-items-center', 'gap-3', 'text-muted', 'font-size-sm']);
-        elInfo.innerHTML = `<div>Showing 1 to 2 of 2 entries</div>`;
+        const elPagination = this.makeGridviewFooterPaginationContainer(numberOfPages);
+        const elInfo = this.makeGridviewFooterPaginationInfo(numberOfPages);
 
         elFooter.append(elPagination, elInfo);
         return elFooter;
+    },
+
+    makeGridviewFooterPaginationContainer(numberOfPages, rebuild = false) {
+        let elPagination = null;
+        if(rebuild) {
+            elPagination = document.querySelector('.pagination-container');
+            elPagination.innerHTML = '';
+
+            this.appendGridviewFooterPaginationControllers(elPagination, numberOfPages);
+            
+            return elPagination;
+        }
+
+        elPagination = el('div', ['pagination-container', 'd-flex', 'w-100', 'gap-1']);
+
+        this.appendGridviewFooterPaginationControllers(elPagination, numberOfPages);
+
+        return elPagination;
+    },
+
+    makeGridviewFooterPaginationInfo(numberOfPages, rebuild = false) {
+        let elInfo = null;
+        
+        if(rebuild) {
+            elInfo = document.querySelector('.pagination-info');
+            elInfo.innerHTML = `<div>Showing 1 to ${numberOfPages} of ${this.data.lenght} entries</div>`;
+            
+            return elInfo;
+        }
+        
+        elInfo = el('div', ['pagination-info', 'd-flex', 'align-items-center', 'w-100', 'gap-3', 'text-muted', 'font-size-sm']);
+        elInfo.innerHTML = `<div>Showing 1 to ${numberOfPages} of ${this.data.lenght} entries</div>`;
+
+        return elInfo;
+    },
+
+    makeGridviewFooterPaginationControllers(numberOfPages) {
+        const paginationControllers = [];
+        if(numberOfPages === 1) {
+            const elPageController = el('button', ['btn-page', 'pagination-controller', 'active']);
+            elPageController.setAttribute('data-page-index', 1);
+            elPageController.innerText = 1;
+            elPageController.disabled = true;
+            
+            paginationControllers.push(elPageController);
+        }
+        else {
+            for (let i = 1; i <= numberOfPages; i++) {
+                const elPageController = el('button', ['btn-page', 'pagination-controller']);
+                elPageController.setAttribute('data-page-index', i);
+                elPageController.innerText = i;
+                
+                elPageController.addEventListener('click', (e) => {
+                    this.pagination(e);
+                });
+            
+                paginationControllers.push(elPageController);
+            }
+        }
+
+        return paginationControllers;
     },
 
     makeInput(s, p) {
@@ -235,11 +306,11 @@ export const RegistryComponent = {
         return elRow;
     },
 
-    makeGridviewContentRows() {
+    makeGridviewContentRows(offset = 0, limit = 10) {
         const rows = [];
         if(!this.data || this.data === null) return rows;
 
-        this.data.forEach((entry) => {
+        this.data.slice(offset, limit).forEach((entry) => {
             const elRow = this.makeGridviewContentRow(entry);
             rows.push(elRow);
         });
@@ -374,12 +445,38 @@ export const RegistryComponent = {
 
     //#region AUX
 
-    appendGridviewContentRows(container) {
-        container.append(this.makeGridviewContentNew());
-        const rows = this.makeGridviewContentRows();
+    appendGridviewContentRows(container, offset = 0, limit = 10) {
+        const elGridviewContentNew = this.makeGridviewContentNew();
+        container.append(elGridviewContentNew);
+        
+        const rows = this.makeGridviewContentRows(offset, limit);
         if (rows && rows.length > 0) {
             rows.forEach(elRow => container.append(elRow));
         }
+    },
+
+    appendGridviewFooterPaginationControllers(elPagination, numberOfPages) {
+        const btnPrev = el('button', ['btn-page'], { disabled: true }); 
+        btnPrev.innerText = 'Previous';
+        
+        elPagination.append(btnPrev);
+
+        const paginationControllers = this.makeGridviewFooterPaginationControllers(numberOfPages);
+        paginationControllers.forEach(elPCtr => {
+            elPagination.append(elPCtr);
+        });
+
+        const btnNext = el('button', ['btn-page']); 
+        btnNext.innerText = 'Next';
+        
+        elPagination.append(btnNext);
+    }
+
+    calculateNumberOfPages(limit) {
+        if (limit < 1) return 1; 
+        if(!this.data || this.data === null || this.data.lenght < limit) return 1;
+    
+        return Math.ceil(this.data.lenght / limit);
     },
 
     extractData(elTr) {
@@ -404,12 +501,12 @@ export const RegistryComponent = {
         return result;
     },
 
-    reloadGridviewContent() {
+    reloadGridviewContent(offset = 0, limit = 10) {
         const elTbody = document.getElementById('gridview-tbody');
         if (!elTbody) return;
         elTbody.innerHTML = '';
         
-        this.appendGridviewContentRows(elTbody);
+        this.appendGridviewContentRows(elTbody, offset, limit);
     },
 
     updateData(entry) {
