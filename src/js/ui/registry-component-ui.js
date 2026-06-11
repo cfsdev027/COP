@@ -112,7 +112,7 @@ export const RegistryComponent = {
     },
 
     filter: async function(expression) {
-        if(!expression || expression === null || expression.trim() === '') {
+        if(!expression) {
             this.data = await this.service.get();
         } else {
             this.data = await this.service.fetchByExpression(expression);
@@ -347,19 +347,15 @@ export const RegistryComponent = {
         const elSearchInput = el('input', ['form-control', 'datagrid-search-input'], {
             id: 'datagrid-search-input',
             type: 'text', 
-            placeholder: 'Search by Keywords...' 
-        });
-        
-        elSearchInput.addEventListener('input', () => {
-            this.filter(elSearchInput.value);
+            placeholder: `ex: 'column:value' || {column1:value1||column2:value2} ...` 
         });
 
         const elReload = el('button', ['btn', 'btn-secondary'], { id: 'gridview-reload', role: 'button' });
-        elReload.innerHTML = `
-            <span class="d-inline-flex align-items-center gap-1">
-                <i class="bi bi-arrow-clockwise"></i>
-            </span>
-        `;
+        const elReloadSpan = el('span', ['d-inline-flex', 'align-items-center', 'gap-1']);
+        const elReloadI = el('i', ['bi', 'bi-arrow-clockwise']);
+
+        elReloadSpan.append(elReloadI);
+        elReload.append(elReloadSpan);
 
         elReload.addEventListener('click', () => {
             const elInput = document.getElementById('datagrid-search-input');
