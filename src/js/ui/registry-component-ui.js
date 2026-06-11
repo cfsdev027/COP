@@ -533,5 +533,4 @@ export const RegistryComponent = {
     },
 
     //#endregion
-
 };
