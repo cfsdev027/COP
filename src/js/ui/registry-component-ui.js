@@ -470,7 +470,7 @@ export const RegistryComponent = {
         btnNext.innerText = 'Next';
         
         elPagination.append(btnNext);
-    }
+    },
 
     calculateNumberOfPages(limit) {
         if (limit < 1) return 1; 
