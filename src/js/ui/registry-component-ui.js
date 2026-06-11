@@ -407,7 +407,7 @@ export const RegistryComponent = {
         }
     },
 
-    function toLowerCamelCase(str) {
+    toLowerCamelCase(str) {
         if (!str) return '';
 
         return str
