@@ -155,7 +155,7 @@ export const RegistryComponent = {
         const elTheadRow = el('tr', []);
 
         Object.entries(new this.model()).forEach(([p, val]) => {
-            const s = this.schema[p];
+            const s = this.schema[this.toLowerCamelCase(p)];
             if(!s || s === null) return;
             
             const elTh = el('th', []);
@@ -232,7 +232,7 @@ export const RegistryComponent = {
     makeGridviewContentNew() {
         const elRow = el('tr', [], { id: 'data-registry-row' });
         Object.entries(new this.model()).forEach(([p, val]) => {
-            const s = this.schema[p];
+            const s = this.schema[this.toLowerCamelCase(p)];
             if(!s || s === null) return;
 
             const elTd = el('td');
@@ -295,7 +295,7 @@ export const RegistryComponent = {
         elRow.setAttribute('data-id', entry.id);
 
         Object.entries(entry).forEach(([p, val]) => {
-            const s = this.schema[p];
+            const s = this.schema[this.toLowerCamelCase(p)];
             if(!s || s === null) return;
             
             const elTd = el('td');
@@ -405,5 +405,15 @@ export const RegistryComponent = {
         if (rows && rows.length > 0) {
             rows.forEach(elRow => container.append(elRow));
         }
+    },
+
+    function toLowerCamelCase(str) {
+        if (!str) return '';
+
+        return str
+            // Garante que toda a string comece em minúsculo (caso venha algo como 'Document_type')
+            .replace(/^([A-Z])/, (match) => match.toLowerCase())
+            // Encontra o '_' seguido de uma letra e a transforma em maiúscula
+            .replace(/_([a-z0-9])/g, (match, letter) => letter.toUpperCase());
     }
 };
