@@ -154,23 +154,44 @@ export const RegistryComponent = {
         const elThead = el('thead', ['datagrid-header']);
         const elTheadRow = el('tr', []);
 
+        const elTheadActions = el('th', []);
+        elTheadActions.innerText = 'Actions';
+
+        const columns = this.makeGridviewHeaderColumns();
+        if(!columns || columns === null) {
+            elTheadRow.append(elTheadActions);
+            elThead.append(elTheadRow);
+
+            return elThead;
+        }
+
+        columns.forEach(elColumn => {
+            elTheadRow.append(elColumn);
+        });
+        
+        elTheadRow.append(elTheadActions);
+        elThead.append(elTheadRow);
+        
+        return elThead;
+    },
+
+    makeGridviewHeaderColumns() {
+        const columns = [];
         Object.entries(new this.model()).forEach(([p, val]) => {
             const s = this.schema[this.toLowerCamelCase(p)];
             if(!s || s === null) return;
             
             const elTh = el('th', []);
-            elTh.innerHTML = `${p} <span class="sort-icons">⇅</span>`;
+            const elSpan = el('span', ['sort-icons']);
+            elSpan.innerHTML = '⇅';
+            elTh.append(elSpan);
+            
             if(!s.display) elTh.style.display = 'none';
             
-            elTheadRow.append(elTh);
+            columns.push(elTh);
         });
 
-        const elTheadActions = el('th', []);
-        elTheadActions.innerText = 'Action';
-        elTheadRow.append(elTheadActions);
-        
-        elThead.append(elTheadRow);
-        return elThead;
+        return columns;
     },
 
     makeSearch() {
@@ -241,35 +262,7 @@ export const RegistryComponent = {
             elTd.setAttribute('data-column-type', s.type);
             elTd.setAttribute('data-column-name', p);
 
-            let elInput = null;
-
-            switch(s.type) {
-                case 'select':
-                    elInput = el('select', ['datagrid-cell-input'], { type: s.type });
-                    
-                    let elOpt = el('option');
-                    elOpt.value = '';
-                    elOpt.text = '';
-
-                    elInput.append(elOpt);
-                    
-                    if(s.options){
-                        s.options.forEach(opt => {
-                            elOpt = el('option');
-                            elOpt.value = opt.value;
-                            elOpt.innerHTML = opt.text;
-
-                            elInput.append(elOpt);
-                        });
-                    }
-                    
-                    break;
-                default:
-                    elInput = el('input', ['datagrid-cell-input'], { type: s.type });
-                    break;
-            }
-
-            if(!s.editable) elInput.disabled = true;
+            const elInput = this.makeInput(s, p);
             
             elTd.append(elInput);
             elRow.append(elTd);
@@ -290,6 +283,42 @@ export const RegistryComponent = {
         return elRow;
     },
 
+    makeInput(s, p) {
+        let elInput = null;
+
+        switch(s.type) {
+            case 'select':
+                elInput = el('select', ['datagrid-cell-input'], { type: s.type });
+                    
+                let elOpt = el('option');
+                elOpt.value = '';
+                elOpt.text = '';
+
+                elInput.append(elOpt);
+                    
+                if(s.options){
+                    s.options.forEach(opt => {
+                        elOpt = el('option');
+                        elOpt.value = opt.value;
+                        elOpt.innerHTML = opt.text;
+
+                        elInput.append(elOpt);
+                    });
+                }
+                    
+                break;
+            default:
+                elInput = el('input', ['datagrid-cell-input'], { type: s.type });
+                break;
+        }
+
+        if(!s.editable) elInput.disabled = true;
+
+        elInput.setAttribute('data-property-name', p);
+
+        return elInput;
+    },
+
     makeGridviewContentRow(entry) {
         const elRow = el('tr', []);
         elRow.setAttribute('data-id', entry.id);
@@ -303,42 +332,20 @@ export const RegistryComponent = {
             elTd.setAttribute('data-column-name', p);
             if(!s.display) elTd.style.display = 'none';
 
-            let elInput = null;
-
-            switch(s.type) {
-                case 'select':
-                    elInput = el('select', ['datagrid-cell-input'], { type: s.type });
-                    
-                    let elOpt = el('option');
-                    elOpt.value = '';
-                    elOpt.text = '';
-
-                    elInput.append(elOpt);
-                    
-                    if(s.options){
-                        s.options.forEach(opt => {
-                            elOpt = el('option');
-                            elOpt.value = opt.value;
-                            elOpt.innerHTML = opt.text;
-
-                            elInput.append(elOpt);
-                        });
-                    }
-                    
-                    break;
-                default:
-                    elInput = el('input', ['datagrid-cell-input'], { type: s.type });
-                    
-                    break;
-            }
-
+            const elInput = this.makeInput(s, p);
             elInput.value = val;
-            if(!s.editable) elInput.disabled = true;
             
             elTd.append(elInput);
             elRow.append(elTd);
         });
 
+        const elTdActions = this.makeGridviewContentRowActions(entry);
+        elRow.append(elTdActions);
+
+        return elRow;
+    },
+
+    makeGridviewContentRowActions(entry) {
         const elTdActions = el('td', ['text-nowrap', 'datagrid-actions-cell']);
         const elActionGroup = el('div', ['d-flex', 'gap-1']);
         
@@ -355,9 +362,8 @@ export const RegistryComponent = {
 
         elActionGroup.append(btnView, btnEdit, btnDelete);
         elTdActions.append(elActionGroup);
-        elRow.append(elTdActions);
 
-        return elRow;
+        return elTdActions;
     },
 
     makeGridviewContentRows() {
