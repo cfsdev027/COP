@@ -2,8 +2,6 @@ import {UserModel} from '../models/user-model.js';
 
 export class UserSchema {
     constructor(){
-        this.model = UserModel;
-      
         this.id = {
             display: false,
             type: 'text',
