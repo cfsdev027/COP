@@ -327,7 +327,7 @@ export const RegistryComponent = {
             
             const elTh = el('th', []);
             const elSpan = el('span', ['sort-icons']);
-            elSpan.innerHTML = '⇅';
+            elSpan.innerHTML = ´${p} ⇅´;
             elTh.append(elSpan);
             
             if(!s.display) elTh.style.display = 'none';
