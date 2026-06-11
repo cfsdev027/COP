@@ -299,7 +299,10 @@ export const RegistryComponent = {
         const elTheadRow = el('tr', []);
 
         const elTheadActions = el('th', []);
-        elTheadActions.innerText = 'Actions';
+        const elTheadActionsSpan = el('span', ['sort-icons']);
+        elTheadActionsSpan.innerText = 'Actions';
+
+        elTheadActions.append(elTheadActionsSpan);
 
         const columns = this.makeGridviewHeaderColumns();
         if(!columns || columns === null) {
