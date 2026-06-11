@@ -1,5 +1,3 @@
-import {UserModel} from '../models/user-model.js';
-
 export class UserSchema {
     constructor(){
         this.id = {
