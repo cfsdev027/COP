@@ -137,14 +137,13 @@ export const RegistryComponent = {
     async filter(expression) {
         try {
             if(expression) {
-                this.data = await this.service.fetchByExpression(expression);
-            
+                await this.setDataAsync(await this.service.fetchByExpression(expression));
                 return;
             }
 
-            this.data = await this.service.get();
+            await this.setDataAsync(await this.service.get());
         } catch(err) {
-            this.data = null;
+            await this.setDataAsync(null);
         }
     },
 
@@ -161,10 +160,9 @@ export const RegistryComponent = {
         currentPageController.classList.add('active');
 
         const index = currentPageController.getAttribute('data-page-index');
-        const offset = (index - 1) * 10;
+        const offset = (index - 1) * this.limit;
         
-        this.reloadGridviewContent(offset, 10);
-        this.makeGridviewFooterPaginationInfo(this.calculateNumberOfPages(10), true);
+        this.makeGridviewContentWithData(offset, this.limit);
     },
 
     //#endregion
@@ -173,12 +171,12 @@ export const RegistryComponent = {
 
     makeGridviewFooter() {
         const elFooter = el('div', ['datagrid-footer', 'd-flex', 'justify-content-between', 'align-items-center', 'flex-wrap', 'gap-3'], { id: GRIDVIEW_FOOTER_ID });
-        const numberOfPages = this.calculateNumberOfPages(10);
         
         const elPagination = this.makeGridviewFooterPaginationContainer();
-        const elInfo = this.makeGridviewFooterPaginationInfo(numberOfPages);
+        const elInfo = this.makeGridviewFooterPaginationInfo();
 
         elFooter.append(elPagination, elInfo);
+        
         return elFooter;
     },
 
