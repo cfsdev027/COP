@@ -11,7 +11,8 @@ import {
     GRIDVIEW_PAGINATION_INFO_DETAILS_ID,
     GRIDVIEW_PAGINATION_CURREND_PAGE_ID,
     GRIDVIEW_PAGINATION_TOTAL_PAGES_ID,
-    GRIDVIEW_PAGINATION_COUNT_ID
+    GRIDVIEW_PAGINATION_COUNT_ID,
+    GRIDVIEW_TR_NEW_ID 
 } from '../config/ui/config-registry-component-ui.js';
 
 export const RegistryComponent = {
