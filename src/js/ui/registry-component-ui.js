@@ -2,6 +2,18 @@ import { el } from './el-ui.js';
 import { CatchError } from '../catch-error.js';
 import { ServiceStorage } from '../services/service-storage.js';
 
+import {
+    GRIDVIEW_HEADER_ID,
+    GRIDVIEW_HEADER_TITLE_ID,
+    GRIDVIEW_FOOTER_ID,
+    GRIDVIEW_PAGINATION_CONTAINER_ID,
+    GRIDVIEW_PAGINATION_INFO_ID,
+    GRIDVIEW_PAGINATION_INFO_DETAILS_ID,
+    GRIDVIEW_PAGINATION_CURREND_PAGE_ID,
+    GRIDVIEW_PAGINATION_TOTAL_PAGES_ID,
+    GRIDVIEW_PAGINATION_COUNT_ID
+} from '../config/ui/config-registry-component-ui.js';
+
 export const RegistryComponent = {
     container: null,
     title: null,
@@ -9,6 +21,16 @@ export const RegistryComponent = {
     schema: null,
     service: null,
     data: null,
+    limit = 10,
+
+    //#region DATA
+
+    async setDataAsync(value) {
+        this.data = value;
+        this.onSetDataAsync();
+    }
+
+    //#endregion
 
     //#region INIT
 
@@ -28,9 +50,10 @@ export const RegistryComponent = {
             this.schema = new schema();
             this.service = service;
 
-            this.data = await this.service.get();
-            
             this.render();
+
+            await this.setDataAsync(await this.service.get());
+            
         } catch (err) {
             if (typeof CatchError === 'function') CatchError('RegistryComponent', err);
             else console.error('RegistryComponent Error:', err);
@@ -42,9 +65,9 @@ export const RegistryComponent = {
         this.container.className = "datagrid-wrapper registry-component";
 
         // Bloco de cabeçalho superior unificado (Título + Busca)
-        const elHeaderBlock = el('div', ['datagrid-top-bar']);
+        const elHeaderBlock = el('div', ['datagrid-top-bar'], { id: GRIDVIEW_HEADER_ID});
         
-        const elTitle = el('h5', ['datagrid-title']);
+        const elTitle = el('h5', ['datagrid-title'], { id: GRIDVIEW_HEADER_TITLE_ID});
         elTitle.innerText = this.title;
         
         const elSearch = this.makeSearch();
@@ -61,7 +84,7 @@ export const RegistryComponent = {
     //#region EVENTS
 
     add() {
-        const elTr = document.getElementById('data-registry-row');
+        const elTr = document.getElementById(GRIDVIEW_TR_NEW_ID);
         if(!elTr || elTr === null) return;
 
         const params = this.extractData(elTr);
@@ -111,19 +134,25 @@ export const RegistryComponent = {
         })(); 
     },
 
-    filter: async function(expression) {
-        if(!expression) {
+    async filter(expression) {
+        try {
+            if(expression) {
+                this.data = await this.service.fetchByExpression(expression);
+            
+                return;
+            }
+
             this.data = await this.service.get();
-        } else {
-            this.data = await this.service.fetchByExpression(expression);
+        } catch(err) {
+            this.data = null;
         }
-        
-        this.reloadGridviewContent();
-        this.makeGridviewFooterPaginationContainer(this.calculateNumberOfPages(10), true);
-        this.makeGridviewFooterPaginationInfo(this.calculateNumberOfPages(10), true);
     },
 
-    pagination: function(target) {
+    async onSetDataAsync(value) {
+        this.makeGridviewWithData();
+    }
+
+    pagination(target) {
         const currentPageController = e.currentTarget;
         const activePageController = document.querySelector('.pagination-controller.active');
         if(currentPageController === activePageController) return;
@@ -143,48 +172,70 @@ export const RegistryComponent = {
     //#region MAKE
 
     makeGridviewFooter() {
-        const elFooter = el('div', ['datagrid-footer', 'd-flex', 'justify-content-between', 'align-items-center', 'flex-wrap', 'gap-3']);
+        const elFooter = el('div', ['datagrid-footer', 'd-flex', 'justify-content-between', 'align-items-center', 'flex-wrap', 'gap-3'], { id: GRIDVIEW_FOOTER_ID });
         const numberOfPages = this.calculateNumberOfPages(10);
         
-        const elPagination = this.makeGridviewFooterPaginationContainer(numberOfPages);
+        const elPagination = this.makeGridviewFooterPaginationContainer();
         const elInfo = this.makeGridviewFooterPaginationInfo(numberOfPages);
 
         elFooter.append(elPagination, elInfo);
         return elFooter;
     },
 
-    makeGridviewFooterPaginationContainer(numberOfPages, rebuild = false) {
-        let elPagination = null;
-        if(rebuild) {
-            elPagination = document.querySelector('.pagination-container');
-            elPagination.innerHTML = '';
+    makeGridviewFooterWithData(limit = 0) {
+        if(limit < 1) limit = this.limit;
+        const numberOfPages = this.calculateNumberOfPages(limit);
+        
+        this.makeGridviewFooterPaginationContainerWithData(numberOfPages, limit);
+        this.makeGridviewFooterPaginationInfoWithData(numberOfPages, limit);
+        
+        return elFooter;
+    },
 
-            this.appendGridviewFooterPaginationControllers(elPagination, numberOfPages);
-            
-            return elPagination;
-        }
-
-        elPagination = el('div', ['pagination-container', 'd-flex', 'w-100', 'gap-1']);
-
-        this.appendGridviewFooterPaginationControllers(elPagination, numberOfPages);
+    makeGridviewFooterPaginationContainer() {
+        const elPagination = el('div', ['pagination-container', 'd-flex', 'w-100', 'gap-1'], { id: GRIDVIEW_PAGINATION_CONTAINER_ID });
 
         return elPagination;
     },
 
-    makeGridviewFooterPaginationInfo(numberOfPages, rebuild = false) {
-        let elInfo = null;
+    makeGridviewFooterPaginationContainerWithData(numberOfPages, limit) {
+        let elPagination = document.getElementById(GRIDVIEW_PAGINATION_CONTAINER_ID);
+        if(!elPagination || elPagination === null) return;
+
+        elPagination.innerHTML = '';
+
+        const btnPrev = el('button', ['btn-page'], { disabled: true }); 
+        btnPrev.innerText = 'Previous';
         
-        if(rebuild) {
-            elInfo = document.querySelector('.pagination-info');
-            elInfo.innerHTML = `<div>Showing 1 to ${numberOfPages} of ${this.data.lenght} entries</div>`;
-            
-            return elInfo;
-        }
+        elPagination.append(btnPrev);
+
+        const paginationControllers = this.makeGridviewFooterPaginationControllers(numberOfPages);
+        paginationControllers.forEach(elPCtr => {
+            elPagination.append(elPCtr);
+        });
+
+        const btnNext = el('button', ['btn-page']); 
+        btnNext.innerText = 'Next';
         
-        elInfo = el('div', ['pagination-info', 'd-flex', 'align-items-center', 'w-100', 'gap-3', 'text-muted', 'font-size-sm']);
-        elInfo.innerHTML = `<div>Showing 1 to ${numberOfPages} of ${this.data.lenght} entries</div>`;
+        elPagination.append(btnNext);
+    },
+
+    makeGridviewFooterPaginationInfo() {
+        const elInfo = el('div', ['pagination-info', 'd-flex', 'align-items-center', 'w-100', 'gap-3', 'text-muted', 'font-size-sm'], { id: GRIDVIEW_PAGINATION_INFO_ID});
 
         return elInfo;
+    },
+
+    makeGridviewFooterPaginationInfoWithData(numberOfPages, limit) {
+        const elInfo = document.getElementById(GRIDVIEW_PAGINATION_INFO_ID);
+        if(!elInfo || elInfo === null) return;
+
+        elInfo.innerHTML = '';
+
+        const elInfoDetails = el('div', ['gridview-pagination-info-details'], { id: GRIDVIEW_PAGINATION_INFO_DETAILS_ID});
+        elInfoDetails.innerHTML = `Showing <span id='${GRIDVIEW_PAGINATION_CURREND_PAGE_ID}'>1</span> to <span id='${GRIDVIEW_PAGINATION_TOTAL_PAGES_ID}'>${numberOfPages}</span> of <span id='${GRIDVIEW_PAGINATION_COUNT_ID}'>${this.data.lenght}</span> entries`;
+        
+        elInfo.append(elInfoDetails);
     },
 
     makeGridviewFooterPaginationControllers(numberOfPages) {
@@ -266,6 +317,11 @@ export const RegistryComponent = {
         return elCard;
     },
 
+    makeGridviewWithData() {
+        this.makeGridviewContentWithData();
+        THIS.makeGridviewFooterWithData();
+    },
+
     makeGridviewContent() {
         const elTbody = el('tbody', [], { id: 'gridview-tbody' });
         this.appendGridviewContentRows(elTbody);
@@ -273,8 +329,25 @@ export const RegistryComponent = {
         return elTbody;
     },
 
+    makeGridviewContentWithData(offset = 0, limit = 0) {
+        const elTbody = document.getElementById('gridview-tbody');
+        if(!elTbody || elTbody === null) return;
+        
+        elTbody.innerHTML = '';
+
+        const elGridviewContentNew = this.makeGridviewContentNew();
+        elTbody.append(elGridviewContentNew);
+
+        if(limit < 1) limit = this.limit;
+        
+        const rows = this.makeGridviewContentRows(offset, limit);
+        if (rows && rows.length > 0) {
+            rows.forEach(elRow => elTbody.append(elRow));
+        }
+    },
+
     makeGridviewContentNew() {
-        const elRow = el('tr', [], { id: 'data-registry-row' });
+        const elRow = el('tr', [], { id: GRIDVIEW_TR_NEW_ID });
         Object.entries(new this.model()).forEach(([p, val]) => {
             const s = this.schema[this.toLowerCamelCase(p)];
             if(!s || s === null) return;
