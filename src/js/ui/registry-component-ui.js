@@ -149,7 +149,7 @@ export const RegistryComponent = {
 
     async onSetDataAsync(value) {
         this.makeGridviewWithData();
-    }
+    },
 
     pagination(target) {
         const currentPageController = e.currentTarget;
