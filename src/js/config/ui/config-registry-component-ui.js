@@ -1,3 +1,10 @@
+export const GRIDVIEW_HEADER_ID = 'gridview-header';
+export const GRIDVIEW_HEADER_TITLE_ID = 'gridview-header_title';
+export const GRIDVIEW_FOOTER_ID = 'gridview-footer';
+export const GRIDVIEW_PAGINATION_CONTAINER_ID = 'gridview-pagination-container';
+export const GRIDVIEW_PAGINATION_INFO_ID'gridview-pagination-info';
+export const GRIDVIEW_PAGINATION_INFO_DETAILS_ID'gridview-pagination-info-details';
 export const GRIDVIEW_PAGINATION_CURREND_PAGE_ID = 'gridview-pagination-current-page';
 export const GRIDVIEW_PAGINATION_TOTAL_PAGES_ID = 'gridview-pagination-total-pages';
 export const GRIDVIEW_PAGINATION_COUNT_ID = 'gridview-pagination-count';
+export const GRIDVIEW_TR_NEW_ID = 'gridview-tr-new';
