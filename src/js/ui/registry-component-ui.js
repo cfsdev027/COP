@@ -27,8 +27,8 @@ export const RegistryComponent = {
 
     async setDataAsync(value) {
         this.data = value;
-        this.onSetDataAsync();
-    }
+        await this.onSetDataAsync();
+    },
 
     //#endregion
 
