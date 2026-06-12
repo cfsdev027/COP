@@ -21,7 +21,7 @@ export const RegistryComponent = {
     schema: null,
     service: null,
     data: null,
-    limit = 10,
+    limit: 10,
 
     //#region DATA
 
