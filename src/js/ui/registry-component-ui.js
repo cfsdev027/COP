@@ -148,7 +148,7 @@ export const RegistryComponent = {
         }
     },
 
-    async onSetDataAsync(value) {
+    async onSetDataAsync() {
         this.makeGridviewWithData();
     },
 
