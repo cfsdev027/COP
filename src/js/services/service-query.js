@@ -88,6 +88,7 @@ export const ServiceQuery = {
     },
   
     applyFilter: async function(query, filter) {
+        let error = null;
         switch(filter.type) {
             case 'simple':
                 query = query.eq(filter.property, filter.value);
@@ -96,10 +97,11 @@ export const ServiceQuery = {
                 query = await this.applyOperator(query, filter);
                 break;
             default:
-               throw { stack: 'ServiceQuery.applyFilter', message: 'Invalid filter.' };
-
-            return query;
+                error = { stack: 'ServiceQuery.applyFilter', message: 'Invalid filter.' };
+                break;
         }
+
+        return { data: query, error: error};
     },
   
     applyOperator: async function(query, filter) {
