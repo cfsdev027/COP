@@ -72,7 +72,7 @@ export const ServiceQuery = {
                 error
             } = await query.data;
 
-            if (data) throw error;
+            if (error) throw error;
 
             return data; // Retorna um array de resultados que batem com o filtro
         } catch (err) {
