@@ -67,7 +67,14 @@ export const ServiceQuery = {
 
             if (query.error) throw error;
 
-            return query.data; // Retorna um array de resultados que batem com o filtro
+            const {
+                data,
+                error
+            } = await query.data;
+
+            if (data) throw error;
+
+            return data; // Retorna um array de resultados que batem com o filtro
         } catch (err) {
             if(err.stack) {
                 alert(`${err.stack}: ${err.message}`);
