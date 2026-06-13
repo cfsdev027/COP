@@ -555,12 +555,26 @@ export const RegistryComponent = {
         const columns = elTr.querySelectorAll('td[data-column-name]');
   
         columns.forEach(td => {
+            const type = td.getAttribute('data-column-type');
             const prop = td.getAttribute('data-column-name');
-            const elInput = td.querySelector('input');
-    
-            if (elInput) {
-                data.push({ property: prop, value: elInput.value });
+
+            let input, value = null;
+            switch(type) {
+                case 'checkbox':
+                    input = td.querySelector('input');
+                    if(input) value = input.checked;
+                    break;
+                case 'select':
+                    input = td.querySelector('select');
+                    if(input) value = input.value;
+                    break;
+                default:
+                    input = td.querySelector('input');
+                    if(input) value = input.value;
+                    break;
             }
+    
+            data.push({ property: prop, value: value });
         });
   
         return data;
