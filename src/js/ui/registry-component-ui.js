@@ -263,7 +263,7 @@ export const RegistryComponent = {
         return paginationControllers;
     },
 
-    makeInput(s, p) {
+    makeInput(s, p, isEditable = false) {
         let elInput = null;
 
         switch(s.type) {
@@ -271,7 +271,7 @@ export const RegistryComponent = {
                 elInput = el('select', ['datagrid-cell-input'], { type: s.type });
                     
                 let elOpt = el('option');
-                elOpt.value = '';
+                elOpt.value = null;
                 elOpt.text = '';
 
                 elInput.append(elOpt);
@@ -285,14 +285,27 @@ export const RegistryComponent = {
                         elInput.append(elOpt);
                     });
                 }
+
+                if (!s.default) elInput.value = s.default;
                     
                 break;
+                
+            case 'checkbox':
+                elInput = el('input', ['datagrid-cell-input'], { type: s.type });
+                if (!s.default) elInput.checked = s.default;
+                
+                break;
+                
             default:
                 elInput = el('input', ['datagrid-cell-input'], { type: s.type });
+                if (!s.default) elInput.value = s.default;
+                
                 break;
         }
 
-        if(!s.editable) elInput.disabled = true;
+        if(!isEditable && !s.editable) {
+            elInput.disabled = true;
+        }
 
         elInput.setAttribute('data-property-name', p);
 
@@ -356,7 +369,7 @@ export const RegistryComponent = {
             elTd.setAttribute('data-column-type', s.type);
             elTd.setAttribute('data-column-name', p);
 
-            const elInput = this.makeInput(s, p);
+            const elInput = this.makeInput(s, p, true);
             
             elTd.append(elInput);
             elRow.append(elTd);
