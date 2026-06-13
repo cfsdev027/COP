@@ -319,7 +319,7 @@ export const RegistryComponent = {
 
     makeGridviewWithData() {
         this.makeGridviewContentWithData();
-        THIS.makeGridviewFooterWithData();
+        this.makeGridviewFooterWithData();
     },
 
     makeGridviewContent() {
