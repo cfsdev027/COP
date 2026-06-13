@@ -403,7 +403,12 @@ export const RegistryComponent = {
             if(!s.display) elTd.style.display = 'none';
 
             const elInput = this.makeInput(s, p);
-            elInput.value = val;
+
+            if(s.type === 'checkbox') {
+                elInput.checked = val;
+            } else {
+                elInput.value = val;
+            }
             
             elTd.append(elInput);
             elRow.append(elTd);
