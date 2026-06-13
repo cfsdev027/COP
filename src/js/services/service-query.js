@@ -88,7 +88,7 @@ export const ServiceQuery = {
     },
   
     applyFilter: async function(query, filter) {
-        switch(filter) {
+        switch(filter.type) {
             case 'simple':
                 query = query.eq(filter.property, filter.value);
                 break;
