@@ -53,7 +53,8 @@ export const RegistryComponent = {
 
             this.render();
 
-            await this.setDataAsync(await this.service.get());
+            const data = await this.service.get();
+            await this.setDataAsync(data);
             
         } catch (err) {
             if (typeof CatchError === 'function') CatchError('RegistryComponent', err);
