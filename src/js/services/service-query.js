@@ -65,15 +65,9 @@ export const ServiceQuery = {
                 query = await this.applyFilter(query, filter);
             }
 
-            // Executa a query trazendo a lista de resultados (ou use .maybeSingle() se esperar sempre um)
-            const {
-                data,
-                error
-            } = await query;
+            if (query.error) throw error;
 
-            if (error) throw error;
-
-            return data; // Retorna um array de resultados que batem com o filtro
+            return query.data; // Retorna um array de resultados que batem com o filtro
         } catch (err) {
             if(err.stack) {
                 alert(`${err.stack}: ${err.message}`);
