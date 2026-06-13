@@ -188,8 +188,6 @@ export const RegistryComponent = {
         
         this.makeGridviewFooterPaginationContainerWithData(numberOfPages, limit);
         this.makeGridviewFooterPaginationInfoWithData(numberOfPages, limit);
-        
-        return elFooter;
     },
 
     makeGridviewFooterPaginationContainer() {
