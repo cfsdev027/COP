@@ -231,7 +231,7 @@ export const RegistryComponent = {
         elInfo.innerHTML = '';
 
         const elInfoDetails = el('div', ['gridview-pagination-info-details'], { id: GRIDVIEW_PAGINATION_INFO_DETAILS_ID});
-        elInfoDetails.innerHTML = `Showing <span id='${GRIDVIEW_PAGINATION_CURREND_PAGE_ID}'>1</span> to <span id='${GRIDVIEW_PAGINATION_TOTAL_PAGES_ID}'>${numberOfPages}</span> of <span id='${GRIDVIEW_PAGINATION_COUNT_ID}'>${this.data.lenght}</span> entries`;
+        elInfoDetails.innerHTML = `Showing <span id='${GRIDVIEW_PAGINATION_CURREND_PAGE_ID}'>1</span> to <span id='${GRIDVIEW_PAGINATION_TOTAL_PAGES_ID}'>${numberOfPages}</span> of <span id='${GRIDVIEW_PAGINATION_COUNT_ID}'>${this.data.length}</span> entries`;
         
         elInfo.append(elInfoDetails);
     },
@@ -545,9 +545,9 @@ export const RegistryComponent = {
 
     calculateNumberOfPages(limit) {
         if (limit < 1) return 1; 
-        if(!this.data || this.data === null || this.data.lenght < limit) return 1;
+        if(!this.data || this.data === null || this.data.length < limit) return 1;
     
-        return Math.ceil(this.data.lenght / limit);
+        return Math.ceil(this.data.length / limit);
     },
 
     extractData(elTr) {
