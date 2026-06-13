@@ -3,42 +3,49 @@ export class UserSchema {
         this.id = {
             display: false,
             type: 'text',
+            default: null,
             editable: false
         };
       
         this.createdAt = {
             display: false,
             type: 'datetime-local',
+            default: null,
             editable: false
         };
       
         this.username = {
             display: true,
             type: 'text',
+            default: null,
             editable: true
         };
       
         this.password = {
             display: true,
             type: 'password',
+            default: null,
             editable: true
         };
       
         this.active = {
             display: true,
             type: 'checkbox',
+            default: true,
             editable: false
         };
       
         this.document = {
             display: true,
             type: 'text',
+            default: null,
             editable: true
         };
       
         this.documentType = {
             display: true,
             type: 'select',
+            default: null,
             options: [
                 {
                   text:'CPF',
@@ -55,6 +62,7 @@ export class UserSchema {
         this.role = {
             display: true,
             type: 'select',
+            default: null,
             options: [
                 {
                     text: 'DEFAULT',
