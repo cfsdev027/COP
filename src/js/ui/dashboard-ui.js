@@ -145,12 +145,16 @@ export const DashboardUI = {
             metricsContainer.innerHTML = '';
 
             const elMetricsHeader = el('div', ['d-flex', 'w-100']);
-            const elMetricsHeaderTitle = el('h2', ['m-3', 'w-100']);
+            const elMetricsHeaderTitle = el('h2', ['w-100']);
             elMetricsHeaderTitle.innerHTML = 'DASHBOAR DE ORDENS DE PRODUÇÃO (OPs)';
             elMetricsHeaderTitle.style.fontWeight = 'bold';
+            elMetricsHeaderTitle.style.textAlign = 'center';
+            elMetricsHeaderTitle.style.margin = '0px !important';
 
-             const elMetricsHeaderSubTitle = el('h5', ['m-1', 'w-100']);
+             const elMetricsHeaderSubTitle = el('h5', ['w-100']);
             elMetricsHeaderSubTitle.innerHTML = 'OPs por status de atividade';
+            elMetricsHeaderSubTitle.style.textAlign = 'center';
+            elMetricsHeaderSubTitle.style.margin = '0px !important';
 
             elMetricsHeader.append(elMetricsHeaderTitle);
             elMetricsHeader.append(elMetricsHeaderSubTitle);
