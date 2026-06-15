@@ -47,7 +47,7 @@ export const SidebarUI = {
         const elNavbarBrand = el('a', ['navbar-brand', 'sidebar-header'], { id: 'navbar-brand', href: `/COP?t=${Date.now()}` });
         elNavbarBrand.innerHTML = '<i class="bi bi-gear-fill logo-icon"></i> <span class="logo-text">OP-Control</span>';
 
-        const elNavbarGroup = el('div', ['navbar-toggler', 'btn-group'], { role: 'group' });
+        const elNavbarGroup = el('div', ['navbar-toggler-group', 'navbar-toggler', 'btn-group'], { role: 'group' });
         
         const elUserInfoToggler = el('button', ['btn', 'btn-dark', 'user-info-toggler', 'pr-1'], { type: 'button' });
         elUserInfoToggler.addEventListener('click', () => {
