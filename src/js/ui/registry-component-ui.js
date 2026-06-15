@@ -154,7 +154,7 @@ export const RegistryComponent = {
     },
 
     pagination(target) {
-        const currentPageController = e.currentTarget;
+        const currentPageController = target.currentTarget;
         const activePageController = document.querySelector('.pagination-controller.active');
         if(currentPageController === activePageController) return;
 
