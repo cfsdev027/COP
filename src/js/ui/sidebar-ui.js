@@ -74,7 +74,7 @@ export const SidebarUI = {
 
         elNavbarGroup.append(elUserInfoToggler, elLogoutToggler, elNavbarToggler);
 
-        const elNavbarCollapse = el('div', ['collapse', 'navbar-collapse', 'w-100'], { id: 'navbar-collapse' });
+        const elNavbarCollapse = el('div', ['collapse', 'navbar-collapse', 'd-block', 'd-md-none', 'w-100'], { id: 'navbar-collapse-mobile' });
         
         elNavbarContainer.append(elNavbarBrand, elNavbarGroup, elNavbarCollapse);
         this.container.append(elNavbarContainer);
@@ -98,7 +98,7 @@ export const SidebarUI = {
     },
 
     navbarCollapseController(opt) {
-        const elNavbarCollapse = document.getElementById('navbar-collapse');
+        const elNavbarCollapse = document.getElementById('navbar-collapse-mobile');
         elNavbarCollapse.innerHTML = '';
         
         const currentState = ServiceStorage.get('COP_NAVBAR_CURRENT');
