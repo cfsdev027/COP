@@ -27,10 +27,11 @@ body {
     flex: 1;
     display: flex !important;
     flex-direction: column !important;
+    padding-top: 63px;
 }
 
 @media (min-width: 768px) {
     .main-content {
-        padding-left: 300px;
+        padding-left: 300px !important;
     }
 }
