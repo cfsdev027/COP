@@ -28,6 +28,7 @@ window.addEventListener('DOMContentLoaded', () => {
             appendStyleSheetWithoutCache('style.css');
             appendStyleSheetWithoutCache('sidebar.css');
             appendStyleSheetWithoutCache('gridview-ui.css');
+            appendStyleSheetWithoutCache('dashboard-ui.css');
             appendStyleSheetWithoutCache('section-ui.css');
             appendStyleSheetWithoutCache('section-login-ui.css');
             appendStyleSheetWithoutCache('section-users-ui.css');
