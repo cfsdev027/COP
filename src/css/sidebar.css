@@ -79,6 +79,6 @@
     }
 
     #navbar-collapse-desktop {
-       display: flex !important;
+       display: block !important;
     }
 }
