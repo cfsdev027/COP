@@ -18,6 +18,6 @@
 
 @media (min-width: 768px) {
     .section-base {
-        padding: 1rem !important;
+        padding: 0rem 1rem 1rem 1rem !important;
     }
 }
