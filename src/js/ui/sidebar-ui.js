@@ -74,7 +74,7 @@ export const SidebarUI = {
 
         elNavbarGroup.append(elUserInfoToggler, elLogoutToggler, elNavbarToggler);
 
-        const elNavbarCollapseMobile = el('div', ['collapse', 'navbar-collapse', 'd-block', 'd-md-none', 'w-100'], { id: 'navbar-collapse-mobile' });
+        const elNavbarCollapseMobile = el('div', ['collapse', 'navbar-collapse', 'd-none', 'w-100'], { id: 'navbar-collapse-mobile' });
         const elNavbarCollapseDesktop = el('div', ['collapse', 'navbar-collapse', 'd-none', 'd-md-block', 'w-100'], { id: 'navbar-collapse-desktop' });
         this.makeOptionsMenu(elNavbarCollapseDesktop);
         
