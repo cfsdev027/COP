@@ -95,6 +95,7 @@ export const SectionLoginUI = {
         const card = el('div', ['card', 'border-0', 'shadow-lg', 'p-4', 'p-md-5']);
         card.style.width = '100%';
         card.style.borderRadius = '16px';
+        card.style.maxWidth = "600px";
 
         const form = el('form', ['d-grid']);
         
