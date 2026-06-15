@@ -240,7 +240,7 @@ export const DashboardUI = {
 
     makeSearch() {
         const elSearchWrapper = el('div', ['op-status-search-wrapper', 'w-100']);
-        const elSearchGroup = el('div', ['input-group', 'op-status-search-group']);
+        const elSearchGroup = el('div', ['input-group', 'op-status-search-group'], { margin: '1rem 0rem 1rem 0rem !important;' });
         const elSearchInput = el('input', ['form-control', 'op-status-search-input'], {
             id: 'op-status-search-input',
             type: 'text', 
