@@ -129,7 +129,7 @@ export const DashboardUI = {
         this.section.innerHTML = '';
 
         const gridOpStatus = el('div', ['card', 'grid-metrics', 'grid-op-status'], { id: 'grid-op-status' });
-        gridOpStatus.style.padding = '1rem important';
+        gridOpStatus.style.padding = '1rem !important';
         const gridEtapasDispatch = el('div', ['grid-metrics', 'grid-etapas-dispatch'], { id: 'grid-etapas-dispatch' });
 
         this.section.append(gridOpStatus);
