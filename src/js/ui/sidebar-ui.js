@@ -38,6 +38,7 @@ export const SidebarUI = {
         this.container.className = "sidebar navbar navbar-expand-lg navbar-dark bg-dark";
 
         const elNavbarContainer = el('div', ['container-fluid']);
+        elNavbarContainer.style.maxWidth = '992px !important';
         
         const elNavbarBrand = el('a', ['navbar-brand', 'sidebar-header'], { id: 'navbar-brand', href: `/COP?t=${Date.now()}` });
         elNavbarBrand.innerHTML = '<i class="bi bi-gear-fill logo-icon"></i> <span class="logo-text">OP-Control</span>';
