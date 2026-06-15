@@ -158,8 +158,17 @@ export const DashboardUI = {
             elMetricsHeaderSubTitle.style.textAlign = 'center';
             elMetricsHeaderSubTitle.style.margin = '0px !important';
 
+            const elMetricsFilters = el('div', ['d-flex', 'w-100']);
+            elMetricsFilters.style.flexDirection = 'row';
+
+            const elSearch = this.makeSearch();
+
+            elMetricsFilters.append(elSearch);
+
             elMetricsHeader.append(elMetricsHeaderTitle);
             elMetricsHeader.append(elMetricsHeaderSubTitle);
+            elMetricsHeader.append(elMetricsFilters);
+            
             metricsContainer.append(elMetricsHeader);
             
             this.config.ops.forEach(m => {
@@ -228,4 +237,37 @@ export const DashboardUI = {
         await this.initDataOpStatusAsync();
         await this.initDataEtapasDispatcherAsync();
     },
+
+    makeSearch() {
+        const elSearchWrapper = el('div', ['op-status-search-wrapper', 'w-100']);
+        const elSearchGroup = el('div', ['input-group', 'op-status-search-group']);
+        const elSearchInput = el('input', ['form-control', 'op-status-search-input'], {
+            id: 'op-status-search-input',
+            type: 'text', 
+            placeholder: `ex: '123456...` 
+        });
+
+        const elReload = el('button', ['btn', 'btn-secondary'], { id: 'gridview-reload', role: 'button' });
+        const elReloadSpan = el('span', ['d-inline-flex', 'align-items-center', 'gap-1']);
+        const elReloadI = el('i', ['bi', 'bi-arrow-clockwise']);
+
+        elReloadSpan.append(elReloadI);
+        elReload.append(elReloadSpan);
+
+        elReload.addEventListener('click', () => {
+            const elInput = document.getElementById('op-status-search-input');
+            if(!elInput || elInput === null) return;
+            
+            this.filter(elInput.value);
+        });
+
+        elSearchGroup.append(elSearchInput, elReload);
+        elSearchWrapper.append(elSearchGroup);
+        
+        return elSearchWrapper;
+    },
+
+    filter(value) {
+        
+    }
 };
