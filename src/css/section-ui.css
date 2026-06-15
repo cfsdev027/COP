@@ -16,3 +16,9 @@
     margin-top: 0 !important; /* Remove qualquer espaço residual no topo */
     padding-top: 4rem !important;
 }
+
+@media (min-width: 768px) {
+    .section-base {
+        padding: 1rem !important;
+    }
+}
