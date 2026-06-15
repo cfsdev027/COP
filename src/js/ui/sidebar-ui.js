@@ -35,7 +35,11 @@ export const SidebarUI = {
             message_error: 'el is not a function.'
         };
 
-        this.container.className = "sidebar navbar navbar-expand-lg navbar-dark bg-dark";
+        this.container.classList.add('sidebar');
+        this.container.classList.add('navbar-nav');
+        this.container.classList.add('navbar-expand-lg');
+        this.container.classList.add('navbar-dark');
+        this.container.classList.add('bg-dark');
 
         const elNavbarContainer = el('div', ['container-fluid']);
         elNavbarContainer.style.maxWidth = '992px !important';
