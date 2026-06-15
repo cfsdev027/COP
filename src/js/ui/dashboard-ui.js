@@ -148,13 +148,12 @@ export const DashboardUI = {
             const elMetricsHeader = el('div', ['d-flex', 'w-100']);
             elMetricsHeader.style.flexDirection = 'column';
             
-            const elMetricsHeaderTitle = el('h2', ['w-100']);
+            const elMetricsHeaderTitle = el('h2', ['w-100'], { id: 'dashboard-op-status-title', margin: '1rem 0rem 0rem 0rem !important' });
             elMetricsHeaderTitle.innerHTML = 'DASHBOAR DE ORDENS DE PRODUÇÃO (OPs)';
             elMetricsHeaderTitle.style.fontWeight = 'bold';
             elMetricsHeaderTitle.style.textAlign = 'center';
-            elMetricsHeaderTitle.style.margin = '0px !important';
 
-             const elMetricsHeaderSubTitle = el('h5', ['w-100']);
+             const elMetricsHeaderSubTitle = el('h5', ['w-100'], { id: 'dashboard-op-status-subtitle', margin: '0rem 0rem 1rem 0rem !important' });
             elMetricsHeaderSubTitle.innerHTML = 'OPs por status de atividade';
             elMetricsHeaderSubTitle.style.textAlign = 'center';
             elMetricsHeaderSubTitle.style.margin = '0px !important';
