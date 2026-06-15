@@ -2,12 +2,6 @@
    1. Alinhamento Global, Centralização e Margens Simétricas Laterais
    ========================================================================== */
 .registry-component {
-    margin-top: 85px !important; 
-    margin-left: auto !important;
-    margin-right: auto !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    max-width: 1240px; /* Alinhamento central perfeito em telas grandes */
     width: 100% !important;
     box-sizing: border-box !important;
 }
