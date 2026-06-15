@@ -28,3 +28,9 @@ body {
     display: flex !important;
     flex-direction: column !important;
 }
+
+@media (min-width: 768px) {
+    .main-content {
+        padding-left: 300px;
+    }
+}
