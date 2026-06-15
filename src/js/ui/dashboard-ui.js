@@ -145,6 +145,8 @@ export const DashboardUI = {
             metricsContainer.innerHTML = '';
 
             const elMetricsHeader = el('div', ['d-flex', 'w-100']);
+            elMetricsHeader.style.flexDirection = 'column';
+            
             const elMetricsHeaderTitle = el('h2', ['w-100']);
             elMetricsHeaderTitle.innerHTML = 'DASHBOAR DE ORDENS DE PRODUÇÃO (OPs)';
             elMetricsHeaderTitle.style.fontWeight = 'bold';
