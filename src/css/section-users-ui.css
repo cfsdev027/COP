@@ -1,7 +1,7 @@
 /* section-users-ui.css */
 .section-users {
     animation: fadeIn 0.3s ease-in-out;
-    margin-top: 20px;
+    padding: 0rem 1rem 0rem 1rem !important;
 }
 
 #users-registry-container table input.form-control {
