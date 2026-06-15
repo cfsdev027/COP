@@ -74,9 +74,11 @@ export const SidebarUI = {
 
         elNavbarGroup.append(elUserInfoToggler, elLogoutToggler, elNavbarToggler);
 
-        const elNavbarCollapse = el('div', ['collapse', 'navbar-collapse', 'd-block', 'd-md-none', 'w-100'], { id: 'navbar-collapse-mobile' });
+        const elNavbarCollapseMobile = el('div', ['collapse', 'navbar-collapse', 'd-block', 'd-md-none', 'w-100'], { id: 'navbar-collapse-mobile' });
+        const elNavbarCollapseDesktop = el('div', ['collapse', 'navbar-collapse', 'd-none', 'd-md-block', 'w-100'], { id: 'navbar-collapse-desktop' });
+        this.makeOptionsMenu(elNavbarCollapseDesktop);
         
-        elNavbarContainer.append(elNavbarBrand, elNavbarGroup, elNavbarCollapse);
+        elNavbarContainer.append(elNavbarBrand, elNavbarGroup, elNavbarCollapseMobile, elNavbarCollapseDesktop);
         this.container.append(elNavbarContainer);
 
         (async () => {
@@ -117,7 +119,7 @@ export const SidebarUI = {
                 this.makeUserInfoMenu(elNavbarCollapse);
                 break;
             case 'options':
-                this.makeOptionsMenu(elNavbarCollapse);
+                this.makeOptionsMenu(elNavbarCollapse, true);
                 break;
             case 'logout':
                 elNavbarCollapse.classList.remove('show');
@@ -127,7 +129,7 @@ export const SidebarUI = {
         }
     },
 
-    makeOptionsMenu(elNavbarCollapse) {
+    makeOptionsMenu(elNavbarCollapse, mobile = false) {
         const elNavbarOptionsMenu = el('ul', ['navbar-nav', 'ms-auto'], { id: 'navbar-options-menu' });
         
         const options = this.getOptions();
