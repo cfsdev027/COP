@@ -41,7 +41,7 @@ export const SidebarUI = {
         this.container.classList.add('navbar-dark');
         this.container.classList.add('bg-dark');
 
-        const elNavbarContainer = el('div', ['container-fluid', 'd-flex', 'justify-content-between', 'align-items-center']);
+        const elNavbarContainer = el('div', ['container-fluid', 'd-flex', 'justify-content-between', 'align-items-center', 'flex-wrap']);
         elNavbarContainer.style.maxWidth = '992px !important';
         
         const elNavbarBrand = el('a', ['navbar-brand', 'sidebar-header', 'flex-grow-1'], { id: 'navbar-brand', href: `/COP/src/index.html?t=${Date.now()}` });
