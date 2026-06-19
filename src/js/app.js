@@ -37,6 +37,7 @@ window.addEventListener('DOMContentLoaded', () => {
             // Segue com o fluxo de autenticação e roteamento
             let isAuthenticated = await ServiceAuthentication.self_authenticate();
             if (isAuthenticated) {
+                document.getElementById('main-content').classList.add('after-login');
                 AppRouter['dashboard'].init(); 
             } else {
                 AppRouter['login'].init();
