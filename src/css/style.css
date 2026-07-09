@@ -27,7 +27,12 @@ body {
     flex: 1;
     display: flex !important;
     flex-direction: column !important;
-    padding-top: 63px !important;
+}
+
+@media (max-width: 767px) {
+    .main-content {
+        padding-top: 63px !important;
+    }
 }
 
 @media (min-width: 768px) {
