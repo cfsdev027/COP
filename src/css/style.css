@@ -30,7 +30,7 @@ body {
 }
 
 @media (max-width: 767px) {
-    .main-content {
+    .after-login {
         padding-top: 63px !important;
     }
 }
